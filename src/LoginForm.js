@@ -3,6 +3,10 @@ import InputField from "./InputField";
 import SubmitButton from "./SubmitButton";
 import UserStore from "./stores/UserStore";
 
+/**
+ * This class is the form where the users will fill in their email and password.
+ * This class also sends the POST request for the log in when the user hits the submit button.
+ */
 class LoginForm extends React.Component {
 
     constructor(props) {
@@ -23,10 +27,18 @@ class LoginForm extends React.Component {
             [property]: value
         })
     }
-
+    // Resets both input fields and enables the submit button
     resetForm() {
         this.setState({
             email: '',
+            password: '',
+            buttonDisabled: false
+        })
+    }
+    // Only resets the password input field and enables the submit button
+    resetPassword() {
+        this.setState( {
+            email: this.state.email,
             password: '',
             buttonDisabled: false
         })
@@ -45,27 +57,29 @@ class LoginForm extends React.Component {
         })
 
         try {
-            let res = await fetch ('login', {
-               method: 'post',
+            let res = await fetch ('http://127.0.0.1:8080/auth/login', {
+               method: 'POST',
                headers: {
                    'Accept': 'application/json',
                    'Content-Type': 'application/json'
                },
+                //NB! In the backend the login system treats the email to login as username. 16.02.2021
+                //credentials: 'same-origin',
                 body: JSON.stringify({
-                    email: this.state.email,
-                    password: this.state.password
+                    username: this.state.email,
+                    password: this.state.password,
                 })
             });
-
-            let result = await  res.json();
+            let result = await res.json();
             if (result && result.success) {
                 UserStore.isLoggedIn = true;
-                UserStore.email = result.email;
+                //UserStore.email = res.email;
             }
-            else if (result && result.success === false) {
-                this.resetForm();
-                alert(result.msg);
+            else if (!result || (result.success !== true)) {
+                this.resetPassword();
+                console.log("Did not log in");
             }
+            console.log("isLoggedIn: " + UserStore.isLoggedIn);
         }
         catch (e) {
             console.log(e);

@@ -8,9 +8,12 @@ import './Login.css';
 
 class Login extends React.Component {
 
+    //Function checks if user is already logged in when entering the site
     async componentDidMount() {
-        try {
-            let response = await fetch('/auth/login', {
+        UserStore.loading = false;
+
+        /*try {
+            let res = await fetch('http://localhost:8080/auth/login', {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
@@ -18,7 +21,7 @@ class Login extends React.Component {
                 }
             });
 
-            let result = await response.json();
+            let result = await res.json();
 
             if (result && result.success) {
                 UserStore.loading = false;
@@ -33,33 +36,22 @@ class Login extends React.Component {
         catch (e) {
             UserStore.loading = false;
             UserStore.isLoggedIn = false;
-        }
+        }*/
     }
 
+    // Logs out the user
     async doLogout() {
-        try {
-            let response = await fetch('/logout', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            let result = await response.json();
-
-            if (result && result.success) {
-                UserStore.isLoggedIn = false;
-                UserStore.firstName = '';
-                UserStore.lastName = '';
-            }
-            else {
-                UserStore.loading = false;
-                UserStore.isLoggedIn = false;
-            }
+        //TODO: The cookie that holds the JWT token needs to be cleared to log out from the system!
+        //Clear token here
+        //This if test should check if the token is there or not, if not clear info.
+        if (UserStore.isLoggedIn) {
+            UserStore.isLoggedIn = false;
+            UserStore.firstName = '';
+            UserStore.lastName = '';
         }
-        catch (e) {
-            console.log(e);
+        else {
+            UserStore.loading = false;
+            UserStore.isLoggedIn = false;
         }
     }
 
