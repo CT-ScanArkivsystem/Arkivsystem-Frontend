@@ -57,9 +57,10 @@ class LoginForm extends React.Component {
         })
 
         try {
-            let res = await fetch ('http://127.0.0.1:8080/auth/login', {
-               method: 'POST',
-               headers: {
+            let res = await fetch ('http://localhost:8080/auth/login', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
                    'Accept': 'application/json',
                    'Content-Type': 'application/json'
                },
