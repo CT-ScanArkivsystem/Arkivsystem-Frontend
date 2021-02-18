@@ -13,20 +13,21 @@ class Login extends React.Component {
         UserStore.loading = false;
 
         /*try {
-            let res = await fetch('http://localhost:8080/auth/login', {
-                method: 'post',
+            let res = await fetch('http://localhost:8080/user/allUsers', {
+                method: 'GET',
+                credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }
+                },
             });
 
             let result = await res.json();
 
-            if (result && result.success) {
+            if (result !== null && result !== "") {
                 UserStore.loading = false;
                 UserStore.isLoggedIn = true;
-                UserStore.firstName = result.firstName;
+                //UserStore.firstName = result.firstName;
             }
             else {
                 UserStore.loading = false;
