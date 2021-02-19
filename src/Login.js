@@ -46,17 +46,32 @@ class Login extends React.Component {
 
     // Logs out the user
     async doLogout() {
-        //TODO: The cookie that holds the JWT token needs to be cleared to log out from the system!
-        //Clear token here
-        //This if test should check if the token is there or not, if not clear info.
-        if (UserStore.isLoggedIn) {
-            UserStore.isLoggedIn = false;
-            UserStore.firstName = '';
-            UserStore.lastName = '';
+        try {
+            let res = await fetch('http://localhost:8080/auth/logout', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+            //let result = await res.json();
+
+            //TODO: The cookie that holds the JWT token needs to be cleared to log out from the system!
+            //Clear token here
+            //This if test should check if the token is there or not, if not clear info.
+            if (UserStore.isLoggedIn) {
+                UserStore.isLoggedIn = false;
+                UserStore.firstName = '';
+                UserStore.lastName = '';
+                UserStore.email = '';
+            } else {
+                UserStore.loading = false;
+                UserStore.isLoggedIn = false;
+            }
         }
-        else {
-            UserStore.loading = false;
-            UserStore.isLoggedIn = false;
+        catch (e) {
+            console.log("Something went wrong: " + e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
     }
 
