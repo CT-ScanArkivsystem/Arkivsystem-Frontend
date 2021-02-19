@@ -1,24 +1,26 @@
 import React from 'react'
 import { observer } from "mobx-react";
+import { configure } from "mobx";
 import UserStore from "./stores/UserStore";
 import SubmitButton from "./SubmitButton";
 import LoginForm from "./LoginForm";
 
 import './Login.css';
 
+// Stops warning when changing an observable value without using an action.
+configure({ enforceActions: 'never'});
+
 class Login extends React.Component {
+
 
     //Function checks if user is already logged in when entering the site
     async componentDidMount() {
-        UserStore.loading = false;
-
-        /*try {
+        try {
             let res = await fetch('http://localhost:8080/user/allUsers', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json'
                 },
             });
 
@@ -27,7 +29,9 @@ class Login extends React.Component {
             if (result !== null && result !== "") {
                 UserStore.loading = false;
                 UserStore.isLoggedIn = true;
-                //UserStore.firstName = result.firstName;
+                UserStore.firstName = result.firstName;
+                UserStore.lastName = result.lastName;
+                UserStore.email = result.email;
             }
             else {
                 UserStore.loading = false;
@@ -37,7 +41,7 @@ class Login extends React.Component {
         catch (e) {
             UserStore.loading = false;
             UserStore.isLoggedIn = false;
-        }*/
+        }
     }
 
     // Logs out the user
@@ -55,6 +59,35 @@ class Login extends React.Component {
             UserStore.isLoggedIn = false;
         }
     }
+
+    async doGetAllUsers() {
+        try {
+            let res = await fetch ('http://localhost:8080/user/allUsers', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            let result = await res.json();
+            let didFindStuff;
+
+            if (result !== null && result !== "") {
+                didFindStuff = true;
+                console.log("didFindStuff: " + didFindStuff);
+            } else {
+                didFindStuff = false;
+                console.log("didFindStuff: " + didFindStuff);
+            }
+            //return <p className={'messageToUser'}>{didFindStuff}</p>;
+        }
+        catch (e) {
+            console.log("Something went wrong: " + e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
+            }
+    }
+
 
     render() {
 
@@ -74,10 +107,16 @@ class Login extends React.Component {
                     <div className='container'>
                         <p>Welcome {UserStore.firstName}!</p>
                         <SubmitButton
+                            text={'Get all users request'}
+                            disabled={false}
+                            onClick={ () => this.doGetAllUsers() }
+                            />
+                        <SubmitButton
                             text={'Log out'}
                             disabled={false}
                             onClick={ () => this.doLogout() }
                         />
+                        <p className={'messageToUser'}></p>
                     </div>
                 </div>
                 );

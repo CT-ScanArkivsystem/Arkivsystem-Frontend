@@ -74,7 +74,9 @@ class LoginForm extends React.Component {
             let result = await res.json();
             if (result && result.success) {
                 UserStore.isLoggedIn = true;
-                //UserStore.email = res.email;
+                UserStore.firstName = result.firstName;
+                UserStore.lastName = result.lastName;
+                UserStore.email = result.email;
             }
             else if (!result || (result.success !== true)) {
                 this.resetPassword();
