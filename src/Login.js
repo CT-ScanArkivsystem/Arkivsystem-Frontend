@@ -32,6 +32,7 @@ class Login extends React.Component {
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;
                 UserStore.email = result.email;
+                //TODO: Get info from user when there is a getUser request
             }
             else {
                 UserStore.loading = false;
@@ -41,6 +42,8 @@ class Login extends React.Component {
         catch (e) {
             UserStore.loading = false;
             UserStore.isLoggedIn = false;
+            console.log("Something went wrong: " + e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
     }
 
