@@ -1,7 +1,7 @@
 import React from 'react'
 import InputField from "./InputField";
 import SubmitButton from "./SubmitButton";
-import UserStore from "./stores/UserStore";
+import UserStore from "../stores/UserStore";
 
 /**
  * This class is the form where the users will fill in their email and password.
