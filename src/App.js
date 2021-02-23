@@ -7,6 +7,7 @@ import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 import "./App.css";
 import {onError} from "./libs/errorLib";
+import UserStore from "./stores/UserStore";
 
 function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -49,7 +50,7 @@ function App() {
      */
     async function checkLoginStatus() {
         try {
-            let res = await fetch('http://localhost:8080/user/allUsers', {
+            let res = await fetch('http://localhost:8080/auth/currentUser', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -61,6 +62,9 @@ function App() {
 
             if (result !== null && result !== "") {
                 console.log("User is logged in!");
+                UserStore.email = result.email;
+                UserStore.firstName = result.firstName;
+                UserStore.lastName = result.lastName;
                 userHasAuthenticated(true);
                 //TODO: Create a is logged in request and get user information from it.
             }
@@ -88,7 +92,12 @@ function App() {
           <Navbar.Collapse className="justify-content-end">
               <Nav activeKey={window.location.pathname}>
                   {isAuthenticated ? (
-                      <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                      <>
+                          <LinkContainer to="/createUser">
+                              <Nav.Link>Create user</Nav.Link>
+                          </LinkContainer>
+                          <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                      </>
                   ) : (
                       <>
                           <LinkContainer to="/login">

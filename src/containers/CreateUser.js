@@ -3,13 +3,16 @@ import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
-import "./Login.css";
+import "./CreateUser.css";
 import LoaderButton from "../components/LoaderButton";
 
-export default function Login() {
+export default function CreateUser() {
     const { userHasAuthenticated } = useAppContext();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
 
@@ -18,7 +21,7 @@ export default function Login() {
      * @returns {boolean}
      */
     function validateForm() {
-        return email.length > 0 && password.length > 0;
+        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && role.length > 0);
     }
 
     /**
@@ -33,7 +36,7 @@ export default function Login() {
         setIsLoading(true);
 
             try {
-                let res = await fetch ('http://localhost:8080/auth/login', {
+                let res = await fetch ('http://localhost:8080/admin/newUser', {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -42,8 +45,11 @@ export default function Login() {
                     //NB! In the backend the login system treats the email to login as username. 16.02.2021
                     //credentials: 'same-origin',
                     body: JSON.stringify({
+                        firstName: firstName,
+                        lastName: lastName,
                         username: email,
-                        password: password
+                        password: password,
+                        role: role
                     })
                 });
 
@@ -68,6 +74,22 @@ export default function Login() {
         <div className="Login">
             <Form onSubmit={handleSubmit}>
                 <Form.Group size="lg" controlId="email">
+                    <Form.Group size="lg" controlId="firstName">
+                        <Form.Label>First name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="lastName">
+                        <Form.Label>Last name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </Form.Group>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                         autoFocus
@@ -82,6 +104,14 @@ export default function Login() {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group size="lg" controlId="role">
+                    <Form.Label>Role</Form.Label>
+                    <Form.Control
+                        type="role"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
                     />
                 </Form.Group>
                 <LoaderButton
