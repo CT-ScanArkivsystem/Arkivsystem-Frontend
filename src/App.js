@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {Nav, Navbar} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
@@ -10,6 +11,7 @@ import UserStore from "./stores/UserStore";
 function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
+    const history = useHistory();
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -26,6 +28,7 @@ function App() {
                     'Accept': 'application/json'
                 },
             });
+            history.push("/login");
         }
         catch (e) {
             console.log("Something went wrong: " + e);

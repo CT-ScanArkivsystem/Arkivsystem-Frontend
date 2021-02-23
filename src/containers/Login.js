@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useAppContext } from "../libs/contextLib";
@@ -8,6 +9,7 @@ export default function Login() {
     const { userHasAuthenticated } = useAppContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     function validateForm() {
         return email.length > 0 && password.length > 0;
@@ -35,6 +37,7 @@ export default function Login() {
                 let result = await res.json();
                 if (result && result.success) {
                     userHasAuthenticated(true);
+                    history.push("/");
                 }
                 else if (!result || (result.success !== true)) {
                     console.log("Did not log in");
