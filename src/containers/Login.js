@@ -1,22 +1,36 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { useAppContext } from "../libs/contextLib";
+import { onError } from "../libs/errorLib";
 import "./Login.css";
+import LoaderButton from "../components/LoaderButton";
 
 export default function Login() {
     const { userHasAuthenticated } = useAppContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
 
+    /**
+     * Checks if both form inputs have something put into them.
+     * @returns {boolean}
+     */
     function validateForm() {
         return email.length > 0 && password.length > 0;
     }
 
+    /**
+     * Sends a POST request to the server with the users input email and password.
+     * If the server responds with success: true it will log the user in. The response
+     * sets a cookie in the users browser which will be sent automatically by the browser during future requests.
+     * @param event
+     * @returns {Promise<void>}
+     */
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
 
             try {
                 let res = await fetch ('http://localhost:8080/auth/login', {
@@ -41,10 +55,12 @@ export default function Login() {
                 }
                 else if (!result || (result.success !== true)) {
                     console.log("Did not log in");
+                    setIsLoading(false);
                 }
             }
             catch (e) {
-                console.log("Something went wrong: " + e);
+                setIsLoading(false);
+                onError(e);
                 //TODO: TELL THE USER SOMETHING WENT WRONG!
             }
         }
@@ -69,9 +85,15 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <LoaderButton
+                    block
+                    size="lg"
+                    type="submit"
+                    isLoading={isLoading}
+                    disabled={!validateForm()}
+                >
                     Login
-                </Button>
+                </LoaderButton>
             </Form>
         </div>
     );

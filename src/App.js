@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 import "./App.css";
-import UserStore from "./stores/UserStore";
+import {onError} from "./libs/errorLib";
 
 function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -18,6 +18,12 @@ function App() {
         checkLoginStatus();
     }, []);
 
+    /**
+     * Sends a GET request to the server that it wants to logout.
+     * The server will send a new cookie that will overwrite the existing one and then get removed.
+     * This process will ensure that the user no longer has a valid JWT token. Effectively logging the user out.
+     * @returns {Promise<void>}
+     */
     async function handleLogout() {
         userHasAuthenticated(false);
         try {
@@ -31,12 +37,16 @@ function App() {
             history.push("/login");
         }
         catch (e) {
-            console.log("Something went wrong: " + e);
+            onError(e);
             //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
     }
 
-    // Sends a GET request to the server to check if user has a JWT token. If token exists, log the user in.
+    /**
+     * Sends a GET request to the server to check if user has a JWT token.
+     * If token exists, it will log the user in.
+     * @returns {Promise<void>}
+     */
     async function checkLoginStatus() {
         try {
             let res = await fetch('http://localhost:8080/user/allUsers', {
@@ -59,7 +69,7 @@ function App() {
             }
         }
         catch (e) {
-            console.log("Something went wrong: " + e);
+            onError(e);
             //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
         setIsAuthenticating(false);
