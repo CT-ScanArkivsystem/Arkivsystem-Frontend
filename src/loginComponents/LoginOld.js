@@ -5,13 +5,12 @@ import UserStore from "../stores/UserStore";
 import SubmitButton from "./SubmitButton";
 import LoginForm from "./LoginForm";
 
-import './Login.css';
+import '../containers/Login.css';
 
 // Stops warning when changing an observable value without using an action.
 configure({ enforceActions: 'never'});
 
 class Login extends React.Component {
-
 
     //Function checks if user is already logged in when entering the site
     async componentDidMount() {
@@ -103,7 +102,7 @@ class Login extends React.Component {
         catch (e) {
             console.log("Something went wrong: " + e);
             //TODO: TELL THE USER SOMETHING WENT WRONG!
-            }
+        }
     }
 
 
@@ -113,7 +112,7 @@ class Login extends React.Component {
             return (
                 <div className="app">
                     <div className='container'>
-                      <p>Loading, please wait..</p>
+                        <p>Loading, please wait..</p>
                     </div>
                 </div>
             )
@@ -121,31 +120,31 @@ class Login extends React.Component {
         else {
             if (UserStore.isLoggedIn) {
                 return (
-                <div className="app">
-                    <div className='container'>
-                        <p>Welcome {UserStore.firstName}!</p>
-                        <SubmitButton
-                            text={'Get all users request'}
-                            disabled={false}
-                            onClick={ () => this.doGetAllUsers() }
+                    <div className="app">
+                        <div className='container'>
+                            <p>Welcome {UserStore.firstName}!</p>
+                            <SubmitButton
+                                text={'Get all users request'}
+                                disabled={false}
+                                onClick={ () => this.doGetAllUsers() }
                             />
-                        <SubmitButton
-                            text={'Log out'}
-                            disabled={false}
-                            onClick={ () => this.doLogout() }
-                        />
-                        <p className={'messageToUser'}></p>
+                            <SubmitButton
+                                text={'Log out'}
+                                disabled={false}
+                                onClick={ () => this.doLogout() }
+                            />
+                            <p className={'messageToUser'}></p>
+                        </div>
                     </div>
-                </div>
                 );
             }
             else {
                 return (
-                  <div className="app">
-                      <div className='container'>
-                          <LoginForm />
-                      </div>
-                  </div>
+                    <div className="app">
+                        <div className='container'>
+                            <LoginForm />
+                        </div>
+                    </div>
                 );
             }
         }
