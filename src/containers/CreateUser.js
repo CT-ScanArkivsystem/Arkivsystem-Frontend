@@ -11,7 +11,8 @@ export default function CreateUser() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password1, setPassword1] = useState("");
+    const [password2, setPassword2] = useState("");
     const [role, setRole] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
@@ -21,7 +22,7 @@ export default function CreateUser() {
      * @returns {boolean}
      */
     function validateForm() {
-        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && role.length > 0);
+        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password1.length > 0 && password2.length === password1.length && role.length > 0);
     }
 
     /**
@@ -48,7 +49,7 @@ export default function CreateUser() {
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
-                        password: password,
+                        password: password1,
                         role: role
                     })
                 });
@@ -70,19 +71,37 @@ export default function CreateUser() {
             }
         }
 
+        function displayFormError(error) {
+            let inputError = "";
+
+            if (firstName.trim().length < 1 || firstName.trim().length > 255) {
+                inputError = "First name is either empty or too long!";
+            } else if (lastName.trim().length < 1 || lastName.trim().length > 255) {
+                inputError = "Last name is either empty or too long!";
+            } else if (email.trim().length < 1 || email.trim().length > 255) {
+                inputError = "Email is either empty or too long!";
+            } else if (role.trim().length < 1 || role.trim().length > 255) {
+                inputError = "Role is either empty or too long!";
+            } else if (password1.trim().length < 5 || password1.trim().length > 255) {
+                inputError = "First password field is either empty, not long enough or too long!";
+            } else if (password2 !== password1) {
+                inputError = "Second password is not equal to the first password!";
+            }
+            return inputError;
+        }
+
     return (
         <div className="CreateUser">
             <Form onSubmit={handleSubmit}>
                 <h2>Create a new user:</h2>
-                <Form.Group size="lg" controlId="email">
-                    <Form.Group size="lg" controlId="firstName">
-                        <Form.Label>First name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </Form.Group>
+                <Form.Group size="lg" controlId="firstName">
+                    <Form.Label>First name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                </Form.Group>
                     <Form.Group size="lg" controlId="lastName">
                         <Form.Label>Last name</Form.Label>
                         <Form.Control
@@ -91,6 +110,7 @@ export default function CreateUser() {
                             onChange={(e) => setLastName(e.target.value)}
                         />
                     </Form.Group>
+                <Form.Group>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                         autoFocus
@@ -99,22 +119,35 @@ export default function CreateUser() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group size="lg" controlId="password">
-                    <Form.Label>Password</Form.Label>
+                <Form.Group size="lg" controlId="password1">
+                    <Form.Label>Password (Minimum 5 characters long)</Form.Label>
                     <Form.Control
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={password1}
+                        onChange={(e) => setPassword1(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group size="lg" controlId="password2">
+                    <Form.Label>Enter password again</Form.Label>
+                    <Form.Control
+                        type="password"
+                        value={password2}
+                        onChange={(e) => setPassword2(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group size="lg" controlId="role">
                     <Form.Label>Role</Form.Label>
                     <Form.Control
-                        type="role"
-                        value={role}
+                        as="select"
                         onChange={(e) => setRole(e.target.value)}
-                    />
+                    >
+                        <option value="user">User</option>
+                        <option value="professor">Professor</option>
+                        <option value="admin">Admin</option>
+                    </Form.Control>
+
                 </Form.Group>
+
                 <LoaderButton
                     block
                     size="lg"
@@ -124,6 +157,7 @@ export default function CreateUser() {
                 >
                     Create user
                 </LoaderButton>
+                <p className="errorMessage">{displayFormError()}</p>
             </Form>
         </div>
     );

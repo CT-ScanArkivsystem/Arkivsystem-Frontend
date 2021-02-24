@@ -8,7 +8,8 @@ class UserStore {
         extendObservable(this, {
             email: '',
             firstName: '',
-            lastName: ''
+            lastName: '',
+            role: ''
         })
     }
 }

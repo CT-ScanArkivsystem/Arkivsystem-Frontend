@@ -65,6 +65,7 @@ function App() {
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;
+                UserStore.role = result.role;
                 userHasAuthenticated(true);
                 //TODO: Create a is logged in request and get user information from it.
             }
@@ -80,8 +81,8 @@ function App() {
         }
         setIsAuthenticating(false);
     }
-
-  return (
+    // TODO: Create user link in navbar should only be shown to admins.
+    return (
       !isAuthenticating && (
       <div className="App container py-3">
         <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
@@ -95,6 +96,9 @@ function App() {
               <Nav activeKey={window.location.pathname}>
                   {isAuthenticated ? (
                       <>
+                          <LinkContainer to="/userFrontpage">
+                              <Nav.Link>User frontpage</Nav.Link>
+                          </LinkContainer>
                           <LinkContainer to="/createUser">
                               <Nav.Link>Create user</Nav.Link>
                           </LinkContainer>
