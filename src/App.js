@@ -50,7 +50,7 @@ function App() {
      */
     async function checkLoginStatus() {
         try {
-            let res = await fetch('http://localhost:8080/auth/currentUser', {
+            let res = await fetch('http://localhost:8080/user/currentUser', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

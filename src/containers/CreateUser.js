@@ -47,7 +47,7 @@ export default function CreateUser() {
                     body: JSON.stringify({
                         firstName: firstName,
                         lastName: lastName,
-                        username: email,
+                        email: email,
                         password: password,
                         role: role
                     })
