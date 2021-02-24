@@ -71,8 +71,9 @@ export default function CreateUser() {
         }
 
     return (
-        <div className="Login">
+        <div className="CreateUser">
             <Form onSubmit={handleSubmit}>
+                <h2>Create a new user:</h2>
                 <Form.Group size="lg" controlId="email">
                     <Form.Group size="lg" controlId="firstName">
                         <Form.Label>First name</Form.Label>
@@ -121,7 +122,7 @@ export default function CreateUser() {
                     isLoading={isLoading}
                     disabled={!validateForm()}
                 >
-                    Login
+                    Create user
                 </LoaderButton>
             </Form>
         </div>

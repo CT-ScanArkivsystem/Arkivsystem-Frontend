@@ -74,6 +74,8 @@ function App() {
         }
         catch (e) {
             onError(e);
+            //Send the user to the home page. Prevents the user from accessing sites when not logged in.
+            history.push("/");
             //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
         setIsAuthenticating(false);
