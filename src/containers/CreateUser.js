@@ -90,6 +90,7 @@ export default function CreateUser() {
             return inputError;
         }
 
+        // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
     return (
         <div className="CreateUser">
             <Form onSubmit={handleSubmit}>
