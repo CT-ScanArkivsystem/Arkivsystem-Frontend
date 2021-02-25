@@ -50,7 +50,7 @@ export default function Login() {
                 let result = await res.json();
                 if (result && result.success) {
                     userHasAuthenticated(true);
-                    history.push("/");
+                    history.push("/userFrontpage");
                 }
                 else if (!result || (result.success !== true)) {
                     console.log("Did not log in");

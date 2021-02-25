@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Nav, Navbar} from "react-bootstrap";
+import {Dropdown, DropdownButton, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
@@ -67,7 +67,7 @@ function App() {
                 UserStore.lastName = result.lastName;
                 UserStore.role = result.role;
                 userHasAuthenticated(true);
-                //TODO: Create a is logged in request and get user information from it.
+                history.push("/userFrontpage")
             }
             else {
                 console.log("User is not logged in.");
@@ -82,44 +82,63 @@ function App() {
         setIsAuthenticating(false);
     }
     // TODO: Create user link in navbar should only be shown to admins.
+    // TODO: Change what is inside the dropdown button.
+
     return (
-      !isAuthenticating && (
-      <div className="App container py-3">
-        <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
-            <LinkContainer to="/">
-              <Navbar.Brand href="/" className="font-weight-bold text-muted">
-                Scratch
-              </Navbar.Brand>
-            </LinkContainer>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
-              <Nav activeKey={window.location.pathname}>
-                  {isAuthenticated ? (
-                      <>
-                          <LinkContainer to="/userFrontpage">
-                              <Nav.Link>User frontpage</Nav.Link>
-                          </LinkContainer>
-                          <LinkContainer to="/createUser">
-                              <Nav.Link>Create user</Nav.Link>
-                          </LinkContainer>
-                          <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-                      </>
-                  ) : (
-                      <>
-                          <LinkContainer to="/login">
-                              <Nav.Link>Login</Nav.Link>
-                          </LinkContainer>
-                      </>
-                  )}
-              </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-          <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-              <Routes />
-          </AppContext.Provider>
-      </div>
-      )
-  );
+        !isAuthenticating && (
+            <div className="App container py-3">
+                <Navbar collapseOnSelect bg="primary" variant="dark" expand="md" className="mb-3">
+                    {isAuthenticated ? (
+                        <LinkContainer to="/userFrontpage">
+                            <Navbar.Brand href="/" className="font-weight-bold">
+                                CT scan arkivsystem
+                            </Navbar.Brand>
+                        </LinkContainer>
+                    ) : (
+                        <LinkContainer to="/">
+                            <Navbar.Brand href="/" className="font-weight-bold">
+                                CT scan arkivsystem
+                            </Navbar.Brand>
+                        </LinkContainer>
+                    )}
+                    <Navbar.Toggle />
+                    <Navbar.Collapse className="justify-content-end">
+                        <Nav activeKey={window.location.pathname}>
+                            {isAuthenticated ? (
+                                <>
+                                    <NavDropdown id="navDropdownButton" active title="Dropdown :)">
+                                        <LinkContainer to="/userFrontpage">
+                                            <NavDropdown.Item>
+                                                Frontpage
+                                            </NavDropdown.Item>
+                                        </LinkContainer>
+                                        <LinkContainer to="/createUser">
+                                            <NavDropdown.Item href="/createUser">
+                                                Create user
+                                            </NavDropdown.Item>
+                                        </LinkContainer>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item onClick={handleLogout}>
+                                            Logout
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
+                                </>
+                            ) : (
+                                <>
+                                    <LinkContainer to="/login">
+                                        <Nav.Link>Login</Nav.Link>
+                                    </LinkContainer>
+                                </>
+                            )}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+                    <Routes />
+                </AppContext.Provider>
+            </div>
+        )
+    );
 }
 
 export default App;
