@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Dropdown, DropdownButton, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
@@ -9,10 +9,18 @@ import "./App.css";
 import {onError} from "./libs/errorLib";
 import UserStore from "./stores/UserStore";
 
+// All the request scripts this script uses
+import GetCurrentUser from "./apiRequests/GetCurrentUser"
+import GetLogout from "./apiRequests/GetLogout";
+
+export const currentIP = "http://localhost:8080";
+
+
 function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
     const history = useHistory();
+
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -27,19 +35,11 @@ function App() {
      */
     async function handleLogout() {
         userHasAuthenticated(false);
-        try {
-            let res = await fetch('http://localhost:8080/auth/logout', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json'
-                },
-            });
+        let didUserLogOut = await GetLogout();
+        if (didUserLogOut) {
             history.push("/login");
-        }
-        catch (e) {
-            onError(e);
-            //TODO: TELL THE USER SOMETHING WENT WRONG!
+        } else {
+            console.log("Something went wrong when trying to log out!");
         }
     }
 
@@ -50,28 +50,13 @@ function App() {
      */
     async function checkLoginStatus() {
         try {
-            let res = await fetch('http://localhost:8080/user/currentUser', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json'
-                },
-            });
-
-            let result = await res.json();
-
-            if (result !== null && result !== "") {
-                console.log("User is logged in! From autologin");
-                UserStore.email = result.email;
-                UserStore.firstName = result.firstName;
-                console.log(result.firstName);
-                UserStore.lastName = result.lastName;
-                UserStore.role = result.role;
+            let didGetCurrentUser = await GetCurrentUser();
+            if (didGetCurrentUser) {
                 userHasAuthenticated(true);
-                history.push("/userFrontpage")
+                history.push("/userFrontpage");
             }
             else {
-                console.log("User is not logged in.");
+                console.log("Failed to retrieve user information");
             }
         }
         catch (e) {

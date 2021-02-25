@@ -5,7 +5,8 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Login.css";
 import LoaderButton from "../components/LoaderButton";
-import UserStore from "../stores/UserStore";
+import PostLogin from "../apiRequests/PostLogin";
+import GetCurrentUser from "../apiRequests/GetCurrentUser";
 
 export default function Login() {
     const { userHasAuthenticated } = useAppContext();
@@ -30,60 +31,29 @@ export default function Login() {
      * @returns {Promise<void>}
      */
     async function handleSubmit(event) {
-        event.preventDefault();
-        setIsLoading(true);
-
-            try {
-                let res = await fetch ('http://localhost:8080/auth/login', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    //NB! In the backend the login system treats the email to login as username. 16.02.2021
-                    //credentials: 'same-origin',
-                    body: JSON.stringify({
-                        username: email,
-                        password: password
-                    })
-                });
-
-                let result = await res.json();
-                if (result && result.success) {
-                    res = await fetch('http://localhost:8080/user/currentUser', {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                    });
-
-                    result = await res.json();
-
-                    if (result !== null && result !== "") {
-                        console.log("User is logged in! From normal login");
-                        UserStore.email = result.email;
-                        UserStore.firstName = result.firstName;
-                        console.log(result.firstName)
-                        UserStore.lastName = result.lastName;
-                        UserStore.role = result.role;
-                        userHasAuthenticated(true);
-                        history.push("/userFrontpage");
-                    } else {
-                        console.log("User is not logged in. User should not be able to access this if statement if not logged in.");
-                    }
+        try {
+            event.preventDefault();
+            setIsLoading(true);
+            let didUserGetLoggedIn = await PostLogin(email, password);
+            if (didUserGetLoggedIn) {
+                let couldGetCurrentUser = await GetCurrentUser();
+                if (couldGetCurrentUser) {
+                    userHasAuthenticated(true);
+                    history.push("/userFrontpage");
+                } else {
+                    console.log("User is not logged in. User should not be able to access this if statement if not logged in.");
                 }
-                else if (!result || (result.success !== true)) {
-                    console.log("Did not log in");
-                    setIsLoading(false);
-                }
-            }
-            catch (e) {
+            } else {
+                console.log("Did not log in");
                 setIsLoading(false);
-                onError(e);
-                //TODO: TELL THE USER SOMETHING WENT WRONG!
             }
         }
+        catch (e) {
+            setIsLoading(false);
+            onError(e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
+        }
+    }
 
     return (
         <div className="Login">
