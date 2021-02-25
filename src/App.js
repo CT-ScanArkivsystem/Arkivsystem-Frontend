@@ -56,6 +56,8 @@ function App() {
                 history.push("/userFrontpage");
             }
             else {
+                //Send the user to the home page. If they ended up in here they were most likely not logged in.
+                history.push("/");
                 console.log("Failed to retrieve user information");
             }
         }
