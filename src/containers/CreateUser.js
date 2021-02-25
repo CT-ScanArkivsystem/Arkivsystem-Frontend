@@ -5,6 +5,7 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./CreateUser.css";
 import LoaderButton from "../components/LoaderButton";
+import PostCreateUser from "../apiRequests/PostCreateUser";
 
 export default function CreateUser() {
     const { userHasAuthenticated } = useAppContext();
@@ -35,35 +36,16 @@ export default function CreateUser() {
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
-
-            try {
-                let res = await fetch ('http://localhost:8080/admin/newUser', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    //NB! In the backend the login system treats the email to login as username. 16.02.2021
-                    //credentials: 'same-origin',
-                    body: JSON.stringify({
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        password: password1,
-                        role: role
-                    })
-                });
-
-                let result = await res.json();
-                if (result && result.success) {
-                    userHasAuthenticated(true);
-                    history.push("/");
-                }
-                else if (!result || (result.success !== true)) {
-                    console.log("Did not log in");
-                    setIsLoading(false);
-                }
+        try {
+            let didUserGetCreated = PostCreateUser(firstName, lastName, email, password1, role);
+            if (didUserGetCreated) {
+                userHasAuthenticated(true);
+                // TODO: Should redirect to admin page when it is complete!!!
+                history.push("/userFrontpage");
+            } else {
+                console.log("User was not created!");
             }
+        }
             catch (e) {
                 setIsLoading(false);
                 onError(e);
@@ -81,7 +63,7 @@ export default function CreateUser() {
             } else if (email.trim().length < 1 || email.trim().length > 255) {
                 inputError = "Email is either empty or too long!";
             } else if (role.trim().length < 1 || role.trim().length > 255) {
-                inputError = "Role is either empty or too long!";
+                inputError = "Role has not been selected!";
             } else if (password1.trim().length < 5 || password1.trim().length > 255) {
                 inputError = "First password field is either empty, not long enough or too long!";
             } else if (password2 !== password1) {
@@ -142,6 +124,7 @@ export default function CreateUser() {
                         as="select"
                         onChange={(e) => setRole(e.target.value)}
                     >
+                        <option value="" disabled>Choose a role</option>
                         <option value="user">User</option>
                         <option value="professor">Professor</option>
                         <option value="admin">Admin</option>
