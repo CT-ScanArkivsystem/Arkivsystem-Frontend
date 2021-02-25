@@ -106,7 +106,7 @@ function App() {
                         <Nav activeKey={window.location.pathname}>
                             {isAuthenticated ? (
                                 <>
-                                    <NavDropdown id="navDropdownButton" active title="Dropdown :)">
+                                    <NavDropdown id="navDropdownButton" alignRight active title={UserStore.firstName}>
                                         <LinkContainer to="/userFrontpage">
                                             <NavDropdown.Item>
                                                 Frontpage
