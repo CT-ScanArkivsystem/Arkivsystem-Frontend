@@ -61,9 +61,10 @@ function App() {
             let result = await res.json();
 
             if (result !== null && result !== "") {
-                console.log("User is logged in!");
+                console.log("User is logged in! From autologin");
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
+                console.log(result.firstName);
                 UserStore.lastName = result.lastName;
                 UserStore.role = result.role;
                 userHasAuthenticated(true);

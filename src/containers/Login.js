@@ -5,6 +5,7 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Login.css";
 import LoaderButton from "../components/LoaderButton";
+import UserStore from "../stores/UserStore";
 
 export default function Login() {
     const { userHasAuthenticated } = useAppContext();
@@ -49,8 +50,28 @@ export default function Login() {
 
                 let result = await res.json();
                 if (result && result.success) {
-                    userHasAuthenticated(true);
-                    history.push("/userFrontpage");
+                    res = await fetch('http://localhost:8080/user/currentUser', {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                    });
+
+                    result = await res.json();
+
+                    if (result !== null && result !== "") {
+                        console.log("User is logged in! From normal login");
+                        UserStore.email = result.email;
+                        UserStore.firstName = result.firstName;
+                        console.log(result.firstName)
+                        UserStore.lastName = result.lastName;
+                        UserStore.role = result.role;
+                        userHasAuthenticated(true);
+                        history.push("/userFrontpage");
+                    } else {
+                        console.log("User is not logged in. User should not be able to access this if statement if not logged in.");
+                    }
                 }
                 else if (!result || (result.success !== true)) {
                     console.log("Did not log in");
