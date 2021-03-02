@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./UserFrontpage.css";
-import SearchBar from "../components/SearchBar";
-import FilterCheckbox from "../components/FilterCheckbox";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
+import {LinkContainer} from "react-router-bootstrap";
+import {Link} from "react-router-dom";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -66,9 +66,16 @@ export default function UserFrontpage() {
                     </LoaderButton>
                 </Form>
             </div>
-            <div className="lander">
-                <h1>Your frontpage!</h1>
-                <p className="text-muted">Here you will find your projects!</p>
+            <div className="frontPageContainer">
+                <div className="projectContainer">
+                    <h1>Your frontpage!</h1>
+                    <p className="text-muted">Here you will find your projects!</p>
+                </div>
+                <div className="projectFooter">
+                    <Link to="/createUser">
+                            Create user
+                    </Link>
+                </div>
             </div>
         </div>
     );

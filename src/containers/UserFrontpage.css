@@ -5,11 +5,24 @@
     flex-wrap: nowrap;
 }
 
-.userFrontpage .lander {
+.userFrontpage .frontPageContainer {
     text-align: center;
     width: 100%;
     border: #007afd 2px solid;
-    margin: 4px 4px 4px 4px;
+    margin: 4px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.userFrontpage .projectContainer {
+    height: 100%;
+    margin-bottom: 4px;
+}
+
+.userFrontpage .projectFooter {
+    height: 50px;
+    bottom: 4px;
 }
 
 .userFrontpage .lander h1 {
