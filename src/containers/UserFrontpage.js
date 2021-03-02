@@ -42,7 +42,16 @@ export default function UserFrontpage() {
                             type="checkbox"
                             label="Checkbox 1"
                             index="checkbox1"
-                            value="testHook"
+                            value="testHook1"
+                            onChange={(e) => setTestHook(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg">
+                        <Form.Check
+                            type="checkbox"
+                            label="Checkbox 2"
+                            index="checkbox2"
+                            value="testHook2"
                             onChange={(e) => setTestHook(e.target.value)}
                         />
                     </Form.Group>

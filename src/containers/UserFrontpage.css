@@ -1,5 +1,5 @@
 .userFrontpage {
-    border: black 2px solid;
+    border: #007afd 2px solid;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -8,6 +8,8 @@
 .userFrontpage .lander {
     text-align: center;
     width: 100%;
+    border: #007afd 2px solid;
+    margin: 4px 4px 4px 4px;
 }
 
 .userFrontpage .lander h1 {
