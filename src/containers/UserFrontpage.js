@@ -72,8 +72,13 @@ export default function UserFrontpage() {
                     <p className="text-muted">Here you will find your projects!</p>
                 </div>
                 <div className="projectFooter">
-                    <Link to="/createUser">
-                            Create user
+                    <Link to="/createProject">
+                        <LoaderButton
+                            size="sm"
+                            isLoading={isLoading}
+                        >
+                            New project
+                        </LoaderButton>
                     </Link>
                 </div>
             </div>

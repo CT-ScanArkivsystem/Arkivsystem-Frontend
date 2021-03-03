@@ -42,6 +42,7 @@ export default function Login() {
                     history.push("/userFrontpage");
                 } else {
                     console.log("User is not logged in. User should not be able to access this if statement if not logged in.");
+                    setIsLoading(false);
                 }
             } else {
                 console.log("Did not log in");
