@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import {LinkContainer} from "react-router-bootstrap";
 import {Link} from "react-router-dom";
+import Project from "../components/Project";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -57,7 +58,7 @@ export default function UserFrontpage() {
                     </Form.Group>
                     <LoaderButton
                         block
-                        size="lg"
+                        size="sm"
                         type="submit"
                         isLoading={isLoading}
                         disabled={!validateForm()}
@@ -69,7 +70,9 @@ export default function UserFrontpage() {
             <div className="frontPageContainer">
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
-                    <p className="text-muted">Here you will find your projects!</p>
+                    <div className="projects">
+                        <Project>Test</Project>
+                    </div>
                 </div>
                 <div className="projectFooter">
                     <Link to="/createProject">

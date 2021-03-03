@@ -1,0 +1,21 @@
+.project {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    border: #282c34 solid 2px;
+}
+
+.projectIcon {
+    height: 30px;
+    margin: 4px 2px 4px 4px;
+}
+
+.projectName {
+    flex-grow: 1;
+    margin: 0 2px 0 2px;
+}
+
+.projectOwner {
+    margin: 0 4px 0 2px;
+    color: #565656;
+}
