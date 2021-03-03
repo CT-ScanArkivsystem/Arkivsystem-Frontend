@@ -15,6 +15,7 @@ export default async function PostLogin(email, password) {
     try {
         let res = await fetch (currentIP + '/auth/login', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
