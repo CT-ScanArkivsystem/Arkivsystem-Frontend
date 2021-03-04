@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import "./UserFrontpage.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
-import {LinkContainer} from "react-router-bootstrap";
 import {Link} from "react-router-dom";
-import Project from "../components/Project";
+import File from "../components/File";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -71,7 +70,36 @@ export default function UserFrontpage() {
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
                     <div className="projects">
-                        <Project>Test</Project>
+                        <File
+                            className= "project1"
+                            filetype = "folder"
+                            projectname = "Test"
+                            projectowner = "Aleksander Bakken"
+                        />
+                        <File
+                            className= "project2"
+                            filetype = "gif"
+                            projectname = "Valheim"
+                            projectowner = "Brage Tranvik"
+                        />
+                        <File
+                            className= "project3"
+                            filetype = "jpeg"
+                            projectname = "Planks"
+                            projectowner = "Aleksander Bakken"
+                        />
+                        <File
+                            className= "project4"
+                            filetype = "png"
+                            projectname = "Wood"
+                            projectowner = "Trym Vaaland"
+                        />
+                        <File
+                            className= "project5"
+                            filetype = "tiff"
+                            projectname = "Poggers Programming"
+                            projectowner = "Trym Vaaland"
+                        />
                     </div>
                 </div>
                 <div className="projectFooter">
