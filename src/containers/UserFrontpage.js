@@ -3,15 +3,11 @@ import "./UserFrontpage.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import {Link} from "react-router-dom";
-import File from "../components/File";
+import FileDisplay from "../components/FileDisplay";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    //Temporary test hooks
-    const [testHook, setTestHook] = useState("test");
-
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -19,7 +15,6 @@ export default function UserFrontpage() {
     }
 
     function validateForm() {
-        console.log("ValidateForm called! " + testHook)
         return true;
         // TODO: Validate when you know how to validate
         //return email.length > 0 && password.length > 0;
@@ -43,7 +38,7 @@ export default function UserFrontpage() {
                             label="Checkbox 1"
                             index="checkbox1"
                             value="testHook1"
-                            onChange={(e) => setTestHook(e.target.value)}
+                            //onChange={(e) => setTestHook(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group size="lg">
@@ -52,7 +47,7 @@ export default function UserFrontpage() {
                             label="Checkbox 2"
                             index="checkbox2"
                             value="testHook2"
-                            onChange={(e) => setTestHook(e.target.value)}
+                            //onChange={(e) => setTestHook(e.target.value)}
                         />
                     </Form.Group>
                     <LoaderButton
@@ -70,31 +65,31 @@ export default function UserFrontpage() {
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
                     <div className="projects">
-                        <File
+                        <FileDisplay
                             className= "project1"
                             filetype = "folder"
                             projectname = "Test"
                             projectowner = "Aleksander Bakken"
                         />
-                        <File
+                        <FileDisplay
                             className= "project2"
                             filetype = "gif"
                             projectname = "Valheim"
                             projectowner = "Brage Tranvik"
                         />
-                        <File
+                        <FileDisplay
                             className= "project3"
                             filetype = "jpeg"
                             projectname = "Planks"
                             projectowner = "Aleksander Bakken"
                         />
-                        <File
+                        <FileDisplay
                             className= "project4"
                             filetype = "png"
                             projectname = "Wood"
                             projectowner = "Trym Vaaland"
                         />
-                        <File
+                        <FileDisplay
                             className= "project5"
                             filetype = "tiff"
                             projectname = "Poggers Programming"
