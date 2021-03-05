@@ -1,5 +1,3 @@
-import { extendObservable } from 'mobx';
-
 /**
  * ProjectStore. Stores data about a single project.
  */
