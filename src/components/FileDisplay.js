@@ -32,8 +32,8 @@ export default function FileDisplay ({
   return (
       <div className={'fileDisplay'} {...props}>
           <img className="fileDisplayIcon" src={checkFileType()} alt="Filetype icon" />
-          <span className="fileDisplayName">{props.projectname}</span>
-          <span className="fileDisplayOwner">{props.projectowner}</span>
+          <span className="fileDisplayName">{props.filename}</span>
+          <span className="fileDisplayOwner">{props.fileowner}</span>
       </div>
   );
 }
