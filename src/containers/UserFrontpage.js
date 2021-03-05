@@ -74,7 +74,7 @@ export default function UserFrontpage() {
                         <FileDisplay
                             className= "project2"
                             filetype = "gif"
-                            projectname = "Valheim"
+                            projectname = "Birch"
                             projectowner = "Brage Tranvik"
                         />
                         <FileDisplay
@@ -92,7 +92,7 @@ export default function UserFrontpage() {
                         <FileDisplay
                             className= "project5"
                             filetype = "tiff"
-                            projectname = "Poggers Programming"
+                            projectname = "Example Project Name"
                             projectowner = "Trym Vaaland"
                         />
                     </div>

@@ -8,6 +8,7 @@ import { AppContext } from "./libs/contextLib";
 import "./App.css";
 import {onError} from "./libs/errorLib";
 import UserStore from "./stores/UserStore";
+import logo from "./images/CtWoodLogo.png";
 
 // All the request scripts this script uses
 import GetCurrentUser from "./apiRequests/GetCurrentUser"
@@ -83,13 +84,13 @@ function App() {
                     {isAuthenticated ? (
                         <LinkContainer to="/userFrontpage">
                             <Navbar.Brand href="/" className="font-weight-bold">
-                                CT scan arkivsystem
+                                <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
                             </Navbar.Brand>
                         </LinkContainer>
                     ) : (
                         <LinkContainer to="/">
                             <Navbar.Brand href="/" className="font-weight-bold">
-                                CT scan arkivsystem
+                                <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
                             </Navbar.Brand>
                         </LinkContainer>
                     )}
