@@ -3,6 +3,7 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
+import GlobalStyle from "./theme/GlobalStyle";
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 import "./App.css";
@@ -79,57 +80,60 @@ function App() {
 
     return (
         !isAuthenticating && (
-            <div className="App container py-3">
-                <Navbar collapseOnSelect bg="primary" variant="dark" expand="md" className="mb-3">
-                    {isAuthenticated ? (
-                        <LinkContainer to="/userFrontpage">
-                            <Navbar.Brand href="/" className="font-weight-bold">
-                                <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
-                            </Navbar.Brand>
-                        </LinkContainer>
-                    ) : (
-                        <LinkContainer to="/">
-                            <Navbar.Brand href="/" className="font-weight-bold">
-                                <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
-                            </Navbar.Brand>
-                        </LinkContainer>
-                    )}
-                    <Navbar.Toggle />
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav activeKey={window.location.pathname}>
-                            {isAuthenticated ? (
-                                <>
-                                    <NavDropdown id="navDropdownButton" alignRight active title={UserStore.firstName}>
-                                        <LinkContainer to="/userFrontpage">
-                                            <NavDropdown.Item>
-                                                Frontpage
+            <>
+                <GlobalStyle />
+                <div className="App container py-3">
+                    <Navbar collapseOnSelect bg="primary" variant="dark" expand="md" className="mb-3">
+                        {isAuthenticated ? (
+                            <LinkContainer to="/userFrontpage">
+                                <Navbar.Brand href="/" className="font-weight-bold">
+                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
+                                </Navbar.Brand>
+                            </LinkContainer>
+                        ) : (
+                            <LinkContainer to="/">
+                                <Navbar.Brand href="/" className="font-weight-bold">
+                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
+                                </Navbar.Brand>
+                            </LinkContainer>
+                        )}
+                        <Navbar.Toggle />
+                        <Navbar.Collapse className="justify-content-end">
+                            <Nav activeKey={window.location.pathname}>
+                                {isAuthenticated ? (
+                                    <>
+                                        <NavDropdown id="navDropdownButton" alignRight active title={UserStore.firstName}>
+                                            <LinkContainer to="/userFrontpage">
+                                                <NavDropdown.Item>
+                                                    Frontpage
+                                                </NavDropdown.Item>
+                                            </LinkContainer>
+                                            <LinkContainer to="/createUser">
+                                                <NavDropdown.Item href="/createUser">
+                                                    Create user
+                                                </NavDropdown.Item>
+                                            </LinkContainer>
+                                            <NavDropdown.Divider />
+                                            <NavDropdown.Item onClick={handleLogout}>
+                                                Logout
                                             </NavDropdown.Item>
+                                        </NavDropdown>
+                                    </>
+                                ) : (
+                                    <>
+                                        <LinkContainer to="/login">
+                                            <Nav.Link>Login</Nav.Link>
                                         </LinkContainer>
-                                        <LinkContainer to="/createUser">
-                                            <NavDropdown.Item href="/createUser">
-                                                Create user
-                                            </NavDropdown.Item>
-                                        </LinkContainer>
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Item onClick={handleLogout}>
-                                            Logout
-                                        </NavDropdown.Item>
-                                    </NavDropdown>
-                                </>
-                            ) : (
-                                <>
-                                    <LinkContainer to="/login">
-                                        <Nav.Link>Login</Nav.Link>
-                                    </LinkContainer>
-                                </>
-                            )}
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-                    <Routes />
-                </AppContext.Provider>
-            </div>
+                                    </>
+                                )}
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                    <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+                        <Routes />
+                    </AppContext.Provider>
+                </div>
+            </>
         )
     );
 }
