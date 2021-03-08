@@ -8,6 +8,7 @@ import GetAllProjects from "../apiRequests/GetAllProjects";
 import GetAllTags from "../apiRequests/GetAllTags";
 import {render} from "@testing-library/react";
 import {onError} from "../libs/errorLib";
+import TagDisplay from "../components/TagDisplay";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -77,42 +78,49 @@ export default function UserFrontpage() {
     }
 
     /**
-     * Renders the next FileDisplays onto the page.
+     * Renders the next Projects as FileDisplays onto the page.
      * @param max decides the max amount of FileDisplays that can be shown at one time.
      * @returns {[]} An array of FileDisplays
      */
     function renderFileDisplays(max) {
         let result = [];
+
         if (doesHaveProjects) {
             let i = 0;
             for (i; (i < max) && (i < generatedProjects.length); i++) {
-                result.push(<FileDisplay
-                        key={"projectNr" + i}
+                result.push(
+                    <FileDisplay
                         className="fileDisplay"
-                        filetype="jpeg"
+                        key={"ProjectName" + generatedProjects[i].projectName}
+                        filetype="folder"
                         filename={generatedProjects[i].projectName}
-                        fileowner="Random"
+                        fileowner={generatedProjects[i].owner.firstName + " " + generatedProjects[i].owner.lastName}
                     />
                 );
             }
         } else {
             result = ["No projects found!"];
         }
+        return result;
+    }
 
-        /*
-       Old version which uses forEach. Sadly can't be used as far as I can tell as it won't
-       let us control how many are rendered.
-        generatedProjects.forEach((fileToDisplay) => {
+    /**
+     * Renders all the tags in the sidebar as TagDisplays.
+     * @returns {[]}
+     */
+    function renderAllTags() {
+        let result = [];
+
+        allTags.forEach((tagToDisplay) => {
             result.push(
-                <FileDisplay
-                    key={fileToDisplay.projectId}
-                    className="fileDisplay"
-                    filetype="jpeg"
-                    filename={fileToDisplay.projectName}
-                    fileowner="Random"
+                <TagDisplay
+                    key={"TagName" + tagToDisplay.tagName}
+                    id={"TagName" + tagToDisplay.tagName}
+                    label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
+                    index={tagToDisplay.numberOfProjects}
+                    value={tagToDisplay.tagName}
                 />
-            )
-            */
+            )})
         return result;
     }
 
@@ -144,24 +152,7 @@ export default function UserFrontpage() {
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group size="lg">
-                        <Form.Check
-                            type="checkbox"
-                            label="Checkbox 1"
-                            index="checkbox1"
-                            value="testHook1"
-                            //onChange={(e) => setTestHook(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group size="lg">
-                        <Form.Check
-                            type="checkbox"
-                            label="Checkbox 2"
-                            index="checkbox2"
-                            value="testHook2"
-                            //onChange={(e) => setTestHook(e.target.value)}
-                        />
-                    </Form.Group>
+                    {renderAllTags()}
                     <LoaderButton
                         block
                         size="sm"
@@ -178,7 +169,6 @@ export default function UserFrontpage() {
                     <h1>Your frontpage!</h1>
                     <div className="projects">
                         {renderFileDisplays(maxFiles)}
-                        {}
                     </div>
                 </div>
                 <div className="projectFooter">

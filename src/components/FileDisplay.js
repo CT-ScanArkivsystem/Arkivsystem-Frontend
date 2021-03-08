@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import "./FileDisplay.css";
 import folderIcon from "../images/Image-Folder-icon.png";
 import gifIcon from "../images/gif-icon.png";
