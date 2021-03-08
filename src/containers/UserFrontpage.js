@@ -5,6 +5,7 @@ import LoaderButton from "../components/LoaderButton";
 import {Link} from "react-router-dom";
 import FileDisplay from "../components/FileDisplay";
 import GetAllProjects from "../apiRequests/GetAllProjects";
+import GetAllTags from "../apiRequests/GetAllTags";
 import {render} from "@testing-library/react";
 import {onError} from "../libs/errorLib";
 
@@ -12,26 +13,57 @@ export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [doesHaveProjects, setDoesHaveProjects] = useState(false);
+    const [doesHaveTags, setDoesHaveTags] = useState(false);
 
     const [allProjects, setAllProjects] = useState([]);
     const [generatedProjects, setGeneratedProjects] = useState([]);
+
+    const [allTags, setAllTags] = useState([]);
 
     const [maxFiles, setMaxFiles] = useState(0);
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
-        initGetAllProjects();
+        initialisation();
     }, []);
+
+    async function initialisation() {
+        await initGetAllProjects();
+        await initGetAllTags();
+        setIsLoading(false);
+    }
 
     /**
      * Gets run once at page load. Calls the GetAllProjects request and stores all the projects in the allProjects Hook.
      * @returns {Promise<void>}
      */
     async function initGetAllProjects() {
-        if (!doesHaveProjects) {
-            setAllProjects(await GetAllProjects());
-            setDoesHaveProjects(true);
-            setIsLoading(false);
+        try {
+            if (!doesHaveProjects) {
+                setAllProjects(await GetAllProjects());
+                if (allProjects.length <= 0) {
+                    setDoesHaveProjects(true);
+                    console.log("DoesHaveProjects: true")
+                }
+            }
+        }
+        catch (e) {
+            onError(e);
+        }
+    }
+
+    async function initGetAllTags() {
+        try {
+            if (!doesHaveTags) {
+                setAllTags(await GetAllTags());
+                if (allTags.length <= 0) {
+                    setDoesHaveTags(true);
+                    console.log("DoesHaveTags: true")
+                }
+            }
+        }
+        catch (e) {
+            onError(e)
         }
     }
 
@@ -51,18 +83,22 @@ export default function UserFrontpage() {
      */
     function renderFileDisplays(max) {
         let result = [];
-
-        let i = 0;
-        for (i; (i < max) && (i < generatedProjects.length); i++) {
-            result.push(<FileDisplay
-                    key={"projectNr" + i}
-                    className="fileDisplay"
-                    filetype="jpeg"
-                    filename={generatedProjects[i].projectName}
-                    fileowner="Random"
-                />
-            );
+        if (doesHaveProjects) {
+            let i = 0;
+            for (i; (i < max) && (i < generatedProjects.length); i++) {
+                result.push(<FileDisplay
+                        key={"projectNr" + i}
+                        className="fileDisplay"
+                        filetype="jpeg"
+                        filename={generatedProjects[i].projectName}
+                        fileowner="Random"
+                    />
+                );
+            }
+        } else {
+            result = ["No projects found!"];
         }
+
         /*
        Old version which uses forEach. Sadly can't be used as far as I can tell as it won't
        let us control how many are rendered.

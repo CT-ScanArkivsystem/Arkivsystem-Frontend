@@ -12,7 +12,7 @@ import Project from "../objects/Project";
 export default async function GetAllProjects() {
     let result = [];
     try {
-        let res = await fetch(currentIP + '/user/getAllProjects', {
+        let res = await fetch(currentIP + '/user/getAllTags', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -22,12 +22,12 @@ export default async function GetAllProjects() {
 
         result = await res.json();
 
-        console.log("Sending GetAllProjects request: ")
+        console.log("Sending GetAllTags request: ")
         if (result !== null && result.length > 0) {
-            console.log("Got all projects!");
+            console.log("Got all tags!");
         } else {
             result = [];
-            console.log("Could not get projects.");
+            console.log("Could not get tags.");
         }
 
     } catch (e) {
