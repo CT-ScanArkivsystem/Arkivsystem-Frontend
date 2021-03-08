@@ -23,21 +23,32 @@ export default function UserFrontpage() {
         initGetAllProjects();
     }, []);
 
+    /**
+     * Gets run once at page load. Calls the GetAllProjects request and stores all the projects in the allProjects Hook.
+     * @returns {Promise<void>}
+     */
     async function initGetAllProjects() {
         if (!doesHaveProjects) {
-            console.log("passes getAllProjects")
             setAllProjects(await GetAllProjects());
             setDoesHaveProjects(true);
             setIsLoading(false);
-            console.log("doesHaveProjects: " + doesHaveProjects)
         }
     }
 
+    /**
+     * Sets a new maxFiles value to increase the number of FileDisplays on the page.
+     * Also starts the generating of new FileDisplays.
+     */
     function addNextFileDisplays() {
         setMaxFiles(maxFiles + 2);
         setGeneratedProjects([...allProjects]);
     }
 
+    /**
+     * Renders the next FileDisplays onto the page.
+     * @param max decides the max amount of FileDisplays that can be shown at one time.
+     * @returns {[]} An array of FileDisplays
+     */
     function renderFileDisplays(max) {
         let result = [];
 
@@ -52,7 +63,9 @@ export default function UserFrontpage() {
                 />
             );
         }
-            /*
+        /*
+       Old version which uses forEach. Sadly can't be used as far as I can tell as it won't
+       let us control how many are rendered.
         generatedProjects.forEach((fileToDisplay) => {
             result.push(
                 <FileDisplay
@@ -67,6 +80,11 @@ export default function UserFrontpage() {
         return result;
     }
 
+    /**
+     * When the user clicks the search button and searches for projects
+     * @param event holds the information in the forms when the submit button was pressed.
+     * @returns {Promise<void>}
+     */
     async function handleSubmit(event) {
         event.preventDefault();
         console.log("HandleSubmit! in UserFrontpage")
