@@ -24,15 +24,7 @@ export default async function GetAllProjects() {
 
         console.log("Sending GetAllProjects request: ")
         if (result !== null && result !== "") {
-            /*let currentProject = {
-                projectId: "",
-                projectName: "",
-                isPrivate: false,
-                tags: [],
-                usersWithSpecialPermission: [],
-                projectMembers: [],
-            };*/
-            console.log("Gathering all projects!");
+            console.log("Got all projects!");
         } else {
             result = "";
             console.log("Could not get projects.");
@@ -44,6 +36,5 @@ export default async function GetAllProjects() {
         //Send the user to the home page. Prevents the user from accessing sites when not logged in.
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    console.log("result in GetAllProjects.js: " + result);
     return (result);
 }
