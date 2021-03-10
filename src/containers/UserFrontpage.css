@@ -14,7 +14,7 @@
     padding: 4px;
     display: flex;
     flex-flow: column;
-    min-height: 110vh;
+    min-height: 85vh;
 }
 
 .userFrontpage .projectContainer {

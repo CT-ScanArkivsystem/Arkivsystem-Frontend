@@ -111,16 +111,18 @@ export default function UserFrontpage() {
     function renderAllTags() {
         let result = [];
 
-        allTags.forEach((tagToDisplay) => {
-            result.push(
+        result = allTags.map(function(tagToDisplay) {
+            return (
                 <TagDisplay
-                    key={"TagName" + tagToDisplay.tagName}
-                    id={"TagName" + tagToDisplay.tagName}
-                    label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
-                    index={tagToDisplay.numberOfProjects}
-                    value={tagToDisplay.tagName}
-                />
-            )})
+                key={"TagName" + tagToDisplay.tagName}
+                id={"TagName" + tagToDisplay.tagName}
+                label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
+                index={tagToDisplay.numberOfProjects}
+                value={tagToDisplay.tagName}
+            />
+            )
+        });
+
         return result;
     }
 
