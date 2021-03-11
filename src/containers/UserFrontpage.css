@@ -8,13 +8,16 @@
 
 .userFrontpage .frontPageContainer {
     text-align: center;
-    width: 100%;
     border: #007afd 2px solid;
-    margin: 4px;
     padding: 4px;
     display: flex;
+    flex-grow: 100;
     flex-flow: column;
     min-height: 85vh;
+}
+
+.userFrontpage .checkboxContainer {
+    margin-left: 8px;
 }
 
 .userFrontpage .projectContainer {

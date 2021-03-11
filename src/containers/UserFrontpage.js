@@ -170,7 +170,10 @@ export default function UserFrontpage() {
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
                     </Form.Group>
-                    {renderAllTags()}
+                    <Form.Group size="lg" className="checkboxContainer">
+                        {renderAllTags()}
+                    </Form.Group>
+
                     <LoaderButton
                         block
                         size="sm"

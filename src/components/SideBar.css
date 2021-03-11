@@ -1,4 +1,5 @@
 .sideBar {
-    width: 200px;
-    margin: 4px;
+    width: 20%;
+    border: 2px #007AFD solid;
+    margin-right: 4px;
 }

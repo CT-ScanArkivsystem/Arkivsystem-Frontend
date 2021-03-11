@@ -35,8 +35,7 @@ const GlobalStyle = createGlobalStyle`
   div .pageContainer {
     width: 100%;
     border: #007afd 2px solid;
-    margin: 4px;
-    padding: 4px;
+    padding: 8px;
     display: flex;
     flex-flow: row;
     min-height: 85vh;
