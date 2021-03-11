@@ -8,6 +8,7 @@ import GetAllProjects from "../apiRequests/GetAllProjects";
 import GetAllTags from "../apiRequests/GetAllTags";
 import {onError} from "../libs/errorLib";
 import TagDisplay from "../components/TagDisplay";
+import SideBar from "../components/SideBar";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -158,8 +159,8 @@ export default function UserFrontpage() {
     }
     return (
         !isLoading && (
-        <div className="userFrontpage">
-            <div className="sideBar">
+        <div className="userFrontpage pageContainer">
+            <SideBar>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group size="lg">
                         <Form.Control
@@ -180,7 +181,7 @@ export default function UserFrontpage() {
                         Search
                     </LoaderButton>
                 </Form>
-            </div>
+            </SideBar>
             <div className="frontPageContainer">
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>

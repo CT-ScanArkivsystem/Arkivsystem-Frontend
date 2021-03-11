@@ -23,9 +23,23 @@ const GlobalStyle = createGlobalStyle`
     font-family: Helvetica, Sans-Serif, Open-Sans;
   }
 
+  button:disabled {
+    cursor: default;
+  }
+
   button.btn {
     background-color: #007afd;
     color: white;
+  }
+
+  div .pageContainer {
+    width: 100%;
+    border: #007afd 2px solid;
+    margin: 4px;
+    padding: 4px;
+    display: flex;
+    flex-flow: row;
+    min-height: 85vh;
   }
 `;
 

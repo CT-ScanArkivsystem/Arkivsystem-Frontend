@@ -26,14 +26,12 @@ export default function FileDisplay ({
         fileTypeIcon = filetypeHashmap.get(props.filetype);
         return(fileTypeIcon)
     }
-    // TODO: Need to give this component the parameters of the project
-    // This includes: Project name and project owner.
-    // Put project name further left so it is next to the icon
-  return (
+
+    return (
       <div className={'fileDisplay'} {...props}>
           <img className="fileDisplayIcon" src={checkFileType()} alt="Filetype icon" />
           <span className="fileDisplayName">{props.filename}</span>
           <span className="fileDisplayOwner">{props.fileowner}</span>
       </div>
-  );
+    );
 }
