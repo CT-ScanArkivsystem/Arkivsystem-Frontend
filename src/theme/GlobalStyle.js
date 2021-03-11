@@ -40,6 +40,14 @@ const GlobalStyle = createGlobalStyle`
     flex-flow: row;
     min-height: 85vh;
   }
+  
+  div .pageContent {
+    border: #007afd 2px solid;
+    padding: 4px;
+    display: flex;
+    flex-grow: 100;
+    min-height: 85vh;
+  }
 `;
 
 export default GlobalStyle

@@ -185,7 +185,7 @@ export default function UserFrontpage() {
                     </LoaderButton>
                 </Form>
             </SideBar>
-            <div className="frontPageContainer">
+            <div className="frontPageContainer pageContent">
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
                     <div className="projects">
