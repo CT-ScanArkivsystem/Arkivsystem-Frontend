@@ -5,6 +5,7 @@ import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";
 import CreateUser from "./containers/CreateUser";
 import UserFrontpage from "./containers/UserFrontpage";
+import CreateProject from "./containers/CreateProject";
 
 export default function Routes() {
     return (
@@ -17,6 +18,9 @@ export default function Routes() {
             </Route>
             <Route exact path="/userFrontpage">
                 <UserFrontpage />
+            </Route>
+            <Route exact path="/createProject">
+                <CreateProject />
             </Route>
             <Route exact path="/createUser">
                 <CreateUser />

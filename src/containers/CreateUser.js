@@ -74,7 +74,7 @@ export default function CreateUser() {
 
         // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
     return (
-        <div className="CreateUser">
+        <div className="CreateUser pageContainer">
             <Form onSubmit={handleSubmit}>
                 <h2>Create a new user:</h2>
                 <Form.Group size="lg" controlId="firstName">
