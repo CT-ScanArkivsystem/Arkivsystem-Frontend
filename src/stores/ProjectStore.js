@@ -6,10 +6,10 @@ import { extendObservable } from 'mobx';
 class ProjectStore {
     constructor() {
         extendObservable(this, {
-            email: '',
-            firstName: '',
-            lastName: '',
-            role: ''
+            projectName: '',
+            projectDescription: '',
+            isPrivate: '',
+            creationDate: ''
         })
     }
 }

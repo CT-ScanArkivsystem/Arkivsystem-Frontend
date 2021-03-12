@@ -13,6 +13,7 @@
 
 .userFrontpage .checkboxContainer {
     margin-left: 8px;
+    text-align: start;
 }
 
 .userFrontpage .projectContainer {
