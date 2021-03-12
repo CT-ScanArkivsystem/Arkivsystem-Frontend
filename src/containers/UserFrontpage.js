@@ -193,7 +193,7 @@ export default function UserFrontpage() {
                         {renderFileDisplays(maxFiles)}
                     </div>
                 </div>
-                <div className="projectFooter">
+                <div className="containerFooter">
                     <Link to="/createProject">
                         <LoaderButton
                             size="sm"

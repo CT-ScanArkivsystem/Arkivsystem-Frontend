@@ -2,7 +2,7 @@ import React from "react";
 import "./SideBar.css";
 
 
-export default function FileDisplay ({
+export default function SideBar ({
     className = "sideBar",
     ...props
 }) {

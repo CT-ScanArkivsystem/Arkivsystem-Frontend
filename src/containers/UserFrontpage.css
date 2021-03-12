@@ -20,12 +20,6 @@
     margin-bottom: 4px;
 }
 
-.userFrontpage .projectFooter {
-    bottom: 4px;
-    display: flex;
-    flex-direction: row-reverse;
-}
-
 .userFrontpage .lander h1 {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;

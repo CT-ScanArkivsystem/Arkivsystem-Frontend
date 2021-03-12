@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
   button:disabled {
     cursor: default;
   }
-
+  
   button.btn {
     background-color: #007afd;
     color: white;
@@ -47,6 +47,13 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-grow: 100;
     min-height: 85vh;
+  }
+  
+  div .containerFooter {
+    bottom: 4px;
+    display: flex;
+    margin: 8px;
+    flex-direction: row-reverse;
   }
 `;
 
