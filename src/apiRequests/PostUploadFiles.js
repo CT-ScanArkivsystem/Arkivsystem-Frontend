@@ -10,7 +10,7 @@ import {currentIP} from "../App";
  * @param projectId the id of the project which the files are going to be put under.
  */
 export default async function PostUploadFiles(files, projectId) {
-    let didFilesGetUploaded = false;
+    let result = [];
     try {
         let res = await fetch(currentIP + '/academic/uploadFiles', {
             method: 'POST',
@@ -24,16 +24,16 @@ export default async function PostUploadFiles(files, projectId) {
             })
         });
         let result = await res.json();
-        if (result !== null && result !== "") {
-            didFilesGetUploaded = true;
+        if (result !== null && result === []) {
+            console.log("Upload was successful.")
             // TODO: Pull information about the newly made user and show it on the page!
         } else {
-            console.log("User was not created!");
+            console.log("Upload encountered a problem!");
         }
     } catch (e) {
         onError(e);
-        console.log("User was not created due to an error!");
+        console.log("Files were not uploaded due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return didFilesGetUploaded;
+    return result;
 }

@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from "react";
 import Form from "react-bootstrap/Form";
-import "./CreateProjectContent.css";
+import "./UploadToProjectContent.css";
 import LoaderButton from "./LoaderButton";
-import PostCreateProject from "../apiRequests/PostCreateProject";
 import {onError} from "../libs/errorLib";
 import {useAppContext} from "../libs/contextLib";
 import ProjectStore from "../stores/ProjectStore";
-import {Button} from "react-bootstrap";
 import styled from "styled-components";
 import {useDropzone} from "react-dropzone";
+import PostUploadFiles from "../apiRequests/PostUploadFiles";
 
 const getColor = (props) => {
     if (props.isDragAccept) {
@@ -39,17 +38,13 @@ const Container = styled.div`
       transition: border .24s ease-in-out;
     `;
 
-export default function UploadToProjectContent(props) {
-    const { userHasAuthenticated } = useAppContext();
-    const [uploadedFiles, setUploadedFiles] = useState([<p>Init value</p>]);
-    const [projectName, setProjectName] = useState("");
-    const [projectDescription, setProjectDescription] = useState("");
-    const [creationDate, setCreationDate] = useState("");
-    const [isPrivate, setIsPrivate] = useState(false);
+//TODO: If the upload fails, tell the user!
+//TODO: Stop the user from uploading the same file! Maybe use the keys of the queued files?
+export default function UploadToProjectContent() {
     const [isLoading, setIsLoading] = useState(false);
 
+    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [filesInQueue, setFilesInQueue] = useState([]);
-    //const [myDropzone, setMyDropzone] = useState(<MyDropzone files={this.props.files} changeFirst={this.props.setFiles} />);
 
     const {
         acceptedFiles,
@@ -76,25 +71,23 @@ export default function UploadToProjectContent(props) {
      */
     async function handleSubmit(event) {
         event.preventDefault();
-        console.log("creationDate: " + creationDate);
         setIsLoading(true);
-        try {
-            let didProjectGetCreated = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
-            if (didProjectGetCreated !== null && didProjectGetCreated) {
-                userHasAuthenticated(true);
-                console.log("Project was created!")
-                // TODO: Should send user to upload files tab.
-                // TODO: Put project information into a projectStore.
-                // history.push("/userFrontpage");
-            } else {
-                console.log("Project was not created!");
+            try {
+                let didProjectGetCreated = await PostUploadFiles(filesInQueue, ProjectStore.projectId); //PostCreateUser(firstName, lastName, email, password1, role);
+                if (didProjectGetCreated !== null && didProjectGetCreated === []) {
+                    setUploadedFiles(uploadedFiles.concat(filesInQueue));
+                    setFilesInQueue([]);
+                    setIsLoading(false);
+                    console.log("Project was created!")
+                } else {
+                    setIsLoading(false);
+                    console.log("Project was not created!");
+                }
+            } catch (e) {
+                setIsLoading(false);
+                onError(e);
+                //TODO: TELL THE USER SOMETHING WENT WRONG!
             }
-        }
-        catch (e) {
-            setIsLoading(false);
-            onError(e);
-            //TODO: TELL THE USER SOMETHING WENT WRONG!
-        }
     }
 
     /**
@@ -107,13 +100,6 @@ export default function UploadToProjectContent(props) {
         return (filesInQueue.length > 0);
     }
 
-    function uploadFiles() {
-        if (validateFiles()) {
-
-        }
-        setUploadedFiles(uploadedFiles.concat(<p>Test value</p>));
-    }
-
     return (
       <Form onSubmit={handleSubmit} className="createProjectForm">
           <div className="createProjectFormDiv">
@@ -124,21 +110,23 @@ export default function UploadToProjectContent(props) {
                       <p>Drag 'n' drop some files here, or click to select files</p>
                   </Container>
                   <LoaderButton
+                      className="uploadButton"
+                      type="submit"
                       isLoading={isLoading}
                       disabled={!validateFiles()}
-                      onClick={uploadFiles}
+                      onClick={handleSubmit}
                   >
                       Upload
                   </LoaderButton>
                   <aside>
                       <h2>Files in queue</h2>
-                      <ul>{filesInQueue}</ul>
+                      <ul>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</ul>
                   </aside>
               </div>
               <div>
                   <h2>Files uploaded</h2>
                   <div>
-                      {uploadedFiles}
+                      {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded."}
                   </div>
               </div>
           </div>
