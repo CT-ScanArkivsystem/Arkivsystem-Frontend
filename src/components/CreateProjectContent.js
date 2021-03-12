@@ -4,12 +4,10 @@ import Form from "react-bootstrap/Form";
 import LoaderButton from "./LoaderButton";
 import PostCreateProject from "../apiRequests/PostCreateProject";
 import {onError} from "../libs/errorLib";
-import {useAppContext} from "../libs/contextLib";
 import ProjectStore from "../stores/ProjectStore";
 
 
 export default function CreateProjectContent() {
-    const { userHasAuthenticated } = useAppContext();
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [creationDate, setCreationDate] = useState("");
@@ -33,9 +31,9 @@ export default function CreateProjectContent() {
 
         setIsLoading(true);
         try {
-            let didProjectGetCreated = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
-            if (didProjectGetCreated !== null && didProjectGetCreated) {
-                userHasAuthenticated(true);
+            let result = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
+            if (result !== null && result) {
+                ProjectStore.projectId = result.projectId;
                 console.log("Project was created!")
                 // TODO: Should send user to upload files tab.
                 // TODO: Put project information into a projectStore.
