@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import Form from "react-bootstrap/Form";
 import "./CreateProjectContent.css";
 import LoaderButton from "./LoaderButton";
@@ -48,7 +48,7 @@ export default function UploadToProjectContent(props) {
     const [isPrivate, setIsPrivate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const [filesInQueue, setFilesInQueue] = useState();
+    const [filesInQueue, setFilesInQueue] = useState([]);
     //const [myDropzone, setMyDropzone] = useState(<MyDropzone files={this.props.files} changeFirst={this.props.setFiles} />);
 
     const {
@@ -58,7 +58,7 @@ export default function UploadToProjectContent(props) {
         isDragActive,
         isDragAccept,
         isDragReject
-    } = useDropzone({accept: 'image/*'});
+    } = useDropzone();
 
         useEffect(() => {
             setFilesInQueue(acceptedFiles.map(file => (
@@ -66,7 +66,7 @@ export default function UploadToProjectContent(props) {
                     {file.path} - {file.size} bytes
                 </li>
             )))
-        }, [acceptedFiles])
+        }, [acceptedFiles]);
 
     /**
      * Sends a POST request to the server with the users input projectName, creationDate, isPrivate and projectDescription.
@@ -103,11 +103,14 @@ export default function UploadToProjectContent(props) {
      * If no input in either of them the button will be disabled.
      * @returns {boolean}
      */
-    function validateForm() {
-        return (projectName.length > 0 && projectName.length < 256 && creationDate.length > 0 && projectDescription.length > 0 && projectDescription.length < 256);
+    function validateFiles() {
+        return (filesInQueue.length > 0);
     }
 
     function uploadFiles() {
+        if (validateFiles()) {
+
+        }
         setUploadedFiles(uploadedFiles.concat(<p>Test value</p>));
     }
 
@@ -120,26 +123,20 @@ export default function UploadToProjectContent(props) {
                       <input {...getInputProps()} />
                       <p>Drag 'n' drop some files here, or click to select files</p>
                   </Container>
+                  <LoaderButton
+                      isLoading={isLoading}
+                      disabled={!validateFiles()}
+                      onClick={uploadFiles}
+                  >
+                      Upload
+                  </LoaderButton>
                   <aside>
-                      <h4>Files</h4>
+                      <h2>Files in queue</h2>
                       <ul>{filesInQueue}</ul>
                   </aside>
               </div>
-              <div className="containerFooter">
-                  <LoaderButton
-                      size="bg"
-                      type="submit"
-                      isLoading={isLoading}
-                      disabled={!validateForm()}
-                  >
-                      Create project
-                  </LoaderButton>
-                  <Button
-                    onClick={uploadFiles}
-                  >Add files</Button>
-              </div>
               <div>
-                  <h2>Display uploaded files here!</h2>
+                  <h2>Files uploaded</h2>
                   <div>
                       {uploadedFiles}
                   </div>
