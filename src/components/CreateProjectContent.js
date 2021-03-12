@@ -5,6 +5,7 @@ import LoaderButton from "./LoaderButton";
 import PostCreateProject from "../apiRequests/PostCreateProject";
 import {onError} from "../libs/errorLib";
 import {useAppContext} from "../libs/contextLib";
+import ProjectStore from "../stores/ProjectStore";
 
 
 export default function CreateProjectContent() {
@@ -24,7 +25,12 @@ export default function CreateProjectContent() {
      */
     async function handleSubmit(event) {
         event.preventDefault();
-        console.log("creationDate: " + creationDate);
+
+        ProjectStore.projectName = projectName;
+        ProjectStore.projectDescription = projectDescription;
+        ProjectStore.isPrivate = isPrivate;
+        ProjectStore.creationDate = creationDate;
+
         setIsLoading(true);
         try {
             let didProjectGetCreated = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
@@ -47,11 +53,12 @@ export default function CreateProjectContent() {
 
     /**
      * Checks if projectName, creationDate and projectDescription form inputs have something put into them.
+     * Also checks if the input values are too large for the server to be able to handle.
      * If no input in either of them the button will be disabled.
      * @returns {boolean}
      */
     function validateForm() {
-        return (projectName.length > 0 && creationDate.length > 0 && projectDescription.length > 0);
+        return (projectName.length > 0 && projectName.length < 256 && creationDate.length > 0 && projectDescription.length > 0 && projectDescription.length < 256);
     }
 
   return (
@@ -90,7 +97,7 @@ export default function CreateProjectContent() {
                       <Form.Label>Project description</Form.Label>
                       <Form.Control
                           as="textarea"
-                          rows="7"
+                          rows="9"
                           value={projectDescription}
                           onChange={(e) => setProjectDescription(e.target.value)}
                       />

@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
+import {Button} from "react-bootstrap";
+
 import "./CreateProject.css";
 import SideBar from "../components/SideBar";
-import {Button} from "react-bootstrap";
 import CreateProjectContent from "../components/CreateProjectContent";
+import UploadToProjectContent from "../components/UploadToProjectContent";
 
 export default function CreateProject() {
 
@@ -13,7 +15,7 @@ export default function CreateProject() {
     }
 
     function contentToDetails() {
-        setPageContent(<h2>Details!</h2>)
+        setPageContent(<UploadToProjectContent />)
     }
 
 
