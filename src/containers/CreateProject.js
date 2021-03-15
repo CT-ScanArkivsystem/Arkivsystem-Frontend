@@ -5,6 +5,7 @@ import "./CreateProject.css";
 import SideBar from "../components/SideBar";
 import CreateProjectContent from "../components/CreateProjectContent";
 import UploadToProjectContent from "../components/UploadToProjectContent";
+import ProjectStore from "../stores/ProjectStore";
 
 export default function CreateProject() {
 
@@ -16,6 +17,13 @@ export default function CreateProject() {
 
     function contentToDetails() {
         setPageContent(<UploadToProjectContent />)
+
+        ProjectStore.projectName = "testProject";
+        ProjectStore.projectDescription = "test desc.";
+        ProjectStore.isPrivate = false;
+        ProjectStore.creationDate = "2021-03-15";
+        ProjectStore.projectId = "adccb882-bc05-4502-816f-6f122eb10728";
+
     }
 
 

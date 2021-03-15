@@ -15,7 +15,7 @@ import {currentIP} from "../App";
 export default async function PostCreateProject(projectName, isPrivate, creationDate, projectDescription) {
     let result;
     try {
-        let res = await fetch(currentIP + '/admin/newUser', {
+        let res = await fetch(currentIP + '/academic/createProject', {
             method: 'POST',
             credentials: 'include',
             headers: {
