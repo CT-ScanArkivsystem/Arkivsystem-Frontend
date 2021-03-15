@@ -3,7 +3,6 @@ import Form from "react-bootstrap/Form";
 import "./UploadToProjectContent.css";
 import LoaderButton from "./LoaderButton";
 import {onError} from "../libs/errorLib";
-import {useAppContext} from "../libs/contextLib";
 import ProjectStore from "../stores/ProjectStore";
 import styled from "styled-components";
 import {useDropzone} from "react-dropzone";
@@ -70,18 +69,24 @@ export default function UploadToProjectContent() {
      * @returns {Promise<void>}
      */
     async function handleSubmit(event) {
+        //TODO: If picture already exists you get response telling you what did not get saved. Tell user!
+        // result is undefined, unable to use res to figure out what did not get uploaded
         event.preventDefault();
         setIsLoading(true);
             try {
-                let didProjectGetCreated = await PostUploadFiles(filesInQueue, ProjectStore.projectId); //PostCreateUser(firstName, lastName, email, password1, role);
-                if (didProjectGetCreated !== null && didProjectGetCreated === []) {
+                let didFilesGetUploaded = await PostUploadFiles(acceptedFiles, ProjectStore.projectId);
+                if (didFilesGetUploaded === []) {
                     setUploadedFiles(uploadedFiles.concat(filesInQueue));
                     setFilesInQueue([]);
                     setIsLoading(false);
-                    console.log("Project was created!")
-                } else {
+                    console.log("All files were uploaded successfully!")
+                } else if (didFilesGetUploaded !== []) {
                     setIsLoading(false);
-                    console.log("Project was not created!");
+                    console.log("Something did not get uploaded: " + didFilesGetUploaded);
+                }
+                    else {
+                    setIsLoading(false);
+                    console.log("Files were not uploaded!");
                 }
             } catch (e) {
                 setIsLoading(false);

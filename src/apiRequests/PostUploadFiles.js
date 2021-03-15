@@ -10,21 +10,23 @@ import {currentIP} from "../App";
  * @param projectId the id of the project which the files are going to be put under.
  */
 export default async function PostUploadFiles(files, projectId) {
-    let result = [];
+    let res;
     try {
-        let res = await fetch(currentIP + '/academic/uploadFiles', {
+        let formData = new FormData();
+        /*files.forEach(i => {
+            formData.append("files", files[i])
+        })*/
+        formData.append("files", files[0]);
+        formData.append("projectId", projectId);
+
+        res = await fetch(currentIP + '/academic/uploadFiles', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                files: files,
-                projectId: projectId
-            })
+            body: formData
         });
+
         let result = await res.json();
-        if (result !== null && result === []) {
+        if (res.ok) {
             console.log("Upload was successful.")
             // TODO: Pull information about the newly made user and show it on the page!
         } else {
@@ -35,5 +37,6 @@ export default async function PostUploadFiles(files, projectId) {
         console.log("Files were not uploaded due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return result;
+    console.log(res);
+    return res;
 }
