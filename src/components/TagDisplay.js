@@ -10,12 +10,10 @@ export default function TagDisplay ({
 }) {
 
   return (
-      <Form.Group size="lg">
           <Form.Check
               type="checkbox"
               className="tagCheckbox"
               {...props}
           />
-      </Form.Group>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import "./UserFrontpage.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
@@ -6,9 +6,9 @@ import {Link} from "react-router-dom";
 import FileDisplay from "../components/FileDisplay";
 import GetAllProjects from "../apiRequests/GetAllProjects";
 import GetAllTags from "../apiRequests/GetAllTags";
-import {render} from "@testing-library/react";
 import {onError} from "../libs/errorLib";
 import TagDisplay from "../components/TagDisplay";
+import SideBar from "../components/SideBar";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -17,13 +17,13 @@ export default function UserFrontpage() {
     const [doesHaveTags, setDoesHaveTags] = useState(false);
 
     const [allProjects, setAllProjects] = useState([]);
-    const [generatedProjects, setGeneratedProjects] = useState([]);
 
     const [allTags, setAllTags] = useState([]);
 
+    const [filesToDisplay, setFilesToDisplay] = useState([]);
     const [maxFiles, setMaxFiles] = useState(0);
 
-    //Functions in the useEffect() will be run once on load of site.
+    //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         initialisation();
     }, []);
@@ -31,6 +31,7 @@ export default function UserFrontpage() {
     async function initialisation() {
         await initGetAllProjects();
         await initGetAllTags();
+        generateFileDisplays();
         setIsLoading(false);
     }
 
@@ -68,13 +69,28 @@ export default function UserFrontpage() {
         }
     }
 
+    function generateFileDisplays() {
+        let result = [];
+
+        allProjects.map(function(fileToDisplay) {
+            return (
+                <FileDisplay
+                    className="fileDisplay"
+                    key={"ProjectName" + fileToDisplay.projectName}
+                    filetype="folder"
+                    filename={fileToDisplay.projectName}
+                    fileowner={fileToDisplay.owner.firstName + " " + fileToDisplay.owner.lastName}
+                />
+            )});
+        setFilesToDisplay(result);
+    }
+
     /**
      * Sets a new maxFiles value to increase the number of FileDisplays on the page.
      * Also starts the generating of new FileDisplays.
      */
-    function addNextFileDisplays() {
+    function changeMaxFiles() {
         setMaxFiles(maxFiles + 2);
-        setGeneratedProjects([...allProjects]);
     }
 
     /**
@@ -87,14 +103,13 @@ export default function UserFrontpage() {
 
         if (doesHaveProjects) {
             let i = 0;
-            for (i; (i < max) && (i < generatedProjects.length); i++) {
+            for (i; (i < max) && (i < allProjects.length); i++) {
                 result.push(
                     <FileDisplay
                         className="fileDisplay"
-                        key={"ProjectName" + generatedProjects[i].projectName}
-                        filetype="folder"
-                        filename={generatedProjects[i].projectName}
-                        fileowner={generatedProjects[i].owner.firstName + " " + generatedProjects[i].owner.lastName}
+                        key={"ProjectName" + allProjects[i].projectName}
+                        filename={allProjects[i].projectName}
+                        fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
                     />
                 );
             }
@@ -111,16 +126,18 @@ export default function UserFrontpage() {
     function renderAllTags() {
         let result = [];
 
-        allTags.forEach((tagToDisplay) => {
-            result.push(
+        result = allTags.map(function(tagToDisplay) {
+            return (
                 <TagDisplay
-                    key={"TagName" + tagToDisplay.tagName}
-                    id={"TagName" + tagToDisplay.tagName}
-                    label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
-                    index={tagToDisplay.numberOfProjects}
-                    value={tagToDisplay.tagName}
-                />
-            )})
+                key={"TagName" + tagToDisplay.tagName}
+                id={"TagName" + tagToDisplay.tagName}
+                label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
+                index={tagToDisplay.numberOfProjects}
+                value={tagToDisplay.tagName}
+            />
+            )
+        });
+
         return result;
     }
 
@@ -141,8 +158,8 @@ export default function UserFrontpage() {
     }
     return (
         !isLoading && (
-        <div className="userFrontpage">
-            <div className="sideBar">
+        <div className="userFrontpage pageContainer">
+            <SideBar>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group size="lg">
                         <Form.Control
@@ -152,7 +169,10 @@ export default function UserFrontpage() {
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
                     </Form.Group>
-                    {renderAllTags()}
+                    <Form.Group size="lg" className="checkboxContainer">
+                        {renderAllTags()}
+                    </Form.Group>
+
                     <LoaderButton
                         block
                         size="sm"
@@ -163,15 +183,16 @@ export default function UserFrontpage() {
                         Search
                     </LoaderButton>
                 </Form>
-            </div>
-            <div className="frontPageContainer">
+            </SideBar>
+            <div className="frontPageContainer pageContent">
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
                     <div className="projects">
+                        {filesToDisplay}
                         {renderFileDisplays(maxFiles)}
                     </div>
                 </div>
-                <div className="projectFooter">
+                <div className="containerFooter">
                     <Link to="/createProject">
                         <LoaderButton
                             size="sm"
@@ -183,7 +204,7 @@ export default function UserFrontpage() {
                     <LoaderButton
                         size="sm"
                         isLoading={isLoading}
-                        onClick={addNextFileDisplays}
+                        onClick={changeMaxFiles}
                     >
                         Get next projects
                     </LoaderButton>

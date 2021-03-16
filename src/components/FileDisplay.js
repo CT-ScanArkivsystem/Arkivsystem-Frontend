@@ -15,25 +15,44 @@ export default function FileDisplay ({
     let filetypeHashmap = new Map([
         ["folder", folderIcon],
         ["gif", gifIcon],
+        // All JPEG formats
+        ["jpg", jpegIcon],
         ["jpeg", jpegIcon],
+        ["jpe", jpegIcon],
+        ["jif", jpegIcon],
+        ["jfif", jpegIcon],
+        ["jfi", jpegIcon],
         ["png", pngIcon],
+        // All TIFF formats
         ["tiff", tiffIcon],
+        ["tif", tiffIcon],
     ])
 
     let fileTypeIcon = "";
 
     function checkFileType() {
-        fileTypeIcon = filetypeHashmap.get(props.filetype);
-        return(fileTypeIcon)
+        let fileExtension = props.filename.substr(props.filename.lastIndexOf('.') + 1);
+        // Checks if the extension found is the same as the filename. If it is it's a folder.
+        if (fileExtension === props.filename) {
+            fileTypeIcon = filetypeHashmap.get("folder");
+        } else {
+            fileTypeIcon = filetypeHashmap.get(fileExtension);
+        }
+        return(fileTypeIcon);
     }
-    // TODO: Need to give this component the parameters of the project
-    // This includes: Project name and project owner.
-    // Put project name further left so it is next to the icon
-  return (
+
+    /*
+    function checkFileType() {
+        fileTypeIcon = filetypeHashmap.get(props.filetype);
+        return(fileTypeIcon);
+    }
+    */
+
+    return (
       <div className={'fileDisplay'} {...props}>
           <img className="fileDisplayIcon" src={checkFileType()} alt="Filetype icon" />
           <span className="fileDisplayName">{props.filename}</span>
           <span className="fileDisplayOwner">{props.fileowner}</span>
       </div>
-  );
+    );
 }
