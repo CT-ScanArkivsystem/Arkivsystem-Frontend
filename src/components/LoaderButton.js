@@ -11,6 +11,7 @@ export default function LoaderButton({
 }) {
   return (
       <Button
+          variant="outline-dark"
           disabled={disabled || isLoading}
           className={`LoaderButton ${className}`}
           {...props}

@@ -82,8 +82,8 @@ function App() {
         !isAuthenticating && (
             <>
                 <GlobalStyle />
-                <div className="App container py-3">
-                    <Navbar collapseOnSelect bg="primary" variant="dark" expand="md" className="mb-3">
+                <div className="App container">
+                    <Navbar collapseOnSelect variant="dark" expand="md">
                         {isAuthenticated ? (
                             <LinkContainer to="/userFrontpage">
                                 <Navbar.Brand href="/" className="font-weight-bold">

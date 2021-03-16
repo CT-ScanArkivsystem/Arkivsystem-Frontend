@@ -8,6 +8,7 @@ import styled from "styled-components";
 import {useDropzone} from "react-dropzone";
 import PostUploadFiles from "../apiRequests/PostUploadFiles";
 import FileDisplay from "./FileDisplay";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 const getColor = (props) => {
     if (props.isDragAccept) {
@@ -45,6 +46,7 @@ export default function UploadToProjectContent() {
 
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [filesInQueue, setFilesInQueue] = useState([]);
+    const [errorMessage, setErrorMessage] = useState();
 
     const {
         acceptedFiles,
@@ -88,13 +90,22 @@ export default function UploadToProjectContent() {
                     setUploadedFiles(uploadedFiles.concat(filesInQueue));
                     setFilesInQueue([]);
                     setIsLoading(false);
+                    setErrorMessage("");
                     console.log("All files were uploaded successfully!")
                 } else if (didFilesGetUploaded && didFilesGetUploaded.length) {
                     setIsLoading(false);
+                    setErrorMessage(
+                        <p className="errorMessage">Some files did not get uploaded!
+                            <br/>
+                            The most probable cause is that they already exist in the project! Files not uploaded:
+                            <br/>
+                            {filesNotUploadedToString(didFilesGetUploaded)}
+                        </p>)
                     console.log("Something did not get uploaded: " + didFilesGetUploaded);
                 }
                     else {
                     setIsLoading(false);
+                    setErrorMessage(<p className="errorMessage">Something went wrong!</p>)
                     console.log("Files were not uploaded!");
                 }
             } catch (e) {
@@ -102,6 +113,21 @@ export default function UploadToProjectContent() {
                 onError(e);
                 //TODO: TELL THE USER SOMETHING WENT WRONG!
             }
+    }
+
+    function filesNotUploadedToString(files) {
+            let filesNotUploaded = "";
+
+            console.log(files);
+            for (let i = 0; i < files.length; i++) {
+                if ((i+1) < files.length) {
+                    filesNotUploaded = filesNotUploaded + files[i] + ", ";
+                } else {
+                    filesNotUploaded = filesNotUploaded + files[i];
+                }
+            }
+            console.log(filesNotUploaded);
+            return filesNotUploaded;
     }
 
     /**
@@ -136,12 +162,13 @@ export default function UploadToProjectContent() {
               </div>
               <div>
                   <h2>Files to be uploaded</h2>
+                  {errorMessage}
                   <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
               </div>
               <div>
                   <h2>Files uploaded</h2>
                   <div>
-                      {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded."}
+                      {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded yet."}
                   </div>
               </div>
           </div>

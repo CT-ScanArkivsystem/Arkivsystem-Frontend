@@ -2,7 +2,6 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    border: #282c34 solid 2px;
     margin-bottom: 8px;
 }
 

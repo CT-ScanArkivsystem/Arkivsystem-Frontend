@@ -14,7 +14,6 @@ export default async function PostUploadFiles(files, projectId) {
     try {
         let formData = new FormData();
         files.forEach(file => {
-            console.log(file);
             formData.append("files", file);
         })
         formData.append("projectId", projectId);

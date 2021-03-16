@@ -21,7 +21,7 @@ export default function UserFrontpage() {
     const [allTags, setAllTags] = useState([]);
 
     const [filesToDisplay, setFilesToDisplay] = useState([]);
-    const [maxFiles, setMaxFiles] = useState(0);
+    const [maxFiles, setMaxFiles] = useState(10);
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -58,7 +58,7 @@ export default function UserFrontpage() {
         try {
             if (!doesHaveTags) {
                 setAllTags(await GetAllTags());
-                if (allTags.length <= 0) {
+                if (allTags.length > 0) {
                     setDoesHaveTags(true);
                     console.log("DoesHaveTags: true")
                 }
@@ -90,7 +90,7 @@ export default function UserFrontpage() {
      * Also starts the generating of new FileDisplays.
      */
     function changeMaxFiles() {
-        setMaxFiles(maxFiles + 2);
+        setMaxFiles(maxFiles + 5);
     }
 
     /**
