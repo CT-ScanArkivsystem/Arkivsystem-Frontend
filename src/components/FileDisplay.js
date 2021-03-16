@@ -16,13 +16,17 @@ export default function FileDisplay ({
         ["folder", folderIcon],
         ["gif", gifIcon],
         // All JPEG formats
+        ["JPG", jpegIcon],
         ["jpg", jpegIcon],
+        ["JPEG", jpegIcon],
         ["jpeg", jpegIcon],
         ["jpe", jpegIcon],
         ["jif", jpegIcon],
         ["jfif", jpegIcon],
         ["jfi", jpegIcon],
+        // All PNG formats
         ["png", pngIcon],
+        ["PNG", pngIcon],
         // All TIFF formats
         ["tiff", tiffIcon],
         ["tif", tiffIcon],

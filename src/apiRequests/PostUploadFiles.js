@@ -13,10 +13,10 @@ export default async function PostUploadFiles(files, projectId) {
     let result = false;
     try {
         let formData = new FormData();
-        /*files.forEach(i => {
-            formData.append("files", files[i])
-        })*/
-        formData.append("files", files[0]);
+        files.forEach(file => {
+            console.log(file);
+            formData.append("files", file);
+        })
         formData.append("projectId", projectId);
 
         let res = await fetch(currentIP + '/academic/uploadFiles', {

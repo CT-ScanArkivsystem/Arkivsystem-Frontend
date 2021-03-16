@@ -135,7 +135,7 @@ export default function UploadToProjectContent() {
 
               </div>
               <div>
-                  <h2>Files in queue</h2>
+                  <h2>Files to be uploaded</h2>
                   <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
               </div>
               <div>
