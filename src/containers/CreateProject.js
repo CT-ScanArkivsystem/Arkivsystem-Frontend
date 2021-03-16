@@ -9,13 +9,15 @@ import ProjectStore from "../stores/ProjectStore";
 
 export default function CreateProject() {
 
-    const [pageContent, setPageContent] = useState(<CreateProjectContent />);
+    const [pageContent, setPageContent] = useState(<CreateProjectContent contentToDetails={contentToDetails}/>);
+    const [creatingProject, setCreatingProject] = useState(true);
 
     function contentToCreateProject() {
-        setPageContent(<CreateProjectContent />);
+        setPageContent(<CreateProjectContent contentToDetails={contentToDetails}/>);
     }
 
     function contentToDetails() {
+        setCreatingProject(false);
         setPageContent(<UploadToProjectContent />)
 
         ProjectStore.projectName = "testProject";
@@ -36,17 +38,16 @@ export default function CreateProject() {
                 <Button
                     className="sideBarButton"
                     onClick={contentToCreateProject}
+                    disabled={!creatingProject}
                 >
                     Create new project
                 </Button>
                 <Button
                     className="sideBarButton"
                     onClick={contentToDetails}
+                    disabled={creatingProject}
                 >
                     View details
-                </Button>
-                <Button className="sideBarButton">
-                    Test3
                 </Button>
             </SideBar>
             <div className="pageContent">

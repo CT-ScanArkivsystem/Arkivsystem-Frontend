@@ -5,9 +5,10 @@ import LoaderButton from "./LoaderButton";
 import PostCreateProject from "../apiRequests/PostCreateProject";
 import {onError} from "../libs/errorLib";
 import ProjectStore from "../stores/ProjectStore";
+import UploadToProjectContent from "./UploadToProjectContent";
 
 
-export default function CreateProjectContent() {
+export default function CreateProjectContent(props) {
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [creationDate, setCreationDate] = useState("");
@@ -31,9 +32,10 @@ export default function CreateProjectContent() {
 
         setIsLoading(true);
         try {
-            let result = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
+            let result = true // await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
             if (result !== null && result) {
-                ProjectStore.projectId = result.projectId;
+                ProjectStore.projectId = "adccb882-bc05-4502-816f-6f122eb10728";
+                props.contentToDetails();
                 console.log("Project was created!")
                 // TODO: Should send user to upload files tab.
                 // TODO: Put project information into a projectStore.
