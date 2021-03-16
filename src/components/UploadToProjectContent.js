@@ -84,12 +84,12 @@ export default function UploadToProjectContent() {
         setIsLoading(true);
             try {
                 let didFilesGetUploaded = await PostUploadFiles(acceptedFiles, ProjectStore.projectId);
-                if (didFilesGetUploaded === []) {
+                if (didFilesGetUploaded && !didFilesGetUploaded.length) {
                     setUploadedFiles(uploadedFiles.concat(filesInQueue));
                     setFilesInQueue([]);
                     setIsLoading(false);
                     console.log("All files were uploaded successfully!")
-                } else if (didFilesGetUploaded !== []) {
+                } else if (didFilesGetUploaded && didFilesGetUploaded.length) {
                     setIsLoading(false);
                     console.log("Something did not get uploaded: " + didFilesGetUploaded);
                 }
@@ -132,10 +132,11 @@ export default function UploadToProjectContent() {
                   >
                       Upload
                   </LoaderButton>
-                  <aside>
-                      <h2>Files in queue</h2>
-                      <ul>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</ul>
-                  </aside>
+
+              </div>
+              <div>
+                  <h2>Files in queue</h2>
+                  <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
               </div>
               <div>
                   <h2>Files uploaded</h2>
