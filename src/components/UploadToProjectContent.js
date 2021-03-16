@@ -7,6 +7,7 @@ import ProjectStore from "../stores/ProjectStore";
 import styled from "styled-components";
 import {useDropzone} from "react-dropzone";
 import PostUploadFiles from "../apiRequests/PostUploadFiles";
+import FileDisplay from "./FileDisplay";
 
 const getColor = (props) => {
     if (props.isDragAccept) {
@@ -56,10 +57,18 @@ export default function UploadToProjectContent() {
 
         useEffect(() => {
             setFilesInQueue(acceptedFiles.map(file => (
-                <li key={file.path}>
+                <FileDisplay
+                    className="fileDisplay"
+                    key={file.path}
+                    filename={file.path}
+                    fileowner=""
+                />)))
+
+            /*
+            <li key={file.path}>
                     {file.path} - {file.size} bytes
                 </li>
-            )))
+             */
         }, [acceptedFiles]);
 
     /**

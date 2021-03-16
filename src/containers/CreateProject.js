@@ -6,11 +6,14 @@ import SideBar from "../components/SideBar";
 import CreateProjectContent from "../components/CreateProjectContent";
 import UploadToProjectContent from "../components/UploadToProjectContent";
 import ProjectStore from "../stores/ProjectStore";
+import LoaderButton from "../components/LoaderButton";
+import {Link} from "react-router-dom";
 
 export default function CreateProject() {
 
     const [pageContent, setPageContent] = useState(<CreateProjectContent contentToDetails={contentToDetails}/>);
     const [creatingProject, setCreatingProject] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     function contentToCreateProject() {
         setPageContent(<CreateProjectContent contentToDetails={contentToDetails}/>);
@@ -40,15 +43,27 @@ export default function CreateProject() {
                     onClick={contentToCreateProject}
                     disabled={!creatingProject}
                 >
-                    Create new project
+                    Create project
                 </Button>
                 <Button
                     className="sideBarButton"
                     onClick={contentToDetails}
                     disabled={creatingProject}
                 >
-                    View details
+                    Upload files
                 </Button>
+                <br/>
+                <Link to="/project">
+                    <LoaderButton
+                        size="bg"
+                        className="toProjectButton"
+                        disabled={creatingProject}
+                        isLoading={isLoading}
+                        onClick={() => setIsLoading(true)}
+                    >
+                        Go to project
+                    </LoaderButton>
+                </Link>
             </SideBar>
             <div className="pageContent">
                 {pageContent}

@@ -108,7 +108,6 @@ export default function UserFrontpage() {
                     <FileDisplay
                         className="fileDisplay"
                         key={"ProjectName" + allProjects[i].projectName}
-                        filetype="folder"
                         filename={allProjects[i].projectName}
                         fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
                     />

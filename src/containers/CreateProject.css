@@ -6,4 +6,8 @@
     .errorMessage {
         color: red;
     }
+
+    .toProjectButton {
+        width: 100%;
+    }
 }
