@@ -107,7 +107,7 @@ export default function UserFrontpage() {
                 result.push(
                     <FileDisplay
                         className="fileDisplay"
-                        key={"ProjectName" + allProjects[i].projectName}
+                        key={allProjects[i].projectId}
                         filename={allProjects[i].projectName}
                         fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
                     />

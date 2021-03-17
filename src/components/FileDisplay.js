@@ -5,6 +5,7 @@ import gifIcon from "../images/gif-icon.png";
 import jpegIcon from "../images/jpeg-icon.png";
 import pngIcon from "../images/Image-PNG-icon.png";
 import tiffIcon from "../images/Image-TIFF-icon.png";
+import {Link} from "react-router-dom";
 
 
 export default function FileDisplay ({
@@ -53,10 +54,12 @@ export default function FileDisplay ({
     */
 
     return (
-      <div className={'fileDisplay'} {...props}>
-          <img className="fileDisplayIcon" src={checkFileType()} alt="Filetype icon" />
-          <span className="fileDisplayName">{props.filename}</span>
-          <span className="fileDisplayOwner">{props.fileowner}</span>
-      </div>
+        <Link to="/project" className="fileDisplayLink">
+            <div className={'fileDisplay'}>
+                <img className="fileDisplayIcon" src={checkFileType()} alt="Filetype icon" />
+                <span className="fileDisplayName">{props.filename}</span>
+                <span className="fileDisplayOwner">{props.fileowner}</span>
+            </div>
+        </Link>
     );
 }
