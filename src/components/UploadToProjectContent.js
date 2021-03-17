@@ -8,7 +8,6 @@ import styled from "styled-components";
 import {useDropzone} from "react-dropzone";
 import PostUploadFiles from "../apiRequests/PostUploadFiles";
 import FileDisplay from "./FileDisplay";
-import {forEach} from "react-bootstrap/ElementChildren";
 
 const getColor = (props) => {
     if (props.isDragAccept) {

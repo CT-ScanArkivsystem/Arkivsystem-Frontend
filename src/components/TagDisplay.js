@@ -1,5 +1,4 @@
 import React from "react";
-import "./FileDisplay.css";
 
 import Form from "react-bootstrap/Form";
 

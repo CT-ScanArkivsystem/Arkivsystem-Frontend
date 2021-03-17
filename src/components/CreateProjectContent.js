@@ -2,11 +2,8 @@ import React, {useState} from "react";
 import "./CreateProjectContent.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "./LoaderButton";
-import PostCreateProject from "../apiRequests/PostCreateProject";
 import {onError} from "../libs/errorLib";
 import ProjectStore from "../stores/ProjectStore";
-import UploadToProjectContent from "./UploadToProjectContent";
-
 
 export default function CreateProjectContent(props) {
     const [projectName, setProjectName] = useState("");

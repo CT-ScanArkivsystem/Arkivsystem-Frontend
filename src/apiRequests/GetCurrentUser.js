@@ -1,6 +1,6 @@
-import UserStore from "../stores/UserStore";
 import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
+import UserStore from "../stores/UserStore";
 
 /**
  * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
