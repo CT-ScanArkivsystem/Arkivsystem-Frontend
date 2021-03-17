@@ -38,20 +38,20 @@ export default function CreateProject() {
         <div className="CreateProject pageContainer">
             <SideBar>
                 <h3>Options</h3>
-                <Button
+                <LoaderButton
                     className="sideBarButton"
                     onClick={contentToCreateProject}
                     disabled={!creatingProject}
                 >
                     Create project
-                </Button>
-                <Button
+                </LoaderButton>
+                <LoaderButton
                     className="sideBarButton"
                     onClick={contentToDetails}
                     disabled={creatingProject}
                 >
                     Upload files
-                </Button>
+                </LoaderButton>
                 <br/>
                 <Link to="/project">
                     <LoaderButton

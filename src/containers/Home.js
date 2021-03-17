@@ -5,8 +5,8 @@ export default function Home() {
     return (
         <div className="Home">
             <div className="lander">
-                <h1>CT scan arkivsystem</h1>
-                <p className="text-muted">Et enkelt arkivsystem for de som jobber med CT scanning</p>
+                <h1>CT Wood</h1>
+                <p className="text-muted">A simple archiving system for those who work with CT-scanners</p>
             </div>
         </div>
     );

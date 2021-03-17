@@ -163,6 +163,7 @@ export default function UserFrontpage() {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group size="lg">
                         <Form.Control
+                            className="searchFormControl"
                             type="search"
                             placeholder="Search"
                             value={searchInput}
@@ -196,6 +197,7 @@ export default function UserFrontpage() {
                     <Link to="/createProject">
                         <LoaderButton
                             size="sm"
+                            variant="dark"
                             isLoading={isLoading}
                         >
                             New project
@@ -203,6 +205,7 @@ export default function UserFrontpage() {
                     </Link>
                     <LoaderButton
                         size="sm"
+                        variant="dark"
                         isLoading={isLoading}
                         onClick={changeMaxFiles}
                     >
