@@ -5,21 +5,21 @@ import Background from "../images/logs.jpg";
 // Avoid using the RGB variables if possible. Box shadow needs opacity and therefore needs RGB values.
 let mainColor = "white";
 let mainColorRgb = "255 255 255";
-let secondaryColor = "#302718"; // #007AFD old color
-let secondaryColorRgb = "48 39 24";
+let secondaryColor = "#4E3E22"; // #007AFD old blue color, #302718 old brown color
+let secondaryColorRgb = "78 62 34";
 let extraColor = "black";
 let extraColorRgb = "0 0 0";
 
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${mainColor};
-    background-image: url(${Background});
+    background: url(${Background}) no-repeat fixed;
     background-size: 100%;
     color: ${extraColor};
     font-family: Helvetica, Sans-Serif, Open-Sans;
     transition: all 0.5s linear;
   }
-  
+
   div.App {
     background: ${mainColor};
     padding: 1rem;
@@ -47,22 +47,22 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button.btn {
-    
+
   }
-  
-  button.insetFocus:focus {
+
+  button.btn:focus {
     // Bootstrap button styles can be overwritten here. Try changing the variant of the button first!
     // Might need to use !important
-    box-shadow: inset 0 0 0.5rem 0.2rem rgb(${secondaryColorRgb} / 25%);
+    box-shadow: 0 0 0.1rem 0.2rem rgb(${secondaryColorRgb} / 25%);
   }
-  
+
   button:disabled {
     cursor: default;
   }
-  
+
   .form-control:focus {
     border-color: ${secondaryColor};
-    box-shadow: 0 0 0 0.2rem rgb(${secondaryColorRgb} / 25%);
+    box-shadow: 0 0 0.1rem 0.2rem rgb(${secondaryColorRgb} / 25%);
   }
 
   div.sideBar {
