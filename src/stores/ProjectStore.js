@@ -9,6 +9,7 @@ class ProjectStore {
             projectId: '',
             projectName: '',
             projectDescription: '',
+            projectOwner: '',
             isPrivate: '',
             creationDate: ''
         })

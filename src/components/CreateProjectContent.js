@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import LoaderButton from "./LoaderButton";
 import {onError} from "../libs/errorLib";
 import ProjectStore from "../stores/ProjectStore";
+import UserStore from "../stores/UserStore";
+
 
 export default function CreateProjectContent(props) {
     const [projectName, setProjectName] = useState("");
@@ -26,6 +28,7 @@ export default function CreateProjectContent(props) {
         ProjectStore.projectDescription = projectDescription;
         ProjectStore.isPrivate = isPrivate;
         ProjectStore.creationDate = creationDate;
+        ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
 
         setIsLoading(true);
         try {

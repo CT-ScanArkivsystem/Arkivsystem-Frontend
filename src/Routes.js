@@ -20,7 +20,7 @@ export default function Routes() {
             <Route exact path="/userFrontpage">
                 <UserFrontpage />
             </Route>
-            <Route exact path="/userFrontpage">
+            <Route exact path="/Project">
                 <Project />
             </Route>
             <Route exact path="/createProject">

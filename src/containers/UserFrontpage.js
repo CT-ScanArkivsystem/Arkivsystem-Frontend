@@ -107,9 +107,14 @@ export default function UserFrontpage() {
                 result.push(
                     <FileDisplay
                         className="fileDisplay"
+                        isproject={true}
                         key={allProjects[i].projectId}
+                        fileid={allProjects[i].projectId}
                         filename={allProjects[i].projectName}
+                        filedescription={allProjects[i].description}
                         fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
+                        fileisprivate={allProjects[i].isPrivate}
+                        filecreationdate={allProjects[i].creation}
                     />
                 );
             }
