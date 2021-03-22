@@ -1,0 +1,27 @@
+.userFrontpage {
+    border: #007afd 2px solid;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.userFrontpage .frontPageContainer {
+    text-align: center;
+    flex-flow: column;
+}
+
+.userFrontpage .checkboxContainer {
+    margin-left: 8px;
+    text-align: start;
+}
+
+.userFrontpage .projectContainer {
+    flex-grow: 1;
+    margin-bottom: 4px;
+}
+
+.userFrontpage .lander h1 {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+}
