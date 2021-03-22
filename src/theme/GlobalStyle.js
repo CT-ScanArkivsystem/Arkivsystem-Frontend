@@ -3,7 +3,7 @@ import Background from "../images/logs.jpg";
 
 // The sites main colors. As many elements should be affected by these as possible.
 // Avoid using the RGB variables if possible. Box shadow needs opacity and therefore needs RGB values.
-let mainColor = "white";
+let mainColor = "#F8F4EE";
 let mainColorRgb = "255 255 255";
 let secondaryColor = "#4E3E22"; // #007AFD old blue color, #302718 old brown color
 let secondaryColorRgb = "78 62 34";
@@ -13,7 +13,7 @@ let extraColorRgb = "0 0 0";
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${mainColor};
-    background: url(${Background}) no-repeat fixed;
+    background: #F8F4EE no-repeat fixed;
     background-size: 100%;
     color: ${extraColor};
     font-family: Helvetica, Sans-Serif, Open-Sans;

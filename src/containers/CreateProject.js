@@ -22,14 +22,15 @@ export default function CreateProject() {
         setCreatingProject(false);
         setPageContent(<UploadToProjectContent />)
 
+        /*
         ProjectStore.projectName = "testProject";
         ProjectStore.projectDescription = "test desc.";
         ProjectStore.isPrivate = false;
         ProjectStore.creationDate = "2021-03-15";
         ProjectStore.projectId = "adccb882-bc05-4502-816f-6f122eb10728";
+         */
 
     }
-
 
         // <p className="errorMessage">{displayFormError()}</p>
         // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
