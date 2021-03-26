@@ -4,7 +4,7 @@ import Background from "../images/logs.jpg";
 // The sites main colors. As many elements should be affected by these as possible.
 // Avoid using the RGB variables if possible. Box shadow needs opacity and therefore needs RGB values.
 let mainColor = "#F8F4EE";
-let mainColorRgb = "255 255 255";
+//let mainColorRgb = "255 255 255"; This RGB is wrong atm
 let secondaryColor = "#4E3E22"; // #007AFD old blue color, #302718 old brown color
 let secondaryColorRgb = "78 62 34";
 let extraColor = "black";

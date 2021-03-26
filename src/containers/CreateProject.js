@@ -15,6 +15,7 @@ export default function CreateProject() {
     const [isLoading, setIsLoading] = useState(false);
 
     function contentToCreateProject() {
+        // Need to pass contentToDetails to allow for a redirect when the project is created.
         setPageContent(<CreateProjectContent contentToDetails={contentToDetails}/>);
     }
 
@@ -68,7 +69,6 @@ export default function CreateProject() {
             <div className="pageContent">
                 {pageContent}
             </div>
-
         </div>
     );
 }

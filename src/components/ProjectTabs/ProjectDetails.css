@@ -1,0 +1,26 @@
+.projectDetails {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+
+}
+
+.tabHeader {
+    text-align: center;
+}
+
+.tabContent {
+    display: flex;
+    flex-direction: row;
+}
+
+.tagsAndPrivateAndCreatedContainer {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1em;
+}
+
+.creationDate {
+    color: gray;
+}
