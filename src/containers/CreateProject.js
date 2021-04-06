@@ -35,17 +35,8 @@ export default function CreateProject() {
 
         // <p className="errorMessage">{displayFormError()}</p>
         // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
-    return (
-        <div className="CreateProject pageContainer">
-            <SideBar>
-                <h3>Options</h3>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToCreateProject}
-                    disabled={!creatingProject}
-                >
-                    Create project
-                </LoaderButton>
+
+    /*
                 <LoaderButton
                     className="sideBarButton"
                     onClick={contentToDetails}
@@ -65,6 +56,18 @@ export default function CreateProject() {
                         Go to project
                     </LoaderButton>
                 </Link>
+     */
+    return (
+        <div className="CreateProject pageContainer">
+            <SideBar>
+                <h3>Options</h3>
+                <LoaderButton
+                    className="sideBarButton"
+                    onClick={contentToCreateProject}
+                    disabled={!creatingProject}
+                >
+                    Create project
+                </LoaderButton>
             </SideBar>
             <div className="pageContent">
                 {pageContent}
