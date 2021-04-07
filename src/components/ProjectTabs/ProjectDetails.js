@@ -18,6 +18,8 @@ export default function ProjectDetails() {
     const [currentProject, setCurrentProject] = useState("");
     const [allTags, setAllTags] = useState([]);
     const [projectTags, setProjectTags] = useState([]);
+    const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
+    const [tagsToBeRemoved, setTagsToBeRemoved] = useState([]);
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -27,12 +29,24 @@ export default function ProjectDetails() {
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
         setCurrentProject(project);
-        setProjectTags(project.tags);
 
-        setAllTags(await GetAllTags());
+        let tagsVar = trimTagArray(project.tags);
+        setProjectTags(tagsVar);
+
+        tagsVar = trimTagArray(await GetAllTags());
+        setAllTags(tagsVar);
     }
 
-    //TODO: Checkboxes must be checked if they are in the project
+    function trimTagArray(arrayToTrim) {
+        let trimmedProjectTags = [];
+        console.log(arrayToTrim);
+        for (let i = 0; i < arrayToTrim.length; i++) {
+            trimmedProjectTags.push(arrayToTrim[i].tagName);
+        }
+        console.log(trimmedProjectTags);
+        return trimmedProjectTags;
+    }
+
     function renderProjectTags() {
         let result = [];
 
@@ -40,11 +54,10 @@ export default function ProjectDetails() {
             result = allTags.map(function(tagToDisplay) {
                 return (
                     <TagDisplay
-                        key={"TagName" + tagToDisplay.tagName}
-                        id={"TagName" + tagToDisplay.tagName}
-                        label={tagToDisplay.tagName}
-                        index={tagToDisplay.numberOfProjects}
-                        value={tagToDisplay.tagName}
+                        key={"TagName" + tagToDisplay}
+                        id={"TagName" + tagToDisplay}
+                        label={tagToDisplay}
+                        value={tagToDisplay}
                         disabled={!editingTags}
                         defaultChecked={checkIfTagIsInProject(tagToDisplay)}
                     />
@@ -55,11 +68,11 @@ export default function ProjectDetails() {
     }
 
     function checkIfTagIsInProject(tagToCheck) {
-        if (projectTags !== []) {
+        if (projectTags && projectTags !== []) {
             let isTagInProject = false;
 
             for (let i = 0; i < projectTags.length && isTagInProject === false; i++) {
-                if (tagToCheck.tagName === projectTags[i].tagName) {
+                if (tagToCheck === projectTags[i]) {
                     isTagInProject = true;
                 }
             }
