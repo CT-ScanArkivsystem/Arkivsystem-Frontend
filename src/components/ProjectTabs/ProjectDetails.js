@@ -7,7 +7,6 @@ import TagDisplay from "../TagDisplay";
 import GetProject from "../../apiRequests/GetProject";
 import GetAllTags from "../../apiRequests/GetAllTags";
 
-
 export default function ProjectDetails() {
     const [isLoading, setIsLoading] = useState(false);
     const [canUserEdit, setCanUserEdit] = useState(true);
@@ -47,11 +46,26 @@ export default function ProjectDetails() {
                         index={tagToDisplay.numberOfProjects}
                         value={tagToDisplay.tagName}
                         disabled={!editingTags}
+                        defaultChecked={checkIfTagIsInProject(tagToDisplay)}
                     />
                 )
             })
         }
         return result;
+    }
+
+    function checkIfTagIsInProject(tagToCheck) {
+        if (projectTags !== []) {
+            let isTagInProject = false;
+
+            for (let i = 0; i < projectTags.length && isTagInProject === false; i++) {
+                if (tagToCheck.tagName === projectTags[i].tagName) {
+                    isTagInProject = true;
+                }
+            }
+
+            return isTagInProject;
+        }
     }
 
 
