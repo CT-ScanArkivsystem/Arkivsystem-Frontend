@@ -15,12 +15,36 @@
     flex-direction: row;
 }
 
+.isPrivateContainer {
+    margin: 10px 0 10px 0;
+}
+
 .tagsAndPrivateAndCreatedContainer {
     display: flex;
     flex-direction: column;
     margin-right: 1em;
 }
 
+.tagsContainer {
+    border-width: 1px !important;
+    border-radius: 4px;
+    padding: 4px;
+}
+
 .creationDate {
     color: gray;
+}
+
+.descriptionField {
+    width: 25vw;
+}
+
+.descriptionLabel {
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+.editDescriptionButton {
+    width: 100%;
 }

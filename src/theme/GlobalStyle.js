@@ -105,6 +105,10 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: row-reverse;
     position: sticky;
   }
+  
+  div.defaultBorder {
+    border: ${secondaryColor} 2px solid;
+  }
 `;
 
 export default GlobalStyle
