@@ -28,7 +28,9 @@ export default async function GetCurrentUser() {
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;
-                UserStore.role = result.role;
+                result.roles.forEach((selectedRole) => {
+                    UserStore.role = selectedRole.roleName;
+                })
                 isUserLoggedIn = true;
             }
             else {

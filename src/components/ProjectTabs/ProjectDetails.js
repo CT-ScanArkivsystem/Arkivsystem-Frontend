@@ -8,14 +8,16 @@ import GetProject from "../../apiRequests/GetProject";
 import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
+import UserStore from "../../stores/UserStore";
 
 export default function ProjectDetails() {
     const [isLoading, setIsLoading] = useState(false);
-    const [canUserEdit, setCanUserEdit] = useState(true);
     //TODO: When project is private and user is not a member/owner editing should be disabled!
+    const [canUserEdit, setCanUserEdit] = useState(false);
     const [projectDescription, setProjectDescription] = useState(ProjectStore.projectDescription);
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
+    //TODO: When backend has request to change private property, implement it
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
     const [currentProject, setCurrentProject] = useState("");
     const [allTags, setAllTags] = useState([]);
@@ -37,6 +39,11 @@ export default function ProjectDetails() {
 
         tagsVar = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(tagsVar);
+
+        console.log(UserStore.role)
+        if (UserStore.role === "ROLE_ACADEMIC" || UserStore.role === "ROLE_ADMIN") {
+            setCanUserEdit(true);
+        }
     }
 
     function trimTagArray(arrayToTrim, projectTagArray) {
