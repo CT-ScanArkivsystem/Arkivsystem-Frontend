@@ -22,8 +22,9 @@ export default async function GetAllProjects() {
         result = await res.json();
 
         if (result !== null && result.length > 0) {
-            console.log("Got all tags!");
-        } else {
+
+        }
+        else {
             result = [];
             console.log("Could not get tags.");
         }

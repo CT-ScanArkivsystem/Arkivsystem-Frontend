@@ -30,21 +30,31 @@ export default function ProjectDetails() {
         let project = await GetProject(ProjectStore.projectId);
         setCurrentProject(project);
 
-        let tagsVar = trimTagArray(project.tags);
+        let tagsVar = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsVar);
 
-        tagsVar = trimTagArray(await GetAllTags());
+        tagsVar = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(tagsVar);
     }
 
-    function trimTagArray(arrayToTrim) {
+    function trimTagArray(arrayToTrim, projectTagArray) {
         let trimmedProjectTags = [];
-        console.log(arrayToTrim);
         for (let i = 0; i < arrayToTrim.length; i++) {
-            trimmedProjectTags.push(arrayToTrim[i].tagName);
+            trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
         }
-        console.log(trimmedProjectTags);
         return trimmedProjectTags;
+    }
+
+    function checkIfTagIsInProject(tagToCheck, projectTagArray) {
+        let isTagInProject = false;
+        if (projectTagArray && projectTagArray.length > 0) {
+            for (let i = 0; i < projectTagArray.length && isTagInProject === false; i++) {
+                if (tagToCheck === projectTagArray[i].tagName) {
+                    isTagInProject = true;
+                }
+            }
+        }
+        return isTagInProject;
     }
 
     function renderProjectTags() {
@@ -54,12 +64,20 @@ export default function ProjectDetails() {
             result = allTags.map(function(tagToDisplay) {
                 return (
                     <TagDisplay
-                        key={"TagName" + tagToDisplay}
-                        id={"TagName" + tagToDisplay}
-                        label={tagToDisplay}
-                        value={tagToDisplay}
+                        key={"TagKey" + tagToDisplay.tagName}
+                        id={"TagId" + tagToDisplay.tagName}
+                        label={tagToDisplay.tagName}
+                        value={tagToDisplay.tagName}
                         disabled={!editingTags}
-                        defaultChecked={checkIfTagIsInProject(tagToDisplay)}
+                        defaultChecked={tagToDisplay.isInProject}
+                        onChange={() => {
+                            tagToDisplay.isInProject = !tagToDisplay.isInProject;
+                            if (tagToDisplay.isInProject === true) {
+                                setTagsToBeAdded(tagsToBeAdded.concat([tagToDisplay.tagName]));
+                            } else if (tagToDisplay.isInProject === false) {
+                                setTagsToBeRemoved(tagsToBeRemoved.concat([tagToDisplay.tagName]));
+                            }
+                        }}
                     />
                 )
             })
@@ -67,18 +85,12 @@ export default function ProjectDetails() {
         return result;
     }
 
-    function checkIfTagIsInProject(tagToCheck) {
-        if (projectTags && projectTags !== []) {
-            let isTagInProject = false;
+    function addTagsToProject() {
+        console.log("addTagsToProject called");
+    }
 
-            for (let i = 0; i < projectTags.length && isTagInProject === false; i++) {
-                if (tagToCheck === projectTags[i]) {
-                    isTagInProject = true;
-                }
-            }
-
-            return isTagInProject;
-        }
+    function removeTagsFromProject() {
+        console.log("removeTagsFromProject called");
     }
 
 
@@ -104,14 +116,16 @@ export default function ProjectDetails() {
                   <div className="tagsContainer defaultBorder">
                       {renderProjectTags()}
                       <LoaderButton
-                          className="editDescriptionButton"
+                          className="editButton"
                           size="sm"
                           type="submit"
                           isLoading={isLoading}
                           disabled={!canUserEdit}
                           onClick={() => {
-                              if (!editingTags) {
+                              if (editingTags) {
                                   //TODO: Send API request to update tags
+                                  addTagsToProject(tagsToBeAdded);
+                                  removeTagsFromProject(tagsToBeRemoved);
                               }
                               setEditingTags(!editingTags);
                           }}
@@ -133,7 +147,7 @@ export default function ProjectDetails() {
                       />
                   </Form.Group>
                   <LoaderButton
-                      className="editDescriptionButton"
+                      className="editButton"
                       size="sm"
                       type="submit"
                       isLoading={isLoading}
