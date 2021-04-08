@@ -40,7 +40,6 @@ export default function ProjectDetails() {
         tagsVar = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(tagsVar);
 
-        console.log(UserStore.role)
         if (UserStore.role === "ROLE_ACADEMIC" || UserStore.role === "ROLE_ADMIN") {
             setCanUserEdit(true);
         }

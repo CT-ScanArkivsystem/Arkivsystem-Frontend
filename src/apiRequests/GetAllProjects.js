@@ -21,9 +21,8 @@ export default async function GetAllProjects() {
 
         result = await res.json();
 
-        console.log("Sending GetAllProjects request: ")
         if (result !== null && result.length > 0) {
-            console.log("Got all projects!");
+            //console.log("Got all projects!");
         } else {
             result = [];
             console.log("Could not get projects.");

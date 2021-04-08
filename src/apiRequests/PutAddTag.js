@@ -27,7 +27,7 @@ export default async function PutAddTag(projectId, tagNames) {
         });
         result = await res.json();
         if (result && result !== "") {
-
+            //console.log("Tags were added!");
         } else {
             result = [];
             console.log("Tags were not added!");

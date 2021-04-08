@@ -45,7 +45,6 @@ export default function UserFrontpage() {
                 setAllProjects(await GetAllProjects());
                 if (allProjects.length <= 0) {
                     setDoesHaveProjects(true);
-                    console.log("DoesHaveProjects: true")
                 }
             }
         }
@@ -60,7 +59,6 @@ export default function UserFrontpage() {
                 setAllTags(await GetAllTags());
                 if (allTags.length > 0) {
                     setDoesHaveTags(true);
-                    console.log("DoesHaveTags: true")
                 }
             }
         }
