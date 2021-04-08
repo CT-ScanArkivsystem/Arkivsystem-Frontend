@@ -77,9 +77,9 @@ export default function ProjectDetails() {
                         onChange={() => {
                             tagToDisplay.isInProject = !tagToDisplay.isInProject;
                             if (tagToDisplay.isInProject === true) {
-                                setTagsToBeAdded(tagsToBeAdded.concat([tagToDisplay.tagName]));
+                                addTagsToArray(tagToDisplay);
                             } else if (tagToDisplay.isInProject === false) {
-                                setTagsToBeRemoved(tagsToBeRemoved.concat([tagToDisplay.tagName]));
+                                removeTagsFromArray(tagToDisplay);
                             }
                         }}
                     />
@@ -87,6 +87,28 @@ export default function ProjectDetails() {
             })
         }
         return result;
+    }
+
+    function addTagsToArray(tagToDisplay) {
+        if (tagsToBeRemoved.indexOf(tagToDisplay.tagName) !== -1) {
+            let tempArray = [...tagsToBeRemoved];
+            let indexToRemove = tempArray.indexOf(tagToDisplay.tagName);
+            tempArray.splice(indexToRemove, 1);
+            setTagsToBeRemoved(tempArray);
+        } else {
+            setTagsToBeAdded(tagsToBeAdded.concat([tagToDisplay.tagName]));
+        }
+    }
+
+    function removeTagsFromArray(tagToDisplay) {
+        if (tagsToBeAdded.indexOf(tagToDisplay.tagName) !== -1) {
+            let tempArray = [...tagsToBeAdded];
+            let indexToRemove = tempArray.indexOf(tagToDisplay.tagName);
+            tempArray.splice(indexToRemove, 1);
+            setTagsToBeAdded(tempArray);
+        } else {
+            setTagsToBeRemoved(tagsToBeRemoved.concat([tagToDisplay.tagName]));
+        }
     }
 
     async function addTagsToProject() {
@@ -133,10 +155,11 @@ export default function ProjectDetails() {
                           disabled={!canUserEdit}
                           onClick={() => {
                               if (editingTags) {
-                                  //TODO: Send API request to update tags
+                                  setIsLoading(true);
                                   addTagsToProject(tagsToBeAdded);
                                   removeTagsFromProject(tagsToBeRemoved);
                               }
+                              setIsLoading(false);
                               setEditingTags(!editingTags);
                           }}
                       >
