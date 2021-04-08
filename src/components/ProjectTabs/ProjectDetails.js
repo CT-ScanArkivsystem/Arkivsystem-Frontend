@@ -6,6 +6,8 @@ import LoaderButton from "../LoaderButton";
 import TagDisplay from "../TagDisplay";
 import GetProject from "../../apiRequests/GetProject";
 import GetAllTags from "../../apiRequests/GetAllTags";
+import PutAddTag from "../../apiRequests/PutAddTag";
+import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 
 export default function ProjectDetails() {
     const [isLoading, setIsLoading] = useState(false);
@@ -39,8 +41,10 @@ export default function ProjectDetails() {
 
     function trimTagArray(arrayToTrim, projectTagArray) {
         let trimmedProjectTags = [];
-        for (let i = 0; i < arrayToTrim.length; i++) {
-            trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
+        if (arrayToTrim) {
+            for (let i = 0; i < arrayToTrim.length; i++) {
+                trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
+            }
         }
         return trimmedProjectTags;
     }
@@ -85,12 +89,18 @@ export default function ProjectDetails() {
         return result;
     }
 
-    function addTagsToProject() {
-        console.log("addTagsToProject called");
+    async function addTagsToProject() {
+        if (tagsToBeAdded.length > 0) {
+            let result = await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
+            setTagsToBeAdded([]);
+        }
     }
 
-    function removeTagsFromProject() {
-        console.log("removeTagsFromProject called");
+    async function removeTagsFromProject() {
+        if (tagsToBeRemoved.length > 0) {
+            let result = await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
+            setTagsToBeRemoved([]);
+        }
     }
 
 
