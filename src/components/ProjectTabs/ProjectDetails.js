@@ -12,10 +12,8 @@ import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
 import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription";
 import UserStore from "../../stores/UserStore";
 
-export default function ProjectDetails() {
+export default function ProjectDetails(props) {
     const [isLoading, setIsLoading] = useState(false);
-    //TODO: When project is private and user is not a member/owner editing should be disabled!
-    const [canUserEdit, setCanUserEdit] = useState(false);
     const [projectDescription, setProjectDescription] = useState(ProjectStore.projectDescription);
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
@@ -40,29 +38,6 @@ export default function ProjectDetails() {
 
         tagsVar = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(tagsVar);
-
-        //If any of these three are true, then the user is allowed to edit the page.
-        if (checkIfOwner(ProjectStore.projectOwner, UserStore) || checkIfMember(ProjectStore.projectMembers, UserStore) || checkIfAdmin(UserStore)) {
-            setCanUserEdit(true);
-        }
-    }
-
-    function checkIfOwner() {
-        return ProjectStore.projectOwner.userId === UserStore.userId;
-    }
-
-    function checkIfMember(memberList, user) {
-        let isUserMember = false;
-        for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
-            if (memberList[i].userId === user.userId) {
-                isUserMember = true;
-            }
-        }
-        return isUserMember;
-    }
-
-    function checkIfAdmin(user) {
-        return user.role === "ROLE_ADMIN";
     }
 
     function trimTagArray(arrayToTrim, projectTagArray) {
@@ -139,14 +114,14 @@ export default function ProjectDetails() {
 
     async function addTagsToProject() {
         if (tagsToBeAdded.length > 0) {
-            let result = await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
+            await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
             setTagsToBeAdded([]);
         }
     }
 
     async function removeTagsFromProject() {
         if (tagsToBeRemoved.length > 0) {
-            let result = await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
+            await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
             setTagsToBeRemoved([]);
         }
     }
@@ -192,7 +167,7 @@ export default function ProjectDetails() {
                           type="checkbox"
                           className="isPrivateCheckbox"
                           label="Is project private"
-                          disabled={!canUserEdit}
+                          disabled={!props.canEdit}
                           defaultChecked={ProjectStore.isPrivate}
                           onChange={(e) => {
                               setPrivacy();
@@ -206,7 +181,7 @@ export default function ProjectDetails() {
                           size="sm"
                           type="submit"
                           isLoading={isLoading}
-                          disabled={!canUserEdit}
+                          disabled={!props.canEdit}
                           onClick={() => {
                               if (editingTags) {
                                   setIsLoading(true);
@@ -238,7 +213,7 @@ export default function ProjectDetails() {
                       size="sm"
                       type="submit"
                       isLoading={isLoading}
-                      disabled={!canUserEdit}
+                      disabled={!props.canEdit}
                       onClick={() => {
                           if (editingDescription) {
                               setDescription(projectDescription)
