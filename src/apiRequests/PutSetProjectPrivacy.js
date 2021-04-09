@@ -4,10 +4,9 @@ import {currentIP} from "../App";
 /**
  * Sends an API PUT request to the server to set the project privacy setting to either true or false.
  *
- * @returns boolean wasSuccessful if no error codes were returned it will return true, else false
- * @constructor
- * @param projectId string (UUID) the projectId of the project you are trying to change the privacy settings of
- * @param setPrivacy boolean true if project will be set to private and false if removing private status
+ * @returns boolean wasSuccessful if no error codes were returned it will return true, else false.
+ * @param projectId string (UUID) the projectId of the project you are trying to change the privacy settings of.
+ * @param setPrivacy boolean true if project will be set to private and false if removing private status.
  */
 export default async function SetProjectPrivacy(projectId, setPrivacy) {
     let wasSuccessful = false;

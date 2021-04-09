@@ -2,12 +2,11 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API POST request to the server to create a new user with the given parameters.
+ * Sends an API PUT request to the server to update the description of a given project.
  *
- * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @constructor
- * @param projectId
- * @param setDescription
+ * @returns boolean wasSuccessful if no error codes were returned it will return true, else false.
+ * @param projectId string (UUID) the projectId of the project you are trying to change the privacy settings of.
+ * @param setDescription string which contains what the new description of the project should be.
  */
 export default async function SetProjectDescription(projectId, setDescription) {
     let wasSuccessful = false;

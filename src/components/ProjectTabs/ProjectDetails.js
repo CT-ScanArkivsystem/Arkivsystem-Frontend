@@ -149,9 +149,12 @@ export default function ProjectDetails() {
     }
 
     async function setDescription(newDescription) {
-        let wasSuccessful = false;
-        wasSuccessful = await PutSetProjectDescription(ProjectStore.projectId, newDescription);
-        console.log("Description update was successful: " + wasSuccessful);
+        setIsLoading(true);
+        let wasSuccessful = await PutSetProjectDescription(ProjectStore.projectId, newDescription);
+        if (!wasSuccessful) {
+            console.log("Something went wrong when updating description!");
+        }
+        setIsLoading(false);
     }
 
 
@@ -220,7 +223,6 @@ export default function ProjectDetails() {
                       onClick={() => {
                           if (editingDescription) {
                               setDescription(projectDescription)
-                              console.log("Update description")
                           }
                           setEditingDescription(!editingDescription);
                       }}
