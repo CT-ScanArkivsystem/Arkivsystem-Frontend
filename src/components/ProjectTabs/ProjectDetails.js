@@ -8,6 +8,7 @@ import GetProject from "../../apiRequests/GetProject";
 import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
+import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
 import UserStore from "../../stores/UserStore";
 
 export default function ProjectDetails() {
@@ -131,6 +132,23 @@ export default function ProjectDetails() {
         }
     }
 
+    async function setPrivacy() {
+        let wasSuccessful = false;
+        if (isProjectPrivate) {
+            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, false);
+        } else if (!isProjectPrivate) {
+            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, true);
+        }
+
+        if (wasSuccessful) {
+            ProjectStore.isPrivate = !isProjectPrivate;
+            setIsProjectPrivate(!isProjectPrivate);
+        } else {
+            console.log("Something went wrong when attempting to change privacy settings!")
+        }
+
+    }
+
 
     return (
       <div className="projectDetails">
@@ -148,7 +166,10 @@ export default function ProjectDetails() {
                           className="isPrivateCheckbox"
                           label="Is project private"
                           disabled={!canUserEdit}
-                          onChange={(e) => setIsProjectPrivate(e.target.value)}
+                          defaultChecked={ProjectStore.isPrivate}
+                          onChange={(e) => {
+                              setPrivacy();
+                          }}
                       />
                   </div>
                   <div className="tagsContainer defaultBorder">
