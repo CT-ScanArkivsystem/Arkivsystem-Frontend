@@ -92,7 +92,7 @@ export default function Project() {
         setPageContent(<ProjectFiles />)
     }
     function contentToProjectMembers() {
-        setPageContent(<ProjectMembers />)
+        setPageContent(<ProjectMembers canEditMembers={checkIfOwner()} />)
     }
     function contentToProjectSpecialPermission() {
         setPageContent(<ProjectSpecialPermission />)

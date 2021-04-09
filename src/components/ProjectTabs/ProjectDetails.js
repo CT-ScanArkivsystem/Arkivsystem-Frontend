@@ -10,7 +10,6 @@ import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
 import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription";
-import UserStore from "../../stores/UserStore";
 
 export default function ProjectDetails(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -167,7 +166,7 @@ export default function ProjectDetails(props) {
                           label="Is project private"
                           disabled={!props.canEdit}
                           defaultChecked={ProjectStore.isPrivate}
-                          onChange={(e) => {
+                          onChange={() => {
                               setPrivacy();
                           }}
                       />
