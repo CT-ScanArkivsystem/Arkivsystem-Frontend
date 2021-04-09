@@ -87,7 +87,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 8px;
     display: flex;
     flex-flow: row;
-    min-height: 85vh;
+    min-height: 75vh;
   }
 
   div.pageContent {
@@ -95,7 +95,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 4px;
     display: flex;
     flex-grow: 100;
-    min-height: 85vh;
   }
 
   div.containerFooter {
