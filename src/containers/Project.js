@@ -13,12 +13,15 @@ import UploadToProjectContent from "../components/UploadToProjectContent";
 
 
 function getProjectInformation() {
+    console.log(ProjectStore);
+
     console.log(ProjectStore.projectId);
     console.log(ProjectStore.projectName);
     console.log(ProjectStore.projectDescription);
     console.log(ProjectStore.projectOwner);
     console.log("isPrivate: " + ProjectStore.isPrivate);
     console.log(ProjectStore.creationDate);
+    console.log(ProjectStore.projectMembers);
 
     return <p>
         {ProjectStore.projectId}<br/>

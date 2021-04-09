@@ -64,6 +64,7 @@ export default function FileDisplay ({
             ProjectStore.projectOwner = props.fileowner;
             ProjectStore.isPrivate = props.fileisprivate;
             ProjectStore.creationDate = props.filecreationdate;
+            ProjectStore.projectMembers = props.projectmembers;
         }
     }
 

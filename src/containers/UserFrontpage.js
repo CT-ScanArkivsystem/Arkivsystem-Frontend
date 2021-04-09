@@ -113,6 +113,7 @@ export default function UserFrontpage() {
                         fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
                         fileisprivate={allProjects[i].isPrivate}
                         filecreationdate={allProjects[i].creation}
+                        projectmembers={allProjects[i].projectMembers}
                     />
                 );
             }
