@@ -9,6 +9,7 @@ import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
+import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription";
 import UserStore from "../../stores/UserStore";
 
 export default function ProjectDetails() {
@@ -18,7 +19,6 @@ export default function ProjectDetails() {
     const [projectDescription, setProjectDescription] = useState(ProjectStore.projectDescription);
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
-    //TODO: When backend has request to change private property, implement it
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
     const [currentProject, setCurrentProject] = useState("");
     const [allTags, setAllTags] = useState([]);
@@ -146,7 +146,12 @@ export default function ProjectDetails() {
         } else {
             console.log("Something went wrong when attempting to change privacy settings!")
         }
+    }
 
+    async function setDescription(newDescription) {
+        let wasSuccessful = false;
+        wasSuccessful = await PutSetProjectDescription(ProjectStore.projectId, newDescription);
+        console.log("Description update was successful: " + wasSuccessful);
     }
 
 
@@ -213,8 +218,9 @@ export default function ProjectDetails() {
                       isLoading={isLoading}
                       disabled={!canUserEdit}
                       onClick={() => {
-                          if (!editingDescription) {
-                              //TODO: Send API request to update description
+                          if (editingDescription) {
+                              setDescription(projectDescription)
+                              console.log("Update description")
                           }
                           setEditingDescription(!editingDescription);
                       }}

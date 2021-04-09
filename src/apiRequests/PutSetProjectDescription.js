@@ -2,21 +2,21 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API PUT request to the server to set the project privacy setting to either true or false.
+ * Sends an API POST request to the server to create a new user with the given parameters.
  *
- * @returns boolean wasSuccessful if no error codes were returned it will return true, else false
+ * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
  * @constructor
- * @param projectId string (UUID) the projectId of the project you are trying to change the privacy settings of
- * @param setPrivacy boolean true if project will be set to private and false if removing private status
+ * @param projectId
+ * @param setDescription
  */
-export default async function SetProjectPrivacy(projectId, setPrivacy) {
+export default async function SetProjectDescription(projectId, setDescription) {
     let wasSuccessful = false;
     try {
         let urlencoded = new URLSearchParams();
         urlencoded.append("projectId", projectId);
-        urlencoded.append("privacy", setPrivacy);
+        urlencoded.append("description", setDescription);
 
-        let res = await fetch(currentIP + '/academic/setProjectPrivacy', {
+        let res = await fetch(currentIP + '/academic/setProjectDescription', {
             method: 'PUT',
             credentials: 'include',
             headers: {
