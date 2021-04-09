@@ -18,7 +18,6 @@ export default function ProjectDetails(props) {
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
-    const [currentProject, setCurrentProject] = useState("");
     const [allTags, setAllTags] = useState([]);
     const [projectTags, setProjectTags] = useState([]);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
@@ -31,7 +30,6 @@ export default function ProjectDetails(props) {
 
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
-        setCurrentProject(project);
 
         let tagsVar = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsVar);
@@ -202,10 +200,12 @@ export default function ProjectDetails(props) {
                       <Form.Label className="descriptionLabel">Project description</Form.Label>
                       <Form.Control
                           as="textarea"
+                          maxLength="255"
+                          name="Project description"
                           rows="10"
                           value={projectDescription}
                           onChange={(e) => setProjectDescription(e.target.value)}
-                          disabled={!editingDescription}
+                          readOnly={!editingDescription}
                       />
                   </Form.Group>
                   <LoaderButton
@@ -216,8 +216,10 @@ export default function ProjectDetails(props) {
                       disabled={!props.canEdit}
                       onClick={() => {
                           if (editingDescription) {
+                              setIsLoading(true);
                               setDescription(projectDescription)
                           }
+                          setIsLoading(false);
                           setEditingDescription(!editingDescription);
                       }}
                   >
