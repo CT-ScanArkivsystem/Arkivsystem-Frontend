@@ -110,7 +110,7 @@ export default function UserFrontpage() {
                         fileid={allProjects[i].projectId}
                         filename={allProjects[i].projectName}
                         filedescription={allProjects[i].description}
-                        fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
+                        fileowner={allProjects[i].owner}
                         fileisprivate={allProjects[i].isPrivate}
                         filecreationdate={allProjects[i].creation}
                         projectmembers={allProjects[i].projectMembers}

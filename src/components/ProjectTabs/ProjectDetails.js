@@ -41,9 +41,28 @@ export default function ProjectDetails() {
         tagsVar = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(tagsVar);
 
-        if (UserStore.role === "ROLE_ACADEMIC" || UserStore.role === "ROLE_ADMIN") {
+        //If any of these three are true, then the user is allowed to edit the page.
+        if (checkIfOwner(ProjectStore.projectOwner, UserStore) || checkIfMember(ProjectStore.projectMembers, UserStore) || checkIfAdmin(UserStore)) {
             setCanUserEdit(true);
         }
+    }
+
+    function checkIfOwner() {
+        return ProjectStore.projectOwner.userId === UserStore.userId;
+    }
+
+    function checkIfMember(memberList, user) {
+        let isUserMember = false;
+        for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
+            if (memberList[i].userId === user.userId) {
+                isUserMember = true;
+            }
+        }
+        return isUserMember;
+    }
+
+    function checkIfAdmin(user) {
+        return user.role === "ROLE_ADMIN";
     }
 
     function trimTagArray(arrayToTrim, projectTagArray) {

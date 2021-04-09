@@ -24,6 +24,7 @@ export default async function GetCurrentUser() {
 
             if (result !== null && result !== "") {
                 //console.log("User is logged in. Gathering user information!");
+                UserStore.userId = result.userId;
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;

@@ -25,6 +25,7 @@ export default async function GetProject(projectId) {
 
             if (result !== null && result !== "") {
                 //console.log("Project was pulled");
+                //console.log(result);
             }
             else {
                 console.log("Failed to pull project");
