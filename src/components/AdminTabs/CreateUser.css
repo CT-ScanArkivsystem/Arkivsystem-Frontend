@@ -1,17 +1,58 @@
 @media all and (min-width: 480px) {
-    .CreateUser {
+    .createUser {
         display: flex;
         flex-wrap: nowrap;
         flex-direction: column;
         margin: 0 auto 0 auto;
+        min-width: 100%;
+
     }
 
-    .CreateUser form {
+    .formContainer {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        margin: 0 auto 0 auto;
+        min-width: 75%;
+    }
+
+    .createUser form {
         margin: 0 auto;
-        max-width: 320px;
+        /*max-width: 320px;*/
     }
 
     .errorMessage {
         color: red;
+    }
+
+    .first-lastname-box {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+    }
+
+    .firstName {
+        width: 50%;
+        margin-right: 2%;
+    }
+    .lastName {
+        width: 50%;
+        margin-left: 2%;
+    }
+
+    .password1 {
+        width: 50%;
+        margin-right: 2%;
+    }
+
+    .password2 {
+        width: 50%;
+        margin-left: 2%;
+    }
+
+    .password-box {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
     }
 }

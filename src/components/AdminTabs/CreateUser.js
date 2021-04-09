@@ -73,28 +73,48 @@ export default function CreateUser() {
 
     // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
     return (
-        <div className="CreateUser">
+        <div className="createUser">
             <div className="tabHeader">
                 <h2>Create a new user:</h2>
             </div>
             <div className="tabContent">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group size="lg" controlId="firstName">
-                        <Form.Label>First name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group size="lg" controlId="lastName">
-                        <Form.Label>Last name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </Form.Group>
+                <Form className="formContainer" onSubmit={handleSubmit}>
+                    <div className="first-lastname-box">
+                        <Form.Group className="firstName" size="lg" controlId="firstName">
+                            <Form.Label>First name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="lastName" size="lg" controlId="lastName">
+                            <Form.Label>Last name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
+                    <div className="password-box">
+                        <Form.Group className="password1" size="lg" controlId="password1">
+                            <Form.Label>Password (Minimum 5 characters long)</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={password1}
+                                onChange={(e) => setPassword1(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="password2" size="lg" controlId="password2">
+                            <Form.Label>Enter password again</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={password2}
+                                onChange={(e) => setPassword2(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
@@ -102,22 +122,6 @@ export default function CreateUser() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group size="lg" controlId="password1">
-                        <Form.Label>Password (Minimum 5 characters long)</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password1}
-                            onChange={(e) => setPassword1(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group size="lg" controlId="password2">
-                        <Form.Label>Enter password again</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password2}
-                            onChange={(e) => setPassword2(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group size="lg" controlId="role">
