@@ -6,15 +6,6 @@
 
 }
 
-.tabHeader {
-    text-align: center;
-}
-
-.tabContent {
-    display: flex;
-    flex-direction: row;
-}
-
 .isPrivateContainer {
     margin: 10px 0 10px 0;
 }

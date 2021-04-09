@@ -109,6 +109,16 @@ const GlobalStyle = createGlobalStyle`
   div.defaultBorder {
     border: ${secondaryColor} 2px solid;
   }
+
+  div.tabHeader {
+    text-align: center;
+  }
+
+  div.tabContent {
+    display: flex;
+    flex-direction: row;
+  }
+
 `;
 
 export default GlobalStyle
