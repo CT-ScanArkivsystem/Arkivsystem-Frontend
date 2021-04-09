@@ -21,18 +21,16 @@ export default async function GetAllProjects() {
 
         result = await res.json();
 
-        console.log("Sending GetAllTags request: ")
         if (result !== null && result.length > 0) {
-            console.log("Got all tags!");
-        } else {
+
+        }
+        else {
             result = [];
             console.log("Could not get tags.");
         }
 
     } catch (e) {
         onError(e);
-        //isUserLoggedIn = false;
-        //Send the user to the home page. Prevents the user from accessing sites when not logged in.
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
     return (result);
