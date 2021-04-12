@@ -108,9 +108,9 @@ function App() {
                                                     Frontpage
                                                 </NavDropdown.Item>
                                             </LinkContainer>
-                                            <LinkContainer to="/createUser">
-                                                <NavDropdown.Item href="/createUser">
-                                                    Create user
+                                            <LinkContainer to="/AdminPage">
+                                                <NavDropdown.Item href="/AdminPage">
+                                                    Admin Page
                                                 </NavDropdown.Item>
                                             </LinkContainer>
                                             <NavDropdown.Divider />

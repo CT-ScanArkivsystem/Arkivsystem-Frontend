@@ -3,10 +3,11 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";
-import CreateUser from "./containers/CreateUser";
+import CreateUser from "./components/AdminTabs/CreateUser";
 import UserFrontpage from "./containers/UserFrontpage";
 import CreateProject from "./containers/CreateProject";
 import Project from "./containers/Project";
+import AdminPage from "./containers/AdminPage";
 
 export default function Routes() {
     return (
@@ -28,6 +29,9 @@ export default function Routes() {
             </Route>
             <Route exact path="/createUser">
                 <CreateUser />
+            </Route>
+            <Route exact path="/adminPage">
+                <AdminPage />
             </Route>
             <Route>
                 <NotFound />

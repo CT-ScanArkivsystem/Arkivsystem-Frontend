@@ -5,7 +5,6 @@ import {currentIP} from "../App";
  * Sends an API POST request to the server to try to login with the given email and password.
  * Request is sent to 'CurrentIP/auth/login'
  *
- * @param currentIP is the currently used IP for the backend API which the frontend makes calls to.
  * @param email of the user. Must be in email format.
  * @param password of the user. Must be at least 5 characters long.
  * @returns boolean didUserGetLoggedIn if the login was a success, returns true. Else false.

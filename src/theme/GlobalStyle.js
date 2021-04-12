@@ -4,7 +4,7 @@ import Background from "../images/logs.jpg";
 // The sites main colors. As many elements should be affected by these as possible.
 // Avoid using the RGB variables if possible. Box shadow needs opacity and therefore needs RGB values.
 let mainColor = "#F8F4EE";
-let mainColorRgb = "255 255 255";
+//let mainColorRgb = "255 255 255"; This RGB is wrong atm
 let secondaryColor = "#4E3E22"; // #007AFD old blue color, #302718 old brown color
 let secondaryColorRgb = "78 62 34";
 let extraColor = "black";
@@ -87,7 +87,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 8px;
     display: flex;
     flex-flow: row;
-    min-height: 85vh;
+    min-height: 75vh;
   }
 
   div.pageContent {
@@ -95,7 +95,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 4px;
     display: flex;
     flex-grow: 100;
-    min-height: 85vh;
   }
 
   div.containerFooter {
@@ -105,6 +104,20 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: row-reverse;
     position: sticky;
   }
+  
+  div.defaultBorder {
+    border: ${secondaryColor} 2px solid;
+  }
+
+  div.tabHeader {
+    text-align: center;
+  }
+
+  div.tabContent {
+    display: flex;
+    flex-direction: row;
+  }
+
 `;
 
 export default GlobalStyle

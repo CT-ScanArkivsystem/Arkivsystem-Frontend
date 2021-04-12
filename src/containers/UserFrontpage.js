@@ -45,7 +45,6 @@ export default function UserFrontpage() {
                 setAllProjects(await GetAllProjects());
                 if (allProjects.length <= 0) {
                     setDoesHaveProjects(true);
-                    console.log("DoesHaveProjects: true")
                 }
             }
         }
@@ -60,7 +59,6 @@ export default function UserFrontpage() {
                 setAllTags(await GetAllTags());
                 if (allTags.length > 0) {
                     setDoesHaveTags(true);
-                    console.log("DoesHaveTags: true")
                 }
             }
         }
@@ -112,9 +110,10 @@ export default function UserFrontpage() {
                         fileid={allProjects[i].projectId}
                         filename={allProjects[i].projectName}
                         filedescription={allProjects[i].description}
-                        fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
+                        fileowner={allProjects[i].owner}
                         fileisprivate={allProjects[i].isPrivate}
                         filecreationdate={allProjects[i].creation}
+                        projectmembers={allProjects[i].projectMembers}
                     />
                 );
             }

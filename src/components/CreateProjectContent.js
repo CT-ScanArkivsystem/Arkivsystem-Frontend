@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import "./CreateProjectContent.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "./LoaderButton";
-import {onError} from "../libs/errorLib";
+import { onError } from "../libs/errorLib";
+import { useHistory } from "react-router-dom";
 import ProjectStore from "../stores/ProjectStore";
 import UserStore from "../stores/UserStore";
 import PostCreateProject from "../apiRequests/PostCreateProject";
@@ -14,6 +15,7 @@ export default function CreateProjectContent(props) {
     const [creationDate, setCreationDate] = useState("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const history = useHistory();
 
 
     /**
@@ -25,22 +27,19 @@ export default function CreateProjectContent(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        ProjectStore.projectName = projectName;
-        ProjectStore.projectDescription = projectDescription;
-        ProjectStore.isPrivate = isPrivate;
-        ProjectStore.creationDate = creationDate;
-        ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
-
         setIsLoading(true);
         try {
             let result = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
             if (result !== null && result) {
                 ProjectStore.projectId = result.projectId;
-                props.contentToDetails();
+                ProjectStore.projectName = projectName;
+                ProjectStore.projectDescription = projectDescription;
+                ProjectStore.isPrivate = isPrivate;
+                ProjectStore.creationDate = creationDate;
+                ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
+                // props.contentToDetails();
                 console.log("Project was created!")
-                // TODO: Should send user to upload files tab.
-                // TODO: Put project information into a projectStore.
-                // history.push("/userFrontpage");
+                history.push("/project");
             } else {
                 console.log("Project was not created!");
             }

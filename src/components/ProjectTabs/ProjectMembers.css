@@ -1,0 +1,65 @@
+.projectMembers {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    width: 100%;
+}
+
+.tabHeader {
+    text-align: center;
+}
+
+.tabContent {
+    display: flex;
+    flex-direction: row;
+}
+
+.memberListContainer {
+    width: 50%;
+}
+
+.memberButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+.grantOwnershipButton {
+    color: blue;
+}
+
+.informationAndAddMember {
+    width: 50%;
+}
+
+.addMember {
+    display: flex;
+    flex-direction: row;
+}
+
+.addMemberField {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.addMemberLabel {
+    font-weight: bold;
+    width: 100%;
+}
+
+.formInputAndButton {
+    display: flex;
+}
+
+.addMemberButton {
+    min-width: 9em;
+}
+
+.editButton {
+    width: 100%;
+}
+
+.information {
+    color: gray;
+}

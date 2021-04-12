@@ -4,10 +4,9 @@ import {currentIP} from "../App";
 /**
  * Sends an API POST request to the server to upload files to a project on the server.
  *
- * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @constructor
  * @param files that are going to be uploaded to the server.
  * @param projectId the id of the project which the files are going to be put under.
+ * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
  */
 export default async function PostUploadFiles(files, projectId) {
     let result = false;
