@@ -31,7 +31,6 @@ export default function UserFrontpage() {
     async function initialisation() {
         await initGetAllProjects();
         await initGetAllTags();
-        generateFileDisplays();
         setIsLoading(false);
     }
 
@@ -42,8 +41,9 @@ export default function UserFrontpage() {
     async function initGetAllProjects() {
         try {
             if (!doesHaveProjects) {
-                setAllProjects(await GetAllProjects());
-                if (allProjects.length <= 0) {
+                let tempAllProjects = await GetAllProjects();
+                if (tempAllProjects.length > 0) {
+                    setAllProjects(tempAllProjects);
                     setDoesHaveProjects(true);
                 }
             }
@@ -65,22 +65,6 @@ export default function UserFrontpage() {
         catch (e) {
             onError(e)
         }
-    }
-
-    function generateFileDisplays() {
-        let result = [];
-
-        allProjects.map(function(fileToDisplay) {
-            return (
-                <FileDisplay
-                    className="fileDisplay"
-                    key={"ProjectName" + fileToDisplay.projectName}
-                    filetype="folder"
-                    filename={fileToDisplay.projectName}
-                    fileowner={fileToDisplay.owner.firstName + " " + fileToDisplay.owner.lastName}
-                />
-            )});
-        setFilesToDisplay(result);
     }
 
     /**
