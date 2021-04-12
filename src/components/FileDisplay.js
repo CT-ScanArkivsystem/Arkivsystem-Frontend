@@ -64,6 +64,7 @@ export default function FileDisplay ({
             ProjectStore.projectOwner = props.fileowner;
             ProjectStore.isPrivate = props.fileisprivate;
             ProjectStore.creationDate = props.filecreationdate;
+            ProjectStore.projectMembers = props.projectmembers;
         }
     }
 
@@ -72,7 +73,7 @@ export default function FileDisplay ({
             <div className={'fileDisplay'}>
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.filename}</span>
-                <span className="fileDisplayOwner">{props.fileowner}</span>
+                <span className="fileDisplayOwner">{props.fileowner.firstName + " " + props.fileowner.lastName}</span>
             </div>
         </Link>
     );

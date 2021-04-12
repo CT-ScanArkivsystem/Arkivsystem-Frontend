@@ -8,16 +8,15 @@ import GetProject from "../../apiRequests/GetProject";
 import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
+import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
+import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription";
 
-export default function ProjectDetails() {
+export default function ProjectDetails(props) {
     const [isLoading, setIsLoading] = useState(false);
-    const [canUserEdit, setCanUserEdit] = useState(true);
-    //TODO: When project is private and user is not a member/owner editing should be disabled!
     const [projectDescription, setProjectDescription] = useState(ProjectStore.projectDescription);
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
-    const [currentProject, setCurrentProject] = useState("");
     const [allTags, setAllTags] = useState([]);
     const [projectTags, setProjectTags] = useState([]);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
@@ -30,7 +29,6 @@ export default function ProjectDetails() {
 
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
-        setCurrentProject(project);
 
         let tagsVar = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsVar);
@@ -113,16 +111,41 @@ export default function ProjectDetails() {
 
     async function addTagsToProject() {
         if (tagsToBeAdded.length > 0) {
-            let result = await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
+            await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
             setTagsToBeAdded([]);
         }
     }
 
     async function removeTagsFromProject() {
         if (tagsToBeRemoved.length > 0) {
-            let result = await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
+            await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
             setTagsToBeRemoved([]);
         }
+    }
+
+    async function setPrivacy() {
+        let wasSuccessful = false;
+        if (isProjectPrivate) {
+            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, false);
+        } else if (!isProjectPrivate) {
+            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, true);
+        }
+
+        if (wasSuccessful) {
+            ProjectStore.isPrivate = !isProjectPrivate;
+            setIsProjectPrivate(!isProjectPrivate);
+        } else {
+            console.log("Something went wrong when attempting to change privacy settings!")
+        }
+    }
+
+    async function setDescription(newDescription) {
+        setIsLoading(true);
+        let wasSuccessful = await PutSetProjectDescription(ProjectStore.projectId, newDescription);
+        if (!wasSuccessful) {
+            console.log("Something went wrong when updating description!");
+        }
+        setIsLoading(false);
     }
 
 
@@ -141,8 +164,11 @@ export default function ProjectDetails() {
                           type="checkbox"
                           className="isPrivateCheckbox"
                           label="Is project private"
-                          disabled={!canUserEdit}
-                          onChange={(e) => setIsProjectPrivate(e.target.value)}
+                          disabled={!props.canEdit}
+                          defaultChecked={ProjectStore.isPrivate}
+                          onChange={() => {
+                              setPrivacy();
+                          }}
                       />
                   </div>
                   <div className="tagsContainer defaultBorder">
@@ -152,7 +178,7 @@ export default function ProjectDetails() {
                           size="sm"
                           type="submit"
                           isLoading={isLoading}
-                          disabled={!canUserEdit}
+                          disabled={!props.canEdit}
                           onClick={() => {
                               if (editingTags) {
                                   setIsLoading(true);
@@ -173,10 +199,12 @@ export default function ProjectDetails() {
                       <Form.Label className="descriptionLabel">Project description</Form.Label>
                       <Form.Control
                           as="textarea"
+                          maxLength="255"
+                          name="Project description"
                           rows="10"
                           value={projectDescription}
                           onChange={(e) => setProjectDescription(e.target.value)}
-                          disabled={!editingDescription}
+                          readOnly={!editingDescription}
                       />
                   </Form.Group>
                   <LoaderButton
@@ -184,11 +212,13 @@ export default function ProjectDetails() {
                       size="sm"
                       type="submit"
                       isLoading={isLoading}
-                      disabled={!canUserEdit}
+                      disabled={!props.canEdit}
                       onClick={() => {
-                          if (!editingDescription) {
-                              //TODO: Send API request to update description
+                          if (editingDescription) {
+                              setIsLoading(true);
+                              setDescription(projectDescription)
                           }
+                          setIsLoading(false);
                           setEditingDescription(!editingDescription);
                       }}
                   >

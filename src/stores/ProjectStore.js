@@ -11,7 +11,8 @@ class ProjectStore {
             projectDescription: '',
             projectOwner: '',
             isPrivate: '',
-            creationDate: ''
+            creationDate: '',
+            projectMembers: []
         })
     }
 }

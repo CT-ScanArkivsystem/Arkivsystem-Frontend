@@ -2,13 +2,12 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
- * Request is sent to 'CurrentIP/user/currentUser'
+ * Sends an API GET request to the server to get all the tags.
+ * Request is sent to 'CurrentIP/user/getAllTags'
  *
- * @param currentIP is the currently used IP for the backend API which the frontend makes calls to.
- * @returns boolean isUserLoggedIn if the user information was pulled successfully returns true. Else false
+ * @returns Promise result the result from the server. This contains all the tags in the database.
  */
-export default async function GetAllProjects() {
+export default async function GetAllTags() {
     let result = [];
     try {
         let res = await fetch(currentIP + '/user/getAllTags', {

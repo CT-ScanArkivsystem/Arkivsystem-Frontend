@@ -2,11 +2,11 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API POST request to the server to create a new user with the given parameters.
+ * Sends an API PUT request to add a tag to a project.
  *
- * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @param projectId
- * @param tagNames
+ * @param projectId String that identifies the project the user wants to remove tags from.
+ * @param tagNames any[] that holds the tags the user wants to remove from the project.
+ * @returns Promise result the result from the server. Contains the project that was updated.
  */
 export default async function PutRemoveTag(projectId, tagNames) {
     let result;

@@ -6,7 +6,6 @@ import UserStore from "../stores/UserStore";
  * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
  * Request is sent to 'CurrentIP/user/currentUser'
  *
- * @param currentIP is the currently used IP for the backend API which the frontend makes calls to.
  * @returns boolean isUserLoggedIn if the user information was pulled successfully returns true. Else false
  */
 export default async function GetCurrentUser() {
@@ -22,13 +21,15 @@ export default async function GetCurrentUser() {
 
             let result = await res.json();
 
-            console.log("Sending GetCurrentUser request: ")
             if (result !== null && result !== "") {
-                console.log("User is logged in. Gathering user information!");
+                //console.log("User is logged in. Gathering user information!");
+                UserStore.userId = result.userId;
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;
                 UserStore.lastName = result.lastName;
-                UserStore.role = result.role;
+                result.roles.forEach((selectedRole) => {
+                    UserStore.role = selectedRole.roleName;
+                })
                 isUserLoggedIn = true;
             }
             else {

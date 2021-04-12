@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./Project.css";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
@@ -10,15 +10,20 @@ import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
 import UploadToProjectContent from "../components/UploadToProjectContent";
+import LoadingPage from "../containers/LoadingPage";
+import UserStore from "../stores/UserStore";
 
 
 function getProjectInformation() {
+    console.log(ProjectStore);
+
     console.log(ProjectStore.projectId);
     console.log(ProjectStore.projectName);
     console.log(ProjectStore.projectDescription);
     console.log(ProjectStore.projectOwner);
     console.log("isPrivate: " + ProjectStore.isPrivate);
     console.log(ProjectStore.creationDate);
+    console.log(ProjectStore.projectMembers);
 
     return <p>
         {ProjectStore.projectId}<br/>
@@ -32,30 +37,63 @@ function getProjectInformation() {
 
 export default function Project() {
 
-    const [pageContent, setPageContent] = useState(<ProjectDetails />);
+    const [canUserEdit, setCanUserEdit] = useState(false);
+    const [pageContent, setPageContent] = useState(<LoadingPage />);
     const [isLoading, setIsLoading] = useState(false);
 
+    //Functions in the React.useEffect() will be run once on load of site.
+    React.useEffect(() => {
+        initialisation();
+    }, []);
 
-    function contentToProjectDetails() {
-        setPageContent(<ProjectDetails />);
+    function initialisation() {
+        let canEdit = checkIfCanEdit();
+        setCanUserEdit(canEdit);
+        setPageContent(<ProjectDetails canEdit={canEdit} />);
     }
 
+    function checkIfCanEdit() {
+        let canEdit = false;
+        //If any of these three are true, then the user is allowed to edit the project.
+        if (checkIfOwner(ProjectStore.projectOwner, UserStore) || checkIfMember(ProjectStore.projectMembers, UserStore) || checkIfAdmin(UserStore)) {
+            canEdit = true
+        }
+        return canEdit;
+    }
+
+    function checkIfOwner() {
+        return ProjectStore.projectOwner.userId === UserStore.userId;
+    }
+
+    function checkIfMember(memberList, user) {
+        let isUserMember = false;
+        for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
+            if (memberList[i].userId === user.userId) {
+                isUserMember = true;
+            }
+        }
+        return isUserMember;
+    }
+
+    function checkIfAdmin(user) {
+        return user.role === "ROLE_ADMIN";
+    }
+
+    function contentToProjectDetails() {
+        setPageContent(<ProjectDetails canEdit={canUserEdit} />);
+    }
     function contentToUploadToProject() {
         setPageContent(<UploadToProjectContent />)
     }
-
     function contentToProjectImages() {
         setPageContent(<ProjectImages />)
     }
-
     function contentToProjectFiles() {
         setPageContent(<ProjectFiles />)
     }
-
     function contentToProjectMembers() {
-        setPageContent(<ProjectMembers />)
+        setPageContent(<ProjectMembers canEditMembers={checkIfOwner()} />)
     }
-
     function contentToProjectSpecialPermission() {
         setPageContent(<ProjectSpecialPermission />)
     }

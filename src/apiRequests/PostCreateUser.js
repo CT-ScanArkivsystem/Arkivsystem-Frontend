@@ -10,7 +10,6 @@ import {currentIP} from "../App";
  * @param password Users password
  * @param role Users role
  * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @constructor
  */
 export default async function PostCreateUser(firstName, lastName, email, password, role) {
     let didUserGetCreated = false;
