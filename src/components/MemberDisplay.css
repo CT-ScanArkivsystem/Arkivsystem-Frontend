@@ -1,0 +1,23 @@
+.memberDisplayLink {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.memberDisplay {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.memberDisplayName {
+    flex-grow: 1;
+    text-align: start;
+    margin: 0 2px 0 6px;
+}
+
+.memberDisplayEmail {
+    margin: 0 4px 0 2px;
+}
+
+.selected {
+
+}

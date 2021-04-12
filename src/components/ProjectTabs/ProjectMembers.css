@@ -19,6 +19,11 @@
     width: 50%;
 }
 
+.memberList {
+    overflow: scroll;
+    height: 40vh;
+}
+
 .memberButtons {
     display: flex;
     flex-direction: row;

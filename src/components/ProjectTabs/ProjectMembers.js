@@ -3,13 +3,37 @@ import "./ProjectMembers.css";
 import ProjectStore from "../../stores/ProjectStore";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../LoaderButton";
-import {BsArrowRepeat} from "react-icons/bs";
-import Button from "react-bootstrap/Button";
+import MemberDisplay from "../MemberDisplay";
 
 
 export default function ProjectMembers(props) {
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedMember, setSelectedMember] = useState([]);
     const [userToAddAsMember, setUserToAddAsMember] = useState("");
+
+    const memberList = ProjectStore.projectMembers;
+
+
+    function renderMemberList() {
+        let result = [];
+
+        result = memberList.map(function(memberToDisplay) {
+            return (
+                <MemberDisplay
+                    className={memberToDisplay.userId === selectedMember.userId ? 'selected' : ''}
+                    variant={memberToDisplay.userId === selectedMember.userId ? 'secondary' : 'outline-dark'}
+                    onClick={() => {selectedMember === memberToDisplay ? setSelectedMember([]) : setSelectedMember(memberToDisplay)}}
+                    key={memberToDisplay.userId}
+                    id={memberToDisplay.userId}
+                    memberfirstname={memberToDisplay.firstName}
+                    memberlastname={memberToDisplay.lastName}
+                    memberemail={memberToDisplay.email}
+                />
+            )
+        });
+
+        return result;
+    }
 
     return (
         <div className="projectMembers">
@@ -20,7 +44,7 @@ export default function ProjectMembers(props) {
                 <div className="memberListContainer">
                     <h5>Members</h5>
                     <div className="memberList">
-                        MEMBERLIST
+                        {renderMemberList()}
                     </div>
                     <div className="memberButtons">
                         <LoaderButton
@@ -33,15 +57,15 @@ export default function ProjectMembers(props) {
                         >
                             Grant ownership
                         </LoaderButton>
-                        <Button
+                        <LoaderButton
                             variant={"outline-danger"}
+                            size="sm"
                             disabled={isLoading || !props.canEditMembers}
                             className="removeMemberButton"
-                            {...props}
+                            isLoading={isLoading}
                         >
-                            {isLoading && <BsArrowRepeat className="spinning"/>}
                             Remove member
-                        </Button>
+                        </LoaderButton>
                     </div>
 
                 </div>
