@@ -2,11 +2,11 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API POST request to the server to create a new user with the given parameters.
+ * Sends an API PUT request to add a tag to a project.
  *
- * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @param projectId
- * @param tagNames
+ * @param projectId String that identifies the project the user wants to add tags to.
+ * @param tagNames any[] that holds the tags the user wants to add to the project.
+ * @returns Promise result the result from the server. Contains the project that was updated.
  */
 export default async function PutAddTag(projectId, tagNames) {
     let result;
@@ -37,5 +37,6 @@ export default async function PutAddTag(projectId, tagNames) {
         console.log("Tags were not added due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
+    console.log(result)
     return result;
 }

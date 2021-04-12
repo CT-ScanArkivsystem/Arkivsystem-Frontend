@@ -4,11 +4,11 @@ import UserStore from "../stores/UserStore";
 import ProjectStore from "../stores/ProjectStore";
 
 /**
- * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
- * Request is sent to 'CurrentIP/user/currentUser'
+ * Sends an API GET request to the server to get a single project.
+ * Request is sent to 'CurrentIP/user/getProject?projectId=PROJECT_ID_HERE'
  *
- * @returns boolean isUserLoggedIn if the user information was pulled successfully returns true. Else false
- * @param projectId
+ * @param projectId String which contains the UUID of the project you are requesting information about.
+ * @returns Promise result the result from the server. Contains all the information about a single project.
  */
 export default async function GetProject(projectId) {
     let result = '';

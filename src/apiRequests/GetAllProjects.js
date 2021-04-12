@@ -5,8 +5,7 @@ import {currentIP} from "../App";
  * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
  * Request is sent to 'CurrentIP/user/currentUser'
  *
- * @param currentIP is the currently used IP for the backend API which the frontend makes calls to.
- * @returns boolean isUserLoggedIn if the user information was pulled successfully returns true. Else false
+ * @returns Promise result the result from the server. This contains all the Projects in the database.
  */
 export default async function GetAllProjects() {
     let result = [];

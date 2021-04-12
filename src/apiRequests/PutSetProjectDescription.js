@@ -4,9 +4,9 @@ import {currentIP} from "../App";
 /**
  * Sends an API PUT request to the server to update the description of a given project.
  *
- * @returns boolean wasSuccessful if no error codes were returned it will return true, else false.
  * @param projectId string (UUID) the projectId of the project you are trying to change the privacy settings of.
  * @param setDescription string which contains what the new description of the project should be.
+ * @returns boolean wasSuccessful if no error codes were returned it will return true, else false.
  */
 export default async function SetProjectDescription(projectId, setDescription) {
     let wasSuccessful = false;
