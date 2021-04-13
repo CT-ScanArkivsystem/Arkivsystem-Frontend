@@ -82,7 +82,7 @@ function App() {
         !isAuthenticating && (
             <>
                 <GlobalStyle />
-                <div className="App container">
+                <div className="App">
                     <Navbar collapseOnSelect variant="dark" expand="md">
                         {isAuthenticated ? (
                             <LinkContainer to="/userFrontpage">

@@ -37,6 +37,5 @@ export default async function PutAddTag(projectId, tagNames) {
         console.log("Tags were not added due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    console.log(result)
     return result;
 }

@@ -1,6 +1,7 @@
 .sideBar {
     width: 20%;
     margin-right: 4px;
+    padding: 4px;
     display: flex;
     flex-direction: column;
     text-align: center;
