@@ -70,6 +70,8 @@ export default function ProjectMembers(props) {
     }
 
     async function handleChangeOwner(projectId, idOfUserToOwner) {
+        console.log("prosjektId: " + projectId)
+        console.log("idOfuserToOwner: " + idOfUserToOwner)
         if (idOfUserToOwner) {
             let result = await PutChangeProjectOwner(projectId, idOfUserToOwner);
             if (result) {
@@ -127,6 +129,7 @@ export default function ProjectMembers(props) {
                                     type="email"
                                     name="Project description"
                                     placeholder="Enter email"
+                                    disabled={isLoading || !props.canEditMembers}
                                     value={emailOfUserToAdd}
                                     onChange={(e) => setEmailOfUserToAdd(e.target.value)}
                                 />
@@ -135,7 +138,7 @@ export default function ProjectMembers(props) {
                                     size="sm"
                                     type="submit"
                                     isLoading={isLoading}
-                                    disabled={!props.canEditMembers}
+                                    disabled={isLoading || !props.canEditMembers}
                                     onClick={() => {handleAddMember(ProjectStore.projectId, emailOfUserToAdd)}}
                                 >
                                     Add member

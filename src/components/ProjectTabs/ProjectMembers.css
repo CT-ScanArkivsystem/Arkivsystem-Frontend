@@ -36,10 +36,12 @@
 
 .grantOwnershipButton {
     width: 50%;
+    margin-right: 4px;
 }
 
 .removeMemberButton {
     width: 50%;
+    margin-left: 4px;
 }
 
 
