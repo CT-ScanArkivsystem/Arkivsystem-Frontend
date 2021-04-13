@@ -83,7 +83,7 @@ function App() {
             <>
                 <GlobalStyle />
                 <div className="App">
-                    <Navbar collapseOnSelect variant="dark" expand="md">
+                    <Navbar collapseOnSelect variant="dark">
                         {isAuthenticated ? (
                             <LinkContainer to="/userFrontpage">
                                 <Navbar.Brand href="/" className="font-weight-bold">
