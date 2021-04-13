@@ -1,0 +1,28 @@
+.editUser {
+    margin: 0 auto 0 auto;
+    min-width: 100%;
+}
+
+.formContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    min-width: 40%;
+}
+
+.thisPagesContent {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+}
+
+.user-list-box {
+    margin: 0 auto 0 auto;
+    min-width: 90%;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
