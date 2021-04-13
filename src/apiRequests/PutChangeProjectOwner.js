@@ -35,6 +35,5 @@ export default async function PutChangeProjectOwner(projectId, userId) {
         console.log("Owner was not changed due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    console.log(result);
     return result;
 }

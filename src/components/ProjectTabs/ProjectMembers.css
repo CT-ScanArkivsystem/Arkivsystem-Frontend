@@ -17,13 +17,14 @@
 }
 
 .informationAndAddMember {
-    width: 100%;
+    width: 95%;
 }
 
 .memberList {
-    padding: 4px;
+    padding: 4px 0 4px 0;
+    margin-right: 4px;
     overflow: auto;
-    width: 35vw;
+    width: 30vw;
     max-height: 40vh;
 }
 

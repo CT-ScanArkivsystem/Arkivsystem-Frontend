@@ -7,6 +7,7 @@ import MemberDisplay from "../MemberDisplay";
 import PutAddMemberToProject from "../../apiRequests/PutAddMemberToProject";
 import PutRemoveMemberFromProject from "../../apiRequests/PutRemoveMemberFromProject";
 import GetProject from "../../apiRequests/GetProject";
+import PutChangeProjectOwner from "../../apiRequests/PutChangeProjectOwner";
 
 
 export default function ProjectMembers(props) {
@@ -48,7 +49,6 @@ export default function ProjectMembers(props) {
             if (result) {
                 await updateProject(projectId);
             }
-            setIsLoading(false);
         }
     }
     async function handleRemoveMember(projectId, emailOfUserToRemove) {
@@ -57,14 +57,25 @@ export default function ProjectMembers(props) {
             if (result) {
                 await updateProject(projectId);
             }
-            setIsLoading(false);
         }
     }
 
     async function updateProject(projectId) {
         let project = await GetProject(projectId);
         ProjectStore.projectMembers = project.projectMembers;
+        ProjectStore.projectOwner = project.owner;
         setMemberList(ProjectStore.projectMembers);
+        setSelectedMember([]);
+        setIsLoading(false);
+    }
+
+    async function handleChangeOwner(projectId, idOfUserToOwner) {
+        if (idOfUserToOwner) {
+            let result = await PutChangeProjectOwner(projectId, idOfUserToOwner);
+            if (result) {
+                await updateProject(projectId);
+            }
+        }
     }
 
 
@@ -86,7 +97,7 @@ export default function ProjectMembers(props) {
                             variant="outline-primary"
                             isLoading={isLoading}
                             disabled={isLoading || !props.canEditMembers || !selectedMember.email}
-                            onClick={() => {console.log("Click!")}}
+                            onClick={() => {handleChangeOwner(ProjectStore.projectId, selectedMember.userId)}}
                         >
                             Grant ownership
                         </LoaderButton>
@@ -105,8 +116,8 @@ export default function ProjectMembers(props) {
                 </div>
                 <div className="informationAndAddMember">
                     <div className="information">
-                        <span>Current owner: {ProjectStore.projectOwner.firstName + " " + ProjectStore.projectOwner.lastName}</span><br/>
-                        <span>Owner E-mail: {ProjectStore.projectOwner.email}</span>
+                        <span>Current owner: {isLoading ? 'Loading' : (ProjectStore.projectOwner.firstName + " " + ProjectStore.projectOwner.lastName)}</span><br/>
+                        <span>Owner E-mail: {isLoading ? 'Loading' : (ProjectStore.projectOwner.email)}</span>
                     </div>
                         <Form.Group size="lg" controlId="projectDescription" className="addMemberField">
                             <Form.Label className="addMemberLabel">Add member</Form.Label>
