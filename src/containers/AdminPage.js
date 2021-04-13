@@ -3,9 +3,10 @@ import "./AdminPage.css";
 import SideBar from "../components/SideBar";
 import LoaderButton from "../components/LoaderButton";
 import CreateUser from "../components/AdminTabs/CreateUser";
-import EditUser from "../components/AdminTabs/EditUser";
+import FindUser from "../components/AdminTabs/FindUser";
 import DeleteUser from "../components/AdminTabs/DeleteUser";
 import DeleteTags from "../components/AdminTabs/DeleteTags";
+import EditUserPage from "../components/EditUserPage";
 
 export default function AdminPage() {
 
@@ -18,7 +19,7 @@ export default function AdminPage() {
     }
 
     function contentToEditUser() {
-        setPageContent(<EditUser/>)
+        setPageContent(<EditUserPage/>)
     }
 
     function contentToDeleteUser() {
