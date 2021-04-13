@@ -14,7 +14,7 @@ export default function CreateUser() {
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
 
@@ -132,7 +132,7 @@ export default function CreateUser() {
                         >
                             <option value="" disabled>Choose a role</option>
                             <option value="user">User</option>
-                            <option value="professor">Professor</option>
+                            <option value="academic">Academic</option>
                             <option value="admin">Admin</option>
                         </Form.Control>
 

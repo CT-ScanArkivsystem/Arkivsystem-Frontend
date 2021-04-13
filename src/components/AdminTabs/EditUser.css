@@ -21,6 +21,8 @@
 .user-list-box {
     margin: 0 auto 0 auto;
     min-width: 90%;
+    overflow-y: scroll;
+    max-height: 50vh;
 }
 
 .capitalize {
