@@ -4,23 +4,30 @@ import ProjectStore from "../../stores/ProjectStore";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../LoaderButton";
 import MemberDisplay from "../MemberDisplay";
+import PutAddMemberToProject from "../../apiRequests/PutAddMemberToProject";
+import PutRemoveMemberFromProject from "../../apiRequests/PutRemoveMemberFromProject";
+import GetProject from "../../apiRequests/GetProject";
 
 
 export default function ProjectMembers(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedMember, setSelectedMember] = useState([]);
-    const [userToAddAsMember, setUserToAddAsMember] = useState("");
+    const [emailOfUserToAdd, setEmailOfUserToAdd] = useState("");
 
-    const memberList = ProjectStore.projectMembers;
+    const [memberList, setMemberList] = useState([]);
+
+    //Functions in the React.useEffect() will be run once on load of site.
+    React.useEffect(() => {
+        setMemberList(ProjectStore.projectMembers);
+    }, []);
 
 
     function renderMemberList() {
         let result = [];
 
-        result = memberList.map(function(memberToDisplay) {
+        result = memberList.map((memberToDisplay) => {
             return (
                 <MemberDisplay
-                    className={memberToDisplay.userId === selectedMember.userId ? 'selected' : ''}
                     variant={memberToDisplay.userId === selectedMember.userId ? 'secondary' : 'outline-dark'}
                     onClick={() => {selectedMember === memberToDisplay ? setSelectedMember([]) : setSelectedMember(memberToDisplay)}}
                     key={memberToDisplay.userId}
@@ -34,6 +41,32 @@ export default function ProjectMembers(props) {
 
         return result;
     }
+
+    async function handleAddMember(projectId, emailOfUserToAdd) {
+        if (emailOfUserToAdd) {
+            let result = await PutAddMemberToProject(projectId, emailOfUserToAdd);
+            if (result) {
+                await updateProject(projectId);
+            }
+            setIsLoading(false);
+        }
+    }
+    async function handleRemoveMember(projectId, emailOfUserToRemove) {
+        if (emailOfUserToRemove) {
+            let result = await PutRemoveMemberFromProject(projectId, emailOfUserToRemove);
+            if (result) {
+                await updateProject(projectId);
+            }
+            setIsLoading(false);
+        }
+    }
+
+    async function updateProject(projectId) {
+        let project = await GetProject(projectId);
+        ProjectStore.projectMembers = project.projectMembers;
+        setMemberList(ProjectStore.projectMembers);
+    }
+
 
     return (
         <div className="projectMembers">
@@ -50,19 +83,20 @@ export default function ProjectMembers(props) {
                         <LoaderButton
                             className="grantOwnershipButton"
                             size="sm"
-                            type="submit"
+                            variant="outline-primary"
                             isLoading={isLoading}
-                            disabled={!props.canEditMembers}
+                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
                             onClick={() => {console.log("Click!")}}
                         >
                             Grant ownership
                         </LoaderButton>
                         <LoaderButton
-                            variant={"outline-danger"}
-                            size="sm"
-                            disabled={isLoading || !props.canEditMembers}
                             className="removeMemberButton"
+                            size="sm"
+                            variant="outline-danger"
                             isLoading={isLoading}
+                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
+                            onClick={() => {handleRemoveMember(ProjectStore.projectId, selectedMember.email)}}
                         >
                             Remove member
                         </LoaderButton>
@@ -82,8 +116,8 @@ export default function ProjectMembers(props) {
                                     type="email"
                                     name="Project description"
                                     placeholder="Enter email"
-                                    value={userToAddAsMember}
-                                    onChange={(e) => setUserToAddAsMember(e.target.value)}
+                                    value={emailOfUserToAdd}
+                                    onChange={(e) => setEmailOfUserToAdd(e.target.value)}
                                 />
                                 <LoaderButton
                                     className="addMemberButton"
@@ -91,7 +125,7 @@ export default function ProjectMembers(props) {
                                     type="submit"
                                     isLoading={isLoading}
                                     disabled={!props.canEditMembers}
-                                    onClick={() => {console.log("Click!")}}
+                                    onClick={() => {handleAddMember(ProjectStore.projectId, emailOfUserToAdd)}}
                                 >
                                     Add member
                                 </LoaderButton>
