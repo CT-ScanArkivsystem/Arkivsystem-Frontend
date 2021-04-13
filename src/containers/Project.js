@@ -12,75 +12,134 @@ import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
 import UploadToProjectContent from "../components/UploadToProjectContent";
 import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
-
-
-function getProjectInformation() {
-    console.log(ProjectStore);
-
-    console.log(ProjectStore.projectId);
-    console.log(ProjectStore.projectName);
-    console.log(ProjectStore.projectDescription);
-    console.log(ProjectStore.projectOwner);
-    console.log("isPrivate: " + ProjectStore.isPrivate);
-    console.log(ProjectStore.creationDate);
-    console.log(ProjectStore.projectMembers);
-
-    return <p>
-        {ProjectStore.projectId}<br/>
-        {ProjectStore.projectName}<br/>
-        {ProjectStore.projectDescription}<br/>
-        {ProjectStore.projectOwner}<br/>
-        {ProjectStore.isPrivate}<br/>
-        {ProjectStore.creationDate}
-    </p>;
-}
+import GetProject from "../apiRequests/GetProject";
+import GetAllTags from "../apiRequests/GetAllTags";
 
 export default function Project() {
 
-    const [canUserEdit, setCanUserEdit] = useState(false);
     const [pageContent, setPageContent] = useState(<LoadingPage />);
     const [isLoading, setIsLoading] = useState(false);
+    const [projectTags, setProjectTags] = useState([]);
+    const [allTags, setAllTags] = useState([]);
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         initialisation();
     }, []);
 
-    function initialisation() {
-        let canEdit = checkIfCanEdit();
-        setCanUserEdit(canEdit);
-        setPageContent(<ProjectDetails canEdit={canEdit} />);
+    async function initialisation() {
+        let project = await GetProject(ProjectStore.projectId);
+        console.log(project)
+
+        let tagsInProject = trimTagArray(project.tags, project.tags);
+        setProjectTags(tagsInProject);
+
+        let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
+        setAllTags(allTagsTrimmed);
+        setPageContent(<ProjectDetails canEdit={checkIfCanEdit("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
     }
 
-    function checkIfCanEdit() {
-        let canEdit = false;
-        //If any of these three are true, then the user is allowed to edit the project.
-        if (checkIfOwner(ProjectStore.projectOwner, UserStore) || checkIfMember(ProjectStore.projectMembers, UserStore) || checkIfAdmin(UserStore)) {
-            canEdit = true
+    /**
+     * This function removes the unnecessary numberOfProjects part of the tags that is gotten from the requests.
+     * The function also calls to check if the tags are in the project and sets a variable that tells the site if it is in or not.
+     *
+     * @param arrayToTrim Array which contains tags and numberOfProjects the tags are in.
+     * @param projectTagArray The array of the project to check if the tags are in both.
+     * @returns *[] trimmedProjectTags The array with trimmed out numberOfProjects and has a new isInProject.
+     */
+    function trimTagArray(arrayToTrim, projectTagArray) {
+        let trimmedProjectTags = [];
+        if (arrayToTrim) {
+            for (let i = 0; i < arrayToTrim.length; i++) {
+                trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
+            }
         }
+        return trimmedProjectTags;
+    }
+
+    /**
+     * This function checks if a tag is in the project.
+     *
+     * @param tagToCheck The tag that should be checked if is in project.
+     * @param projectTagArray The array that contains all the tags in the project.
+     * @returns {boolean} isTagInProject returns true if the tag is in the project, else false.
+     */
+    function checkIfTagIsInProject(tagToCheck, projectTagArray) {
+        let isTagInProject = false;
+        if (projectTagArray && projectTagArray.length > 0) {
+            for (let i = 0; i < projectTagArray.length && isTagInProject === false; i++) {
+                if (tagToCheck === projectTagArray[i].tagName) {
+                    isTagInProject = true;
+                }
+            }
+        }
+        return isTagInProject;
+    }
+
+    /**
+    This function checks if the user meets the permission requirements that is given.
+    If the user meets the permission needs they will be allowed to edit the page with said requirement.
+
+    @param permissionNeeded String that contains the permission that is going to be checked.
+     */
+    function checkIfCanEdit(permissionNeeded) {
+        let canEdit = false;
+
+        if (checkIfAdmin(UserStore.role)) {
+            canEdit = true;
+        } else {
+
+            switch (permissionNeeded) {
+                case 'member':
+                    if (checkIfMember(ProjectStore.projectMembers, UserStore.userId)) {
+                        canEdit = true;
+                    }
+                    break;
+                case 'owner':
+                    if (checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId)) {
+                        canEdit = true;
+                    }
+                    break;
+                case 'specialPermission':
+                    if (checkIfSpecialPermission()) {
+                        canEdit = true;
+                    }
+                    break;
+                default:
+                    canEdit = false;
+                    break;
+            }
+        }
+
         return canEdit;
     }
 
-    function checkIfOwner() {
-        return ProjectStore.projectOwner.userId === UserStore.userId;
+    function checkIfAdmin(userRole) {
+        return userRole === "ROLE_ADMIN";
     }
 
-    function checkIfMember(memberList, user) {
+    function checkIfOwner(ownerId, userId) {
+        return ownerId === userId;
+    }
+
+    function checkIfMember(memberList, userId) {
         let isUserMember = false;
         for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
-            if (memberList[i].userId === user.userId) {
+            if (memberList[i].userId === userId) {
                 isUserMember = true;
             }
         }
         return isUserMember;
     }
 
-    function checkIfAdmin(user) {
-        return user.role === "ROLE_ADMIN";
+    function checkIfSpecialPermission() {
+
     }
 
+
+
     function contentToProjectDetails() {
-        setPageContent(<ProjectDetails canEdit={canUserEdit} />);
+        setPageContent(<ProjectDetails canEdit={checkIfCanEdit("member")} projectTags={projectTags} allTags={allTags} />);
     }
     function contentToUploadToProject() {
         setPageContent(<UploadToProjectContent />)
@@ -92,7 +151,7 @@ export default function Project() {
         setPageContent(<ProjectFiles />)
     }
     function contentToProjectMembers() {
-        setPageContent(<ProjectMembers canEditMembers={checkIfOwner()} />)
+        setPageContent(<ProjectMembers canEditMembers={checkIfCanEdit("owner")} />)
     }
     function contentToProjectSpecialPermission() {
         setPageContent(<ProjectSpecialPermission />)
