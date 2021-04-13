@@ -8,20 +8,21 @@ import PutAddMemberToProject from "../../apiRequests/PutAddMemberToProject";
 import PutRemoveMemberFromProject from "../../apiRequests/PutRemoveMemberFromProject";
 import GetProject from "../../apiRequests/GetProject";
 import PutChangeProjectOwner from "../../apiRequests/PutChangeProjectOwner";
-
+import ConfirmationModal from "../ConfirmationModal";
 
 export default function ProjectMembers(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedMember, setSelectedMember] = useState([]);
     const [emailOfUserToAdd, setEmailOfUserToAdd] = useState("");
-
     const [memberList, setMemberList] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
+    const [functionIfConfirmed, setFunctionIfConfirmed] = useState(handleRemoveMember);
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         setMemberList(ProjectStore.projectMembers);
     }, []);
-
 
     function renderMemberList() {
         let result = [];
@@ -51,11 +52,18 @@ export default function ProjectMembers(props) {
             }
         }
     }
-    async function handleRemoveMember(projectId, emailOfUserToRemove) {
-        if (emailOfUserToRemove) {
-            let result = await PutRemoveMemberFromProject(projectId, emailOfUserToRemove);
+
+    function openRemoveModal() {
+        setIsModalOpen(true);
+        setModalText("Remove " + selectedMember.firstName + " " + selectedMember.lastName + " from this project?");
+        setFunctionIfConfirmed(() => handleRemoveMember);
+    }
+
+    async function handleRemoveMember() {
+        if (selectedMember.email) {
+            let result = await PutRemoveMemberFromProject(ProjectStore.projectId, selectedMember.email);
             if (result) {
-                await updateProject(projectId);
+                await updateProject(ProjectStore.projectId);
             }
         }
     }
@@ -70,8 +78,6 @@ export default function ProjectMembers(props) {
     }
 
     async function handleChangeOwner(projectId, idOfUserToOwner) {
-        console.log("prosjektId: " + projectId)
-        console.log("idOfuserToOwner: " + idOfUserToOwner)
         if (idOfUserToOwner) {
             let result = await PutChangeProjectOwner(projectId, idOfUserToOwner);
             if (result) {
@@ -80,9 +86,18 @@ export default function ProjectMembers(props) {
         }
     }
 
+    function closeModal() {
+        setIsModalOpen(false)
+    }
 
     return (
         <div className="projectMembers">
+            <ConfirmationModal
+                functionToCloseModal={closeModal}
+                isOpen={isModalOpen}
+                modalText={modalText}
+                functionIfConfirmed={functionIfConfirmed}
+            />
             <div className="tabHeader">
                 <h2>Manage members</h2>
             </div>
@@ -109,7 +124,10 @@ export default function ProjectMembers(props) {
                             variant="outline-danger"
                             isLoading={isLoading}
                             disabled={isLoading || !props.canEditMembers || !selectedMember.email}
-                            onClick={() => {handleRemoveMember(ProjectStore.projectId, selectedMember.email)}}
+                            onClick={() => {
+                                openRemoveModal()
+                                //handleRemoveMember(ProjectStore.projectId, selectedMember.email)
+                            }}
                         >
                             Remove member
                         </LoaderButton>
