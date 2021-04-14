@@ -35,7 +35,7 @@ export default function Project() {
 
         let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(allTagsTrimmed);
-        setPageContent(<ProjectDetails canEdit={checkIfCanEdit("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+        setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
     }
 
     /**
@@ -81,36 +81,36 @@ export default function Project() {
 
     @param permissionNeeded String that contains the permission that is going to be checked.
      */
-    function checkIfCanEdit(permissionNeeded) {
-        let canEdit = false;
+    function checkPermission(permissionNeeded) {
+        let hasPermission = false;
 
         if (checkIfAdmin(UserStore.role)) {
-            canEdit = true;
+            hasPermission = true;
         } else {
 
             switch (permissionNeeded) {
                 case 'member':
-                    if (checkIfMember(ProjectStore.projectMembers, UserStore.userId)) {
-                        canEdit = true;
+                    if (checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId)) {
+                        hasPermission = true;
                     }
                     break;
                 case 'owner':
                     if (checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId)) {
-                        canEdit = true;
+                        hasPermission = true;
                     }
                     break;
                 case 'specialPermission':
-                    if (checkIfSpecialPermission()) {
-                        canEdit = true;
+                    if (checkIfUserIsInList(ProjectStore.usersWithSpecialPermission, UserStore.userId)) {
+                        hasPermission = true;
                     }
                     break;
                 default:
-                    canEdit = false;
+                    hasPermission = false;
                     break;
             }
         }
 
-        return canEdit;
+        return hasPermission;
     }
 
     function checkIfAdmin(userRole) {
@@ -121,24 +121,18 @@ export default function Project() {
         return ownerId === userId;
     }
 
-    function checkIfMember(memberList, userId) {
-        let isUserMember = false;
-        for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
+    function checkIfUserIsInList(memberList, userId) {
+        let isUserInList = false;
+        for (let i = 0; memberList.length > i && isUserInList !== true; i++) {
             if (memberList[i].userId === userId) {
-                isUserMember = true;
+                isUserInList = true;
             }
         }
-        return isUserMember;
+        return isUserInList;
     }
-
-    function checkIfSpecialPermission() {
-
-    }
-
-
 
     function contentToProjectDetails() {
-        setPageContent(<ProjectDetails canEdit={checkIfCanEdit("member")} projectTags={projectTags} allTags={allTags} />);
+        setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={projectTags} allTags={allTags} />);
     }
     function contentToUploadToProject() {
         setPageContent(<UploadToProjectContent />)
@@ -147,10 +141,10 @@ export default function Project() {
         setPageContent(<ProjectImages />)
     }
     function contentToProjectFiles() {
-        setPageContent(<ProjectFiles />)
+        setPageContent(<ProjectFiles canDownloadFiles={checkPermission("specialPermission")} canEditFiles={checkPermission("member")} />)
     }
     function contentToProjectMembers() {
-        setPageContent(<ProjectMembers canEditMembers={checkIfCanEdit("owner")} />)
+        setPageContent(<ProjectMembers canEditMembers={checkPermission("owner")} />)
     }
     function contentToProjectSpecialPermission() {
         setPageContent(<ProjectSpecialPermission />)
@@ -202,17 +196,6 @@ export default function Project() {
                 >
                     Special Permission
                 </LoaderButton>
-                <br/>
-                <Link to="/project">
-                    <LoaderButton
-                        size="bg"
-                        className="toProjectButton"
-                        isLoading={isLoading}
-                        onClick={() => setIsLoading(true)}
-                    >
-                        Go to project
-                    </LoaderButton>
-                </Link>
             </SideBar>
             <div className="pageContent">
                 {pageContent}

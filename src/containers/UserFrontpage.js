@@ -98,6 +98,7 @@ export default function UserFrontpage() {
                         fileisprivate={allProjects[i].isPrivate}
                         filecreationdate={allProjects[i].creation}
                         projectmembers={allProjects[i].projectMembers}
+                        userswithspecialpermission={allProjects[i].usersWithSpecialPermission}
                     />
                 );
             }
