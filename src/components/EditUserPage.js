@@ -4,10 +4,11 @@ import LoadingPage from "../containers/LoadingPage";
 import ProjectDetails from "./ProjectTabs/ProjectDetails";
 import UploadToProjectContent from "./UploadToProjectContent";
 import EditUser from "./AdminTabs/EditUser";
+import UserStore from "../stores/UserStore";
 
 export default function EditUserPage() {
 
-    const [pageContent, setPageContent] = useState(<LoadingPage/>);
+    const [pageContent, setPageContent] = useState(<FindUser/>);
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState("empty user string");
 
@@ -18,11 +19,14 @@ export default function EditUserPage() {
     }, []);
 
     function initialisation() {
-        setPageContent(<FindUser/>);
+        setPageContent(
+            <FindUser reallyDoThis={() => {contentToEditUser()}}/>
+        );
     }
 
     function contentToEditUser() {
-        setPageContent(<EditUser usertoEdit={user}/>)
+        console.log('editUserPage initialisation')
+        setPageContent(<EditUser/>)
     }
 
     return (

@@ -97,6 +97,15 @@ export default function CreateUser() {
                             />
                         </Form.Group>
                     </div>
+                    <Form.Group>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </Form.Group>
                     <div className="password-box">
                         <Form.Group className="password1" size="lg" controlId="password1">
                             <Form.Label>Password (Minimum 5 characters long)</Form.Label>
@@ -115,15 +124,6 @@ export default function CreateUser() {
                             />
                         </Form.Group>
                     </div>
-                    <Form.Group>
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            autoFocus
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </Form.Group>
                     <Form.Group size="lg" controlId="role">
                         <Form.Label>Role</Form.Label>
                         <Form.Control

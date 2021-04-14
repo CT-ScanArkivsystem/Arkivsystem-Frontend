@@ -8,7 +8,7 @@ import UserDisplay from "../UserDisplay";
 import {onError} from "../../libs/errorLib";
 import UserResultRows from "./UserResultRows";
 
-export default function FindUser() {
+export default function FindUser({...props}) {
     const [searchInput, setSearchInput] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [allUsers, setAllUsers] = useState([]);
@@ -66,10 +66,6 @@ export default function FindUser() {
         // TODO: Validate when you know how to validate
     }
 
-    function handleClick() {
-        console.log("handleclick in finduser")
-    }
-
     async function initGetAllUsers() {
         try {
             if (!doesHaveUsers) {
@@ -114,7 +110,11 @@ export default function FindUser() {
                             </tr>
                             </thead>
                             <tbody>
-                            <UserResultRows filteredPersons={filteredPersons}/>
+                            <UserResultRows
+                                filteredPersons={filteredPersons}
+                                onSomethingHappens={() => {props.reallyDoThis()}
+                                }
+                            />
                             </tbody>
                         </Table>
                     </div>
