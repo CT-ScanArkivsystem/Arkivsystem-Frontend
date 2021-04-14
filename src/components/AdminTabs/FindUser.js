@@ -44,7 +44,6 @@ export default function FindUser({...props}) {
         setSearchShow(true);
     };
 
-
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         initialisation();
@@ -112,7 +111,9 @@ export default function FindUser({...props}) {
                             <tbody>
                             <UserResultRows
                                 filteredPersons={filteredPersons}
-                                onSomethingHappens={() => {props.reallyDoThis()}
+                                onSomethingHappens={() => {
+                                    props.reallyDoThis()
+                                }
                                 }
                             />
                             </tbody>

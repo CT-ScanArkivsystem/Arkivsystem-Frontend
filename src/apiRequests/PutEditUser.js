@@ -5,7 +5,7 @@ export default async function PutEditUser(userId, email, firstName, lastName, ro
     let result;
     try {
         let res = await fetch(currentIP + '/admin/editUser', {
-            method: 'POST',
+            method: 'PUT',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',

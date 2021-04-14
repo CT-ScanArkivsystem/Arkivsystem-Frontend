@@ -8,10 +8,11 @@ export default function UserResultRows({...props}) {
             <UserDisplay
                 className="userDisplay"
                 key={user.userId}
+                userId={user.userId}
+                lastName={user.lastName}
                 email={user.email}
                 firstName={user.firstName}
-                lastName={user.lastName}
-                roles={user.roles[0].roleName}
+                role={user.roles[0].roleName}
                 onSomeClick={() => {props.onSomethingHappens()}}
             />
         )

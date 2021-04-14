@@ -5,16 +5,20 @@ import UserResultRows from "./UserResultRows";
 import './EditUser.css';
 import LoaderButton from "../LoaderButton";
 import UserEditStore from "../../stores/UserEditStore";
+import PostCreateUser from "../../apiRequests/PostCreateUser";
+import {onError} from "../../libs/errorLib";
+import PutEditUser from "../../apiRequests/PutEditUser";
 
 export default function EditUser() {
 
     const [isLoading, setIsLoading] = useState(true);
+    const [userId, setUserId] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [role, setRole] = useState("user");
+    const [role, setRole] = useState("");
 
 
     //Functions in the React.useEffect() will be run once on load of site.
@@ -24,6 +28,16 @@ export default function EditUser() {
 
     async function initialisation() {
         setIsLoading(false);
+        setFirstName(UserEditStore.firstName)
+        console.log("firstName for this user is: " + UserEditStore.firstName)
+        setLastName(UserEditStore.lastName)
+        console.log("lastName for this user is: " + UserEditStore.lastName)
+        setEmail(UserEditStore.email)
+        console.log("email for this user is: " + UserEditStore.email)
+        setRole(UserEditStore.role)
+        console.log("role for this user is: " + UserEditStore.role)
+        setUserId(UserEditStore.userId)
+        console.log("userId for this user is: " + UserEditStore.userId)
     }
 
     function doNothing() {
@@ -33,6 +47,21 @@ export default function EditUser() {
     async function handleSubmit(event) {
         event.preventDefault();
         console.log("HandleSubmit! in EditUser")
+        try {
+            let didUserGetSaved = PutEditUser(userId, email, firstName, lastName, role, password1)
+            if (didUserGetSaved !== null) {
+                //userHasAuthenticated(true);
+                // TODO: Should redirect to admin page when it is complete!!!
+                // history.push("/userFrontpage");
+                console.log("User has been saved!");
+            } else {
+                console.log("User was not created!");
+            }
+        } catch (e) {
+            setIsLoading(false);
+            onError(e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
+        }
     }
 
     /**
@@ -54,8 +83,6 @@ export default function EditUser() {
             inputError = "Email is either empty or too long!";
         } else if (role.trim().length < 1 || role.trim().length > 255) {
             inputError = "Role has not been selected!";
-        } else if (password1.trim().length < 5 || password1.trim().length > 255) {
-            inputError = "First password field is either empty, not long enough or too long!";
         } else if (password2 !== password1) {
             inputError = "Second password is not equal to the first password!";
         }
@@ -79,6 +106,7 @@ export default function EditUser() {
                                 <Form.Control
                                     type="text"
                                     value={firstName}
+                                    default
                                     onChange={(e) => setFirstName(e.target.value)}
                                 />
                             </Form.Group>
@@ -88,13 +116,15 @@ export default function EditUser() {
                                     type="text"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
+
+
                                 />
                             </Form.Group>
                         </div>
                         <Form.Group>
                             <Form.Label>Email</Form.Label>
                             <Form.Control
-                                autoFocus
+                                // autoFocus
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -123,6 +153,7 @@ export default function EditUser() {
                             <Form.Control
                                 as="select"
                                 onChange={(e) => setRole(e.target.value)}
+                                value={role}
                             >
                                 <option value="" disabled>Choose a role</option>
                                 <option value="user">User</option>
@@ -139,9 +170,9 @@ export default function EditUser() {
                             isLoading={isLoading}
                             disabled={false}
                         >
-                            Create user
+                            Edit user
                         </LoaderButton>
-                        <p className="errorMessage">{doNothing}</p>
+                        <p className="errorMessage">{displayFormError()}</p>
                     </Form>
                 </div>
             </div>

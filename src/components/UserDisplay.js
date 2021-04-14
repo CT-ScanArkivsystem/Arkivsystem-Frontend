@@ -13,6 +13,7 @@ export default function UserDisplay({...props}) {
         UserEditStore.email = props.email
         UserEditStore.firstName = props.firstName
         UserEditStore.lastName = props.lastName
+        UserEditStore.role = props.role.replace("ROLE_", "").toLowerCase()
 
         props.onSomeClick()
     }
@@ -21,7 +22,7 @@ export default function UserDisplay({...props}) {
             <tr onClick={() => handleRowClick()} className="user-display">
                 <td className="user-display-field">{props.firstName} {props.lastName}</td>
                 <td className="user-display-field">{props.email}</td>
-                <td className="capitalize user-display-field">{props.roles.replace("ROLE_", "").toLowerCase()}</td>
+                <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
             </tr>
     )
 }
