@@ -77,11 +77,17 @@ export default function ProjectMembers(props) {
         setIsLoading(false);
     }
 
-    async function handleChangeOwner(projectId, idOfUserToOwner) {
-        if (idOfUserToOwner) {
-            let result = await PutChangeProjectOwner(projectId, idOfUserToOwner);
+    function openGrantOwnerModal() {
+        setIsModalOpen(true);
+        setModalText("Make " + selectedMember.firstName + " " + selectedMember.lastName + " owner of this project?");
+        setFunctionIfConfirmed(() => handleChangeOwner);
+    }
+
+    async function handleChangeOwner() {
+        if (selectedMember.userId) {
+            let result = await PutChangeProjectOwner(ProjectStore.projectId, selectedMember.userId);
             if (result) {
-                await updateProject(projectId);
+                await updateProject(ProjectStore.projectId);
             }
         }
     }
@@ -109,16 +115,6 @@ export default function ProjectMembers(props) {
                     </div>
                     <div className="memberButtons">
                         <LoaderButton
-                            className="grantOwnershipButton"
-                            size="sm"
-                            variant="outline-primary"
-                            isLoading={isLoading}
-                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
-                            onClick={() => {handleChangeOwner(ProjectStore.projectId, selectedMember.userId)}}
-                        >
-                            Grant ownership
-                        </LoaderButton>
-                        <LoaderButton
                             className="removeMemberButton"
                             size="sm"
                             variant="outline-danger"
@@ -130,6 +126,19 @@ export default function ProjectMembers(props) {
                             }}
                         >
                             Remove member
+                        </LoaderButton>
+                        <LoaderButton
+                            className="grantOwnershipButton"
+                            size="sm"
+                            variant="outline-primary"
+                            isLoading={isLoading}
+                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
+                            onClick={() => {
+                                openGrantOwnerModal()
+                                //handleChangeOwner(ProjectStore.projectId, selectedMember.userId)
+                            }}
+                        >
+                            Grant ownership
                         </LoaderButton>
                     </div>
 

@@ -29,7 +29,6 @@ export default function Project() {
 
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
-        console.log(project)
 
         let tagsInProject = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsInProject);

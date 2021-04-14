@@ -12,7 +12,7 @@ export default function ConfirmationModal(props) {
         isOpen={props.isOpen}
         onRequestClose={props.functionToCloseModal}
     >
-        <h4>{props.modalText}</h4>
+        <h4 className="modalText">{props.modalText}</h4>
         <div className="modalButtons">
             <Button
                 className="modalButton"
@@ -26,7 +26,7 @@ export default function ConfirmationModal(props) {
             </Button>
             <Button
                 className="modalButton"
-                variant="outline-success"
+                variant="outline-info"
                 size="sm"
                 onClick={() => {
                     props.functionIfConfirmed()
