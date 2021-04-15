@@ -12,17 +12,19 @@
 .tabContent {
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
 
-.projectSubfolderContainer {
+.projectSubFolderContainer {
     min-width: 30%;
     max-width: 40%;
 }
 
 .projectFileContainer {
     width: 50%;
+    height: 100%;
     padding-left: 4px;
-    border-left: black solid 2px;
+    border-left: black solid 1px;
 }
 
 .memberList {

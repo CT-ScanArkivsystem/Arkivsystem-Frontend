@@ -17,19 +17,23 @@ export default function SubFolderDisplay ({...props}) {
     SubFolderDisplay.defaultProps = {
         addNew: false,
         highlighted: false,
-        variant: 'outline-dark'
+        variant: 'outline-dark',
+        isChildFolder: false
     }
 
     return (
-        <Button
-            variant={props.variant}
-            onClick={props.onClick}
-            size="sm"
-            className="subFolderDisplayButton customBorderAndText">
-            <div className="subFolderDisplay">
-                <img className="subFolderDisplayIcon" src={folderIcon} alt="sub folder icon" />
-                <span className="subFolderDisplayName">{props.name}</span>
-            </div>
-        </Button>
+        <div className="subFolderDisplayContainer">
+            <Button
+                variant={props.variant}
+                onClick={props.onClick}
+                size="sm"
+                className={`${props.isChildFolder ? 'subFolderDisplayButtonChild' : 'subFolderDisplayButton'} customBorderAndText`}>
+                <div className="subFolderDisplay">
+                    <img className="subFolderDisplayIcon" src={folderIcon} alt="sub folder icon" />
+                    <span className="subFolderDisplayName">{props.name}</span>
+                </div>
+            </Button>
+            {props.childFolders}
+        </div>
     );
 }

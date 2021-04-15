@@ -46,7 +46,7 @@ export default function UploadToProjectContent(props) {
 
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [filesInQueue, setFilesInQueue] = useState([]);
-    const [errorMessage, setErrorMessage] = useState();
+    const [errorMessage, setErrorMessage] = useState("");
     const [hasSelectedSubFolder, setHasSelectedSubFolder] = useState(false);
     const [selectedSubFolder, setSelectedSubFolder] = useState("");
     const [newFolderName, setNewFolderName] = useState("");
@@ -160,10 +160,11 @@ export default function UploadToProjectContent(props) {
                         onClick={() => {
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
+                                setHasSelectedSubFolder(false);
                             } else {
                                 setSelectedSubFolder(subFolder);
+                                setHasSelectedSubFolder(true);
                             }
-                            setHasSelectedSubFolder(!hasSelectedSubFolder);
                         }}
                     />
                 )
