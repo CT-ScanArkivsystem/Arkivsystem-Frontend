@@ -9,7 +9,7 @@ import PostCreateUser from "../../apiRequests/PostCreateUser";
 import {onError} from "../../libs/errorLib";
 import PutEditUser from "../../apiRequests/PutEditUser";
 
-export default function EditUser() {
+export default function EditUser({...props}) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState("");
@@ -48,12 +48,13 @@ export default function EditUser() {
         event.preventDefault();
         console.log("HandleSubmit! in EditUser")
         try {
-            let didUserGetSaved = PutEditUser(userId, email, firstName, lastName, role, password1)
+            let didUserGetSaved = await PutEditUser(userId, email, firstName, lastName, role, password1)
             if (didUserGetSaved !== null) {
                 //userHasAuthenticated(true);
                 // TODO: Should redirect to admin page when it is complete!!!
                 // history.push("/userFrontpage");
                 console.log("User has been saved!");
+                props.backToFindUser()
             } else {
                 console.log("User was not created!");
             }

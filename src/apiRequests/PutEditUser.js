@@ -1,6 +1,19 @@
 import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
+/**
+ * Sends an API request to edit a user's details by overwriting if param is not empty
+ * Request is sent to 'CurrentIP/admin/editUser'
+ *
+ * @param userId Decides which user to edit
+ * @param email Email address of user
+ * @param firstName First name of user
+ * @param lastName Last name of user
+ * @param role Role of the user
+ * @param password Password of the user
+ * @return result The return from the backend API request. user object in this case
+ */
+
 export default async function PutEditUser(userId, email, firstName, lastName, role, password) {
     let result;
     try {

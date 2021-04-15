@@ -51,8 +51,8 @@ export default function FindUser({...props}) {
 
     async function initialisation() {
         setIsLoading(false);
-        initGetAllUsers()
-        console.log(allUsers)
+        await initGetAllUsers()
+        console.log("Getting all users")
     }
 
     async function handleSubmit(event) {
@@ -68,7 +68,10 @@ export default function FindUser({...props}) {
     async function initGetAllUsers() {
         try {
             if (!doesHaveUsers) {
-                setAllUsers(await GetAllUsers())
+                let users = await GetAllUsers()
+                console.log(users)
+
+                setAllUsers(users)
                 if (allUsers.length >= 0) {
                     setDoesHaveUsers(true)
                     setIsLoading(false)
@@ -111,10 +114,7 @@ export default function FindUser({...props}) {
                             <tbody>
                             <UserResultRows
                                 filteredPersons={filteredPersons}
-                                onSomethingHappens={() => {
-                                    props.reallyDoThis()
-                                }
-                                }
+                                onSomethingHappens={() => {props.reallyDoThis()}}
                             />
                             </tbody>
                         </Table>

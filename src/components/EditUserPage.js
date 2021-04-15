@@ -21,12 +21,20 @@ export default function EditUserPage() {
     function initialisation() {
         setPageContent(
             <FindUser reallyDoThis={() => {contentToEditUser()}}/>
-        );
+        )
+    }
+
+    function contentToFindUser() {
+        setPageContent(
+            <FindUser reallyDoThis={() => {contentToEditUser()}}/>
+        )
     }
 
     function contentToEditUser() {
         console.log('editUserPage initialisation')
-        setPageContent(<EditUser/>)
+        setPageContent(
+            <EditUser backToFindUser={() => {contentToFindUser()}}/>
+        )
     }
 
     return (
