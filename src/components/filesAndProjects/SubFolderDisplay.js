@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import "./SubFolderDisplay.css";
 import folderIcon from "../../images/Image-Folder-icon.png";
 import addNewFolderIcon from "../../images/catJam.gif";
+import Button from "react-bootstrap/Button";
 
 /**
  * ProjectDisplay is a component which simply displays a subFolder as a clickable object.
@@ -10,17 +11,25 @@ import addNewFolderIcon from "../../images/catJam.gif";
  * @returns {JSX.Element}
  */
 export default function SubFolderDisplay ({...props}) {
+    const [isNewFolder, setIsNewFolder] = useState(false);
+
     // This sets the default properties of the file.
     SubFolderDisplay.defaultProps = {
         addNew: false,
+        highlighted: false,
+        variant: 'outline-dark'
     }
 
     return (
-        <div onClick={() => {props.onClick()}} className="subFolderDisplayLink">
-            <div className="subFolderDisplay highlightOnHover">
-                <img className="subFolderDisplayIcon" src={props.addNew ? addNewFolderIcon : folderIcon} alt="sub folder icon" />
+        <Button
+            variant={props.variant}
+            onClick={props.onClick}
+            size="sm"
+            className="subFolderDisplayButton customBorderAndText">
+            <div className="subFolderDisplay">
+                <img className="subFolderDisplayIcon" src={folderIcon} alt="sub folder icon" />
                 <span className="subFolderDisplayName">{props.name}</span>
             </div>
-        </div>
+        </Button>
     );
 }

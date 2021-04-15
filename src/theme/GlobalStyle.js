@@ -69,7 +69,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   div.customBorderAndText {
-    border: ${extraColor} solid 2px;
+    border: ${extraColor} solid 1px;
     color: ${extraColor};
   }
 
