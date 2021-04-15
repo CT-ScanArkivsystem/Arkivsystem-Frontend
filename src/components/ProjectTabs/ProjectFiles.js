@@ -4,6 +4,8 @@ import SubFolderDisplay from "../filesAndProjects/SubFolderDisplay";
 
 export default function ProjectFiles(props) {
     const [isLoading, setIsLoading] = useState(false);
+    const [hasSelectedSubFolder, setHasSelectedSubFolder] = useState(false);
+    const [selectedSubFolder, setSelectedSubFolder] = useState("");
     const projectSubFolders = props.projectSubFolders;
 
     function renderSubFolders(subFolderList) {
@@ -16,34 +18,20 @@ export default function ProjectFiles(props) {
                         className="fileDisplay"
                         isproject={false}
                         key={subFolder}
-                        name="folder"
-                        filetype="folder"
+                        name={subFolder.slice(0, -1)}
+                        variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
+                        onClick={() => {
+                            if (selectedSubFolder === subFolder) {
+                                setSelectedSubFolder("");
+                            } else {
+                                setSelectedSubFolder(subFolder);
+                            }
+                            setHasSelectedSubFolder(!hasSelectedSubFolder);
+                        }}
                     />
                 )
             })
         }
-
-        result.push(
-            <SubFolderDisplay
-                className="fileDisplay"
-                isproject={false}
-                key="addNewFolder"
-                name="newFolder"
-                onClick={() => {console.log("Clicked subfolder")}}
-            />
-        )
-        result.push(
-            <SubFolderDisplay
-                className="fileDisplay"
-                isproject={false}
-                key="addNewFolder2"
-                name="newFolderButIt is like double that or something"
-                onClick={() => {console.log("Clicked subfolder")}}
-            />
-        )
-
-        console.log(result)
-
         return result;
     }
 

@@ -156,12 +156,12 @@ export default function UploadToProjectContent(props) {
                         isproject={false}
                         key={subFolder}
                         name={subFolder.slice(0, -1)}
-                        variant={selectedSubFolder === subFolder ? 'dark' : 'outline-dark'}
+                        variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         onClick={() => {
-                            if (!hasSelectedSubFolder) {
-                                setSelectedSubFolder(subFolder);
-                            } else {
+                            if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
+                            } else {
+                                setSelectedSubFolder(subFolder);
                             }
                             setHasSelectedSubFolder(!hasSelectedSubFolder);
                         }}

@@ -31,7 +31,13 @@ export default function ProjectMembers(props) {
             return (
                 <MemberDisplay
                     variant={memberToDisplay.userId === selectedMember.userId ? 'secondary' : 'outline-dark'}
-                    onClick={() => {selectedMember === memberToDisplay ? setSelectedMember([]) : setSelectedMember(memberToDisplay)}}
+                    onClick={() => {
+                        if (selectedMember === memberToDisplay) {
+                            setSelectedMember([]);
+                        } else {
+                            setSelectedMember(memberToDisplay);
+                        }
+                    }}
                     key={memberToDisplay.userId}
                     id={memberToDisplay.userId}
                     memberfirstname={memberToDisplay.firstName}
