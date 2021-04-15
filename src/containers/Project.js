@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./Project.css";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
-import LoaderButton from "../components/LoaderButton";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
 import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
@@ -15,11 +14,12 @@ import GetProject from "../apiRequests/GetProject";
 import GetAllTags from "../apiRequests/GetAllTags";
 import GetAllFileNames from "../apiRequests/GetAllFileNames";
 import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
+import Button from "react-bootstrap/Button";
 
 export default function Project() {
 
     const [pageContent, setPageContent] = useState(<LoadingPage />);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [projectTags, setProjectTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [subFoldersInProject, setSubFoldersInProject] = useState([]);
@@ -83,12 +83,12 @@ export default function Project() {
 
         let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
         setSubFoldersInProject(allProjectSubFolders);
-        console.log(allProjectSubFolders);
 
         //let allFilesInProject = await GetAllFileNames("all", project.projectId, "mySubFolder");
         //setFilesInProject(allFilesInProject);
 
         //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
+        setIsLoading(false);
     }
 
     /**
@@ -188,10 +188,11 @@ export default function Project() {
         let result = [];
 
         result = projectPages.map((page) => {
-            return(<LoaderButton
+            return(<Button
                 className="sideBarButton"
                 key={page.pageName}
                 variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
+                disabled={isLoading}
                 onClick={() => {
                     setPageContent(page.pageElement)
                     if (currentPage === page.pageName) {
@@ -203,7 +204,7 @@ export default function Project() {
                 isLoading={isLoading}
             >
                 {page.pageName}
-            </LoaderButton>
+            </Button>
             )
         })
 
