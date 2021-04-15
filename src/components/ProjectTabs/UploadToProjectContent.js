@@ -204,6 +204,7 @@ export default function UploadToProjectContent(props) {
                       </div>
                   </div>
                   <div className="container">
+                      <h5>Upload</h5>
                       <Form onSubmit={handleSubmit} className="uploadToProjectForm">
                           <Container className="dragAndDrop" {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
                               <input {...getInputProps()} />
