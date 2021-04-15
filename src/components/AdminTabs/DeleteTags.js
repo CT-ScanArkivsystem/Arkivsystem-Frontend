@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./DeleteTags.css";
 
 export default function DeleteTags() {
     //Something

@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import "./AdminPage.css";
 import SideBar from "../components/SideBar";
 import LoaderButton from "../components/LoaderButton";
 import CreateUser from "../components/AdminTabs/CreateUser";
