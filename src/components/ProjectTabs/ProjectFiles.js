@@ -6,6 +6,7 @@ export default function ProjectFiles(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [hasSelectedSubFolder, setHasSelectedSubFolder] = useState(false);
     const [selectedSubFolder, setSelectedSubFolder] = useState("");
+    const [selectedDefaultFolder, setSelectedDefaultFolder] = useState("");
     const foldersInSubFolder = [
         "DICOM",
         "documents",
@@ -26,9 +27,12 @@ export default function ProjectFiles(props) {
                         key={subFolder}
                         name={subFolder.slice(0, -1)}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
+                        hideChildren={selectedSubFolder !== subFolder}
+                        showDropDownArrow={true}
                         onClick={() => {
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
+                                setSelectedDefaultFolder("")
                             } else {
                                 setSelectedSubFolder(subFolder);
                             }
@@ -40,12 +44,12 @@ export default function ProjectFiles(props) {
                                         key={defaultFolder}
                                         name={defaultFolder}
                                         isChildFolder={true}
-                                        variant={selectedSubFolder === defaultFolder ? 'secondary' : 'outline-dark'}
+                                        variant={selectedDefaultFolder === defaultFolder ? 'secondary' : 'outline-dark'}
                                         onClick={() => {
-                                            if (selectedSubFolder === defaultFolder) {
-                                                setSelectedSubFolder("");
+                                            if (selectedDefaultFolder === defaultFolder) {
+                                                setSelectedDefaultFolder("");
                                             } else {
-                                                setSelectedSubFolder(defaultFolder);
+                                                setSelectedDefaultFolder(defaultFolder);
                                             }
                                         }}
                                     />
@@ -64,7 +68,7 @@ export default function ProjectFiles(props) {
               <h2>Project files</h2>
           </div>
           <div className="tabContent">
-              <div className="projectSubFolderContainer">
+              <div className="projectFilesSubFolderContainer">
                   <h5>Sub-folders</h5>
                   <div className="projectSubFolders">
                       {renderSubFolders(projectSubFolders)}

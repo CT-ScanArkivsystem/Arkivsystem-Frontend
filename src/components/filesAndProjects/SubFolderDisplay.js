@@ -1,8 +1,19 @@
 import React, {useState} from "react";
 import "./SubFolderDisplay.css";
 import folderIcon from "../../images/Image-Folder-icon.png";
-import addNewFolderIcon from "../../images/catJam.gif";
+import dropDownIcon from "../../images/dropdown-arrow.png";
 import Button from "react-bootstrap/Button";
+import styled from "styled-components";
+
+// A component that represents the arrow for dropdown
+const DropDownArrow = styled.div `
+    background: url(${dropDownIcon}) no-repeat;
+    background-size: cover;
+    height: 15px;
+    width: 15px;
+    image-rendering: crisp-edges;
+    `;
+
 
 /**
  * ProjectDisplay is a component which simply displays a subFolder as a clickable object.
@@ -11,14 +22,14 @@ import Button from "react-bootstrap/Button";
  * @returns {JSX.Element}
  */
 export default function SubFolderDisplay ({...props}) {
-    const [isNewFolder, setIsNewFolder] = useState(false);
-
     // This sets the default properties of the file.
     SubFolderDisplay.defaultProps = {
         addNew: false,
         highlighted: false,
         variant: 'outline-dark',
-        isChildFolder: false
+        hideChildren: true,
+        isChildFolder: false,
+        showDropDownArrow: false
     }
 
     return (
@@ -31,9 +42,10 @@ export default function SubFolderDisplay ({...props}) {
                 <div className="subFolderDisplay">
                     <img className="subFolderDisplayIcon" src={folderIcon} alt="sub folder icon" />
                     <span className="subFolderDisplayName">{props.name}</span>
+                    {props.showDropDownArrow ? <DropDownArrow /> : ''}
                 </div>
             </Button>
-            {props.childFolders}
+            {props.hideChildren ? '' : props.childFolders}
         </div>
     );
 }
