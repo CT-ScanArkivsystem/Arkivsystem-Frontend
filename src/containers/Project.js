@@ -22,8 +22,48 @@ export default function Project() {
     const [isLoading, setIsLoading] = useState(false);
     const [projectTags, setProjectTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
-    const [subFoldersInProject, setSubFoldersInProject] = useState([])
-    const [filesInProject, setFilesInProject] = useState([])
+    const [subFoldersInProject, setSubFoldersInProject] = useState([]);
+    const [filesInProject, setFilesInProject] = useState([]);
+    const [currentPage, setCurrentPage] = useState("Loading");
+
+    const projectPages = [
+        {
+            pageName: "Project details",
+            pageElement: <ProjectDetails
+                canEdit={checkPermission("member")}
+                projectTags={projectTags}
+                allTags={allTags} />
+        },
+        {
+            pageName: "Upload files",
+            pageElement: <UploadToProjectContent
+                projectSubFolders={subFoldersInProject}
+            />
+        },
+        {
+            pageName: "Project images",
+            pageElement: <ProjectImages />
+        },
+        {
+            pageName: "Project files",
+            pageElement: <ProjectFiles
+                canDownloadFiles={checkPermission("specialPermission")}
+                canEditFiles={checkPermission("member")}
+                projectSubFolders={subFoldersInProject}
+            />
+        },
+        {
+            pageName: "Project members",
+            pageElement: <ProjectMembers
+                canEditMembers={checkPermission("owner")}
+            />
+        },
+        {
+            pageName: "Special Permission",
+            pageElement: <ProjectSpecialPermission />
+        }
+    ];
+
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -39,6 +79,7 @@ export default function Project() {
         let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(allTagsTrimmed);
         setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+        setCurrentPage("Project details")
 
         let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
         setSubFoldersInProject(allProjectSubFolders);
@@ -143,81 +184,37 @@ export default function Project() {
         return isUserInList;
     }
 
-    function contentToProjectDetails() {
-        setPageContent(<ProjectDetails
-            canEdit={checkPermission("member")}
-            projectTags={projectTags}
-            allTags={allTags} />);
-    }
-    function contentToUploadToProject() {
-        setPageContent(<UploadToProjectContent
-            projectSubFolders={subFoldersInProject}
-        />)
-    }
-    function contentToProjectImages() {
-        setPageContent(<ProjectImages />)
-    }
-    function contentToProjectFiles() {
-        setPageContent(<ProjectFiles
-            canDownloadFiles={checkPermission("specialPermission")}
-            canEditFiles={checkPermission("member")}
-            projectSubFolders={subFoldersInProject}
-        />)
-    }
-    function contentToProjectMembers() {
-        setPageContent(<ProjectMembers
-            canEditMembers={checkPermission("owner")} />)
-    }
-    function contentToProjectSpecialPermission() {
-        setPageContent(<ProjectSpecialPermission />)
+    function createSideBarButtons() {
+        let result = [];
+
+        result = projectPages.map((page) => {
+            return(<LoaderButton
+                className="sideBarButton"
+                key={page.pageName}
+                variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
+                onClick={() => {
+                    setPageContent(page.pageElement)
+                    if (currentPage === page.pageName) {
+                        setCurrentPage("");
+                    } else {
+                        setCurrentPage(page.pageName);
+                    }
+                }}
+                isLoading={isLoading}
+            >
+                {page.pageName}
+            </LoaderButton>
+            )
+        })
+
+        return result;
     }
 
     return (
         <div className="CreateProject pageContainer">
             <SideBar>
                 <h3>Options</h3>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectDetails}
-                    isLoading={isLoading}
-                >
-                    Project details
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToUploadToProject}
-                    isLoading={isLoading}
-                >
-                    Upload files
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectImages}
-                    isLoading={isLoading}
-                >
-                    Project Images
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectFiles}
-                    isLoading={isLoading}
-                >
-                    Project Files
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectMembers}
-                    isLoading={isLoading}
-                >
-                    Project Members
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectSpecialPermission}
-                    isLoading={isLoading}
-                >
-                    Special Permission
-                </LoaderButton>
+                {createSideBarButtons()}
             </SideBar>
             <div className="pageContent">
                 {pageContent}
