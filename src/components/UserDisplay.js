@@ -15,7 +15,7 @@ export default function UserDisplay({...props}) {
         UserEditStore.lastName = props.lastName
         UserEditStore.role = props.role.replace("ROLE_", "").toLowerCase()
 
-        props.onSomeClick()
+        props.EditPageEvent1()
     }
 
     return (

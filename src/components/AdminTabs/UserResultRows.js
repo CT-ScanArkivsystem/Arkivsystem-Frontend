@@ -13,7 +13,7 @@ export default function UserResultRows({...props}) {
                 email={user.email}
                 firstName={user.firstName}
                 role={user.roles[0].roleName}
-                onSomeClick={() => {props.onSomethingHappens()}}
+                EditPageEvent1={() => {props.EditPageEvent2()}}
             />
         )
     })

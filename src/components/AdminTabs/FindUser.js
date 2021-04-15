@@ -114,7 +114,7 @@ export default function FindUser({...props}) {
                             <tbody>
                             <UserResultRows
                                 filteredPersons={filteredPersons}
-                                onSomethingHappens={() => {props.reallyDoThis()}}
+                                EditPageEvent2={() => {props.EditPageEvent3()}}
                             />
                             </tbody>
                         </Table>

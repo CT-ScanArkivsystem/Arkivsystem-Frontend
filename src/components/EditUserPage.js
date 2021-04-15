@@ -15,18 +15,12 @@ export default function EditUserPage() {
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
-        initialisation();
+        contentToFindUser();
     }, []);
-
-    function initialisation() {
-        setPageContent(
-            <FindUser reallyDoThis={() => {contentToEditUser()}}/>
-        )
-    }
 
     function contentToFindUser() {
         setPageContent(
-            <FindUser reallyDoThis={() => {contentToEditUser()}}/>
+            <FindUser EditPageEvent3={() => {contentToEditUser()}}/>
         )
     }
 
