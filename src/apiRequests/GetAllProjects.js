@@ -20,7 +20,7 @@ export default async function GetAllProjects() {
 
         result = await res.json();
 
-        if (result !== null && result.length > 0) {
+        if (res.ok) {
             //console.log("Got all projects!");
         } else {
             result = [];

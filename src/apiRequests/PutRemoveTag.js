@@ -26,8 +26,8 @@ export default async function PutRemoveTag(projectId, tagNames) {
             body: urlencoded
         });
         result = await res.json();
-        if (result && result !== "") {
-
+        if (res.ok) {
+            //console.log("Tags were removed")
         } else {
             result = [];
             console.log("Tags were not removed!");

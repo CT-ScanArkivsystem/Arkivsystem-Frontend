@@ -28,8 +28,8 @@ export default async function PostUploadFiles(files, projectId, subFolder) {
         result = await res.json();
         console.log(result);
         // result.length is the same as result.length > 0
-        if (result && !result.length) {
-            console.log("Upload was successful.")
+        if (res.ok) {
+            //console.log("Upload was successful.")
         } else {
             console.log("Upload encountered a problem!");
         }

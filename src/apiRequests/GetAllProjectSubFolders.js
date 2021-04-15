@@ -19,8 +19,9 @@ export default async function GetAllProjectSubFolders(projectId) {
         });
 
         result = await res.json();
+        console.log(result)
 
-        if (result.ok) {
+        if (res.ok) {
             //console.log("Got all sub folders!");
         } else {
             result = [];

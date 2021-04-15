@@ -21,7 +21,7 @@ export default async function GetCurrentUser() {
 
             let result = await res.json();
 
-            if (result !== null && result !== "") {
+            if (res.ok) {
                 //console.log("User is logged in. Gathering user information!");
                 UserStore.userId = result.userId;
                 UserStore.email = result.email;
