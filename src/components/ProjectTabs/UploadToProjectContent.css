@@ -1,0 +1,22 @@
+.uploadButton {
+    margin: 8px;
+    width: 20%;
+    min-width: 80px;
+}
+
+.uploadContent {
+    display: flex;
+}
+
+.uploadToProjectForm {
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto 0 auto;
+}
+
+.projectSubFolderContainer {
+    width: 40%;
+}

@@ -3,17 +3,18 @@ import "./Project.css";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
 import LoaderButton from "../components/LoaderButton";
-import {Link} from "react-router-dom";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
 import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
-import UploadToProjectContent from "../components/UploadToProjectContent";
+import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectContent";
 import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
 import GetProject from "../apiRequests/GetProject";
 import GetAllTags from "../apiRequests/GetAllTags";
+import GetAllFileNames from "../apiRequests/GetAllFileNames";
+import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
 
 export default function Project() {
 
@@ -21,6 +22,8 @@ export default function Project() {
     const [isLoading, setIsLoading] = useState(false);
     const [projectTags, setProjectTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
+    const [subFoldersInProject, setSubFoldersInProject] = useState([])
+    const [filesInProject, setFilesInProject] = useState([])
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -36,6 +39,15 @@ export default function Project() {
         let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
         setAllTags(allTagsTrimmed);
         setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+
+        let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
+        setSubFoldersInProject(allProjectSubFolders);
+        console.log(allProjectSubFolders);
+
+        //let allFilesInProject = await GetAllFileNames("all", project.projectId, "mySubFolder");
+        //setFilesInProject(allFilesInProject);
+
+        //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
     }
 
     /**
@@ -132,19 +144,29 @@ export default function Project() {
     }
 
     function contentToProjectDetails() {
-        setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={projectTags} allTags={allTags} />);
+        setPageContent(<ProjectDetails
+            canEdit={checkPermission("member")}
+            projectTags={projectTags}
+            allTags={allTags} />);
     }
     function contentToUploadToProject() {
-        setPageContent(<UploadToProjectContent />)
+        setPageContent(<UploadToProjectContent
+            projectSubFolders={subFoldersInProject}
+        />)
     }
     function contentToProjectImages() {
         setPageContent(<ProjectImages />)
     }
     function contentToProjectFiles() {
-        setPageContent(<ProjectFiles canDownloadFiles={checkPermission("specialPermission")} canEditFiles={checkPermission("member")} />)
+        setPageContent(<ProjectFiles
+            canDownloadFiles={checkPermission("specialPermission")}
+            canEditFiles={checkPermission("member")}
+            projectSubFolders={subFoldersInProject}
+        />)
     }
     function contentToProjectMembers() {
-        setPageContent(<ProjectMembers canEditMembers={checkPermission("owner")} />)
+        setPageContent(<ProjectMembers
+            canEditMembers={checkPermission("owner")} />)
     }
     function contentToProjectSpecialPermission() {
         setPageContent(<ProjectSpecialPermission />)

@@ -15,11 +15,12 @@
 }
 
 .projectSubfolderContainer {
-    width: 30%;
+    min-width: 30%;
+    max-width: 40%;
 }
 
 .projectFileContainer {
-    width: 70%;
+    width: 50%;
     padding-left: 4px;
     border-left: black solid 2px;
 }

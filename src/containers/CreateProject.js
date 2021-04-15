@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./CreateProject.css";
 import SideBar from "../components/SideBar";
 import CreateProjectContent from "../components/CreateProjectContent";
-import UploadToProjectContent from "../components/UploadToProjectContent";
+import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectContent";
 import ProjectStore from "../stores/ProjectStore";
 import LoaderButton from "../components/LoaderButton";
 import {Link} from "react-router-dom";
