@@ -1,9 +1,9 @@
 import { extendObservable } from 'mobx';
 
 /**
- * UserStore. Stores data about the user.
+ * UserEditStore. Stores data about the user.
  */
-class UserStore {
+class UserEditStore {
     constructor() {
         extendObservable(this, {
             userId: '',
@@ -15,4 +15,4 @@ class UserStore {
     }
 }
 
-export default new UserStore();
+export default new UserEditStore();

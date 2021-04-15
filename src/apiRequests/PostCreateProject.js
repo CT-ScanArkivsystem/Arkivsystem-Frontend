@@ -4,13 +4,11 @@ import {currentIP} from "../App";
 /**
  * Sends an API POST request to the server to create a new user with the given parameters.
  *
- * @param firstName Users first name
- * @param lastName Users last name
- * @param email Users email
- * @param password Users password
- * @param role Users role
- * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
- * @constructor
+ * @param projectName
+ * @param isPrivate
+ * @param creationDate
+ * @param projectDescription
+ * @returns Promise result the result from the server. Contains information about the project that was just created.
  */
 export default async function PostCreateProject(projectName, isPrivate, creationDate, projectDescription) {
     let result;
