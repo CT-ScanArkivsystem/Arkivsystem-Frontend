@@ -1,12 +1,15 @@
 import React, {useState} from "react";
 import "./FileDisplay.css";
-import folderIcon from "../images/Image-Folder-icon.png";
-import gifIcon from "../images/gif-icon.png";
-import jpegIcon from "../images/jpeg-icon.png";
-import pngIcon from "../images/Image-PNG-icon.png";
-import tiffIcon from "../images/Image-TIFF-icon.png";
+import folderIcon from "../../images/Image-Folder-icon.png";
+import gifIcon from "../../images/gif-icon.png";
+import jpegIcon from "../../images/jpeg-icon.png";
+import pngIcon from "../../images/Image-PNG-icon.png";
+import tiffIcon from "../../images/Image-TIFF-icon.png";
 import {Link} from "react-router-dom";
-import ProjectStore from "../stores/ProjectStore";
+import ProjectStore from "../../stores/ProjectStore";
+import Button from "react-bootstrap/Button";
+import {BsArrowRepeat} from "react-icons/bs";
+import LoaderButton from "../LoaderButton";
 
 /**
  * FileDisplay is a component which simply displays a file as a clickable object.
@@ -14,9 +17,13 @@ import ProjectStore from "../stores/ProjectStore";
  * @returns {JSX.Element}
  * @constructor
  */
-export default function FileDisplay ({
-    ...props
-}) {
+export default function FileDisplay ({...props}) {
+    const [isLoading, setIsLoading] = useState(false);
+
+    // This sets the default properties of the file.
+    FileDisplay.defaultProps = {
+        fileName: "Default name",
+    }
 
     let filetypeHashmap = new Map([
         ["folder", folderIcon],
@@ -38,12 +45,11 @@ export default function FileDisplay ({
         ["tif", tiffIcon],
     ])
 
-    const [fileType, setFileType] = useState(checkFileType);
-
+    const fileType = checkFileType(props.filename);
     let fileTypeIcon = "";
 
-    function checkFileType() {
-        return props.filename.substr(props.filename.lastIndexOf('.') + 1);
+    function checkFileType(fileName) {
+        return fileName.substr(fileName.lastIndexOf('.') + 1);
     }
 
     function getFileIcon() {
@@ -56,26 +62,27 @@ export default function FileDisplay ({
         return(fileTypeIcon);
     }
 
-    function putProjectIntoStore() {
-        if (props.isproject) {
-            ProjectStore.projectId = props.fileid;
-            ProjectStore.projectName = props.filename;
-            ProjectStore.projectDescription = props.filedescription;
-            ProjectStore.projectOwner = props.fileowner;
-            ProjectStore.isPrivate = props.fileisprivate;
-            ProjectStore.creationDate = props.filecreationdate;
-            ProjectStore.projectMembers = props.projectmembers;
-            ProjectStore.usersWithSpecialPermission = props.userswithspecialpermission;
-        }
+    async function downloadFile() {
+        setIsLoading(true);
+        console.log("Download file called")
+        //API CALL TO DOWNLOAD HERE!
+        setIsLoading(false);
     }
 
     return (
-        <Link onClick={putProjectIntoStore} to="/project" className="fileDisplayLink">
+        <div onClick={() => console.log("Clicked on a file")} className="fileDisplayContainer">
             <div className={'fileDisplay'}>
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.filename}</span>
-                <span className="fileDisplayOwner">{props.fileowner.firstName + " " + props.fileowner.lastName}</span>
+                <LoaderButton
+                    className="downloadButton"
+                    size="sm"
+                    onClick={() => {downloadFile()}}
+                    isLoading={isLoading}
+                >
+                    Download
+                </LoaderButton>
             </div>
-        </Link>
+        </div>
     );
 }

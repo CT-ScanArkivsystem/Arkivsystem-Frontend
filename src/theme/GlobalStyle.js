@@ -68,16 +68,17 @@ const GlobalStyle = createGlobalStyle`
     border: 2px ${secondaryColor} solid;
   }
 
-  div.fileDisplay {
+  div.customBorderAndText {
     border: ${extraColor} solid 2px;
     color: ${extraColor};
   }
 
-  div.fileDisplay:hover {
-    box-shadow: 0 0 0.1rem 0.2rem rgb(${secondaryColorRgb} / 25%);
+  div.highlightOnHover:hover {
+    box-shadow: 0 0 0.1rem 0.15rem rgb(${secondaryColorRgb}/ 25%);
+    cursor: pointer;
   }
 
-  a.fileDisplayLink:hover {
+  a.noUnderlineOnHover:hover {
     text-decoration: none;
   }
 

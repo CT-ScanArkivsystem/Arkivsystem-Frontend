@@ -1,0 +1,21 @@
+.subFolderDisplay {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-bottom: 4px;
+    margin-right: 4px;
+    min-height: 25px;
+}
+
+.subFolderDisplayIcon {
+    min-height: 1.3em;
+    max-height: 1.5em;
+    margin: 4px 2px 4px 4px;
+}
+
+.subFolderDisplayName {
+    flex-grow: 1;
+    text-align: start;
+    font-size: 1.2em;
+    margin: 0 2px 0 4px;
+}
