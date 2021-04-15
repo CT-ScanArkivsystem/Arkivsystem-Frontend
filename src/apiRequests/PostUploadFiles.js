@@ -5,10 +5,11 @@ import {currentIP} from "../App";
  * Sends an API POST request to the server to upload files to a project on the server.
  *
  * @param files that are going to be uploaded to the server.
- * @param projectId the id of the project which the files are going to be put under.
+ * @param projectId of the project which the files are going to be put under.
+ * @param subFolder that the user wanted to upload the files to.
  * @returns boolean didUserGetCreated if user was successfully created returns true. Else false.
  */
-export default async function PostUploadFiles(files, projectId) {
+export default async function PostUploadFiles(files, projectId, subFolder) {
     let result = false;
     try {
         let formData = new FormData();
@@ -16,6 +17,7 @@ export default async function PostUploadFiles(files, projectId) {
             formData.append("files", file);
         })
         formData.append("projectId", projectId);
+        formData.append("subFolder", subFolder);
 
         let res = await fetch(currentIP + '/academic/uploadFiles', {
             method: 'POST',

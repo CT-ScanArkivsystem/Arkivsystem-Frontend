@@ -2,29 +2,29 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API GET request to the server to get the current users information. The information is stored in the UserStore.
- * Request is sent to 'CurrentIP/user/getAllProjectSubFolders'
+ * Sends an API GET request to the server to get the current projects sub folders.
+ * The information is stored in the UserStore. Request is sent to 'CurrentIP/user/getAllProjectSubFolders'
  *
- * @returns Promise result from the server. This contains all the directories in the project.
+ * @returns Promise result from the server. This contains all the sub folders in the project.
  */
 export default async function GetAllProjectSubFolders(projectId) {
     let result = [];
     try {
-        let res = await fetch(currentIP + '/user/getAllProjectSubFolders', {
+        let res = await fetch(currentIP + '/user/getAllProjectSubFolders?projectId=' + projectId, {
             method: 'GET',
             credentials: 'include',
             headers: {
                 'Accept': 'application/json'
-            },
+            }
         });
 
         result = await res.json();
 
-        if (result !== null && result.length > 0) {
-            //console.log("Got all directories!");
+        if (result.ok) {
+            //console.log("Got all sub folders!");
         } else {
             result = [];
-            console.log("Could not get directories.");
+            console.log("Could not get sub folders.");
         }
 
     } catch (e) {

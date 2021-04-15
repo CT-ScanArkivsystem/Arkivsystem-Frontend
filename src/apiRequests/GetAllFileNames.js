@@ -10,12 +10,16 @@ import {currentIP} from "../App";
 export default async function GetAllFileNames(directory, projectId, subFolder) {
     let result = [];
     try {
-        let res = await fetch(currentIP + '/user/getAllFileNames', {
+        let res = await fetch(currentIP +
+            '/user/getAllFileNames?directory=' + directory +
+            '&projectId=' + projectId +
+            '&subFolder=' + subFolder,
+            {
             method: 'GET',
             credentials: 'include',
             headers: {
                 'Accept': 'application/json'
-            },
+            }
         });
 
         result = await res.json();
