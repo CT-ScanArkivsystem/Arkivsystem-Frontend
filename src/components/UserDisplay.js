@@ -4,6 +4,9 @@ import ProjectStore from "../stores/ProjectStore";
 import UserEditStore from "../stores/UserEditStore";
 import {Link} from "react-router-dom";
 import "./UserDisplay.css";
+import PutEditUser from "../apiRequests/PutEditUser";
+import {onError} from "../libs/errorLib";
+import DeleteDeleteUser from "../apiRequests/DeleteDeleteUser";
 
 export default function UserDisplay({...props}) {
 
@@ -18,11 +21,38 @@ export default function UserDisplay({...props}) {
         props.EditPageEvent1()
     }
 
-    return (
-            <tr onClick={() => handleRowClick()} className="user-display">
-                <td className="user-display-field">{props.firstName} {props.lastName}</td>
-                <td className="user-display-field">{props.email}</td>
-                <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
-            </tr>
-    )
+    async function handleDeleteUser() {
+        console.log("USER " + props.firstName + " " + props.lastName + " HAS BEEN DELETED!")
+        try {
+            let wasUserDeleted = await DeleteDeleteUser(props.userId)
+            if (wasUserDeleted !== null) {
+                console.log("User has been deleted!");
+            } else {
+                console.log("User was not deleted!");
+            }
+        } catch (e) {
+            onError(e);
+            //TODO: TELL THE USER SOMETHING WENT WRONG!
+        }
+    }
+
+    switch (props.pageType3) {
+        case "deleteUser":
+            return (
+                <tr onClick={() => handleDeleteUser()} className="user-display">
+                    <td className="user-display-field">{props.firstName} {props.lastName}</td>
+                    <td className="user-display-field">{props.email}</td>
+                    <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
+                </tr>
+            );
+        case "editUser":
+            return (
+                <tr onClick={() => handleRowClick()} className="user-display">
+                    <td className="user-display-field">{props.firstName} {props.lastName}</td>
+                    <td className="user-display-field">{props.email}</td>
+                    <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
+                </tr>
+            );
+    }
+
 }

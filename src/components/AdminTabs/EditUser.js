@@ -40,8 +40,12 @@ export default function EditUser({...props}) {
         console.log("userId for this user is: " + UserEditStore.userId)
     }
 
-    function doNothing() {
-
+    function clearUserEditStore() {
+        UserEditStore.firstName = ""
+        UserEditStore.lastName = ""
+        UserEditStore.email = ""
+        UserEditStore.role = ""
+        UserEditStore.userId = ""
     }
 
     async function handleSubmit(event) {
@@ -54,6 +58,7 @@ export default function EditUser({...props}) {
                 // TODO: Should redirect to admin page when it is complete!!!
                 // history.push("/userFrontpage");
                 console.log("User has been saved!");
+                clearUserEditStore()
                 props.backToFindUser()
             } else {
                 console.log("User was not created!");

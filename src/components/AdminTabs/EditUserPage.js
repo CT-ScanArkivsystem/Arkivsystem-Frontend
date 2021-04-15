@@ -1,16 +1,16 @@
 import React, {useState} from "react";
-import FindUser from "./AdminTabs/FindUser";
-import LoadingPage from "../containers/LoadingPage";
-import ProjectDetails from "./ProjectTabs/ProjectDetails";
-import UploadToProjectContent from "./UploadToProjectContent";
-import EditUser from "./AdminTabs/EditUser";
-import UserStore from "../stores/UserStore";
+import FindUser from "./FindUser";
+import EditUser from "./EditUser";
 
 export default function EditUserPage() {
 
-    const [pageContent, setPageContent] = useState(<FindUser/>);
+    const [pageContent, setPageContent] = useState(
+        <FindUser
+            pageType1="editUser"
+            pageTitle="Edit user:"
+        />
+    );
     const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState("empty user string");
 
 
     //Functions in the React.useEffect() will be run once on load of site.
@@ -20,7 +20,11 @@ export default function EditUserPage() {
 
     function contentToFindUser() {
         setPageContent(
-            <FindUser EditPageEvent3={() => {contentToEditUser()}}/>
+            <FindUser
+                EditPageEvent3={() => {contentToEditUser()}}
+                pageType1="editUser"
+                pageTitle="Edit user:"
+            />
         )
     }
 

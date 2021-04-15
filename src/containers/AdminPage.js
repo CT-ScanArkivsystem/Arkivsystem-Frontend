@@ -5,7 +5,7 @@ import CreateUser from "../components/AdminTabs/CreateUser";
 import FindUser from "../components/AdminTabs/FindUser";
 import DeleteUser from "../components/AdminTabs/DeleteUser";
 import DeleteTags from "../components/AdminTabs/DeleteTags";
-import EditUserPage from "../components/EditUserPage";
+import EditUserPage from "../components/AdminTabs/EditUserPage";
 
 export default function AdminPage() {
 

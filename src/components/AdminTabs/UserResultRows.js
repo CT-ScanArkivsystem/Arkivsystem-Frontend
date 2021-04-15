@@ -14,6 +14,7 @@ export default function UserResultRows({...props}) {
                 firstName={user.firstName}
                 role={user.roles[0].roleName}
                 EditPageEvent1={() => {props.EditPageEvent2()}}
+                pageType3={props.pageType2}
             />
         )
     })
