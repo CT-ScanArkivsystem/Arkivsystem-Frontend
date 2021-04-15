@@ -1,5 +1,10 @@
+/*
+This property is set high due to a bug in UploadToProjectContent
+If it is somewhat low it will cause the sidebar to shrink on some pages
+*/
 .sideBar {
     width: 20%;
+    min-width: 200px;
     margin-right: 4px;
     padding: 4px;
     display: flex;
