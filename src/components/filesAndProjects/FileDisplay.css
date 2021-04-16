@@ -1,10 +1,14 @@
+.fileDisplayContainer {
+width: 100%;
+}
+
 .fileDisplay {
     display: flex;
     flex-flow: row nowrap;
-    width: 100%;
+    flex: 1;
     align-items: center;
     margin-bottom: 8px;
-    border: solid 2px black;
+    border: solid 1px black;
 }
 
 .fileDisplayIcon {
@@ -21,8 +25,4 @@
 .fileDisplayOwner {
     margin: 0 4px 0 2px;
     color: #565656;
-}
-
-.downloadButton {
-    margin: 4px;
 }

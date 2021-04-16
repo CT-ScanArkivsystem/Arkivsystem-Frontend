@@ -26,6 +26,7 @@ export default async function GetAllFileNames(directory, projectId, subFolder) {
 
         if (res.ok) {
             //console.log("Got all files!");
+            //console.log(result);
         } else {
             result = [];
             console.log("Could not get files.");

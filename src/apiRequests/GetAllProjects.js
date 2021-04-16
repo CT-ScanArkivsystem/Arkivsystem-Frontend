@@ -22,6 +22,7 @@ export default async function GetAllProjects() {
 
         if (res.ok) {
             //console.log("Got all projects!");
+            //console.log(result);
         } else {
             result = [];
             console.log("Could not get projects.");
