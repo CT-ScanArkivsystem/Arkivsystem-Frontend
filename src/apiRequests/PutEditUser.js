@@ -42,7 +42,7 @@ export default async function PutEditUser(userId, email, firstName, lastName, ro
 
     } catch (e) {
         onError(e);
-        console.log("User was not created due to an error!");
+        console.log("User was not edited due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
     return result;

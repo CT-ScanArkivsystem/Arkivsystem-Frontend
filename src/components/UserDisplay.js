@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import "./AdminTabs/FindUser.css";
-import ProjectStore from "../stores/ProjectStore";
 import UserEditStore from "../stores/UserEditStore";
-import {Link} from "react-router-dom";
 import "./UserDisplay.css";
-import PutEditUser from "../apiRequests/PutEditUser";
 import {onError} from "../libs/errorLib";
 import DeleteDeleteUser from "../apiRequests/DeleteDeleteUser";
+import ConfirmationModal from "./ConfirmationModal";
 
 export default function UserDisplay({...props}) {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
+    const [functionIfConfirmed, setFunctionIfConfirmed] = useState(() => handleDeleteUser);
+
 
     let handleRowClick = () => {
         console.log("Saving user (" + props.email + ") to UserStore")
@@ -22,37 +25,71 @@ export default function UserDisplay({...props}) {
     }
 
     async function handleDeleteUser() {
-        console.log("USER " + props.firstName + " " + props.lastName + " HAS BEEN DELETED!")
+        console.log("handleDeleteUser() " + props.firstName + " " + props.lastName + " (" + props.userId + ")")
+
         try {
             let wasUserDeleted = await DeleteDeleteUser(props.userId)
             if (wasUserDeleted !== null) {
-                console.log("User has been deleted!");
+                console.log("API return is not null");
             } else {
-                console.log("User was not deleted!");
+                console.log("API return is null");
             }
         } catch (e) {
             onError(e);
             //TODO: TELL THE USER SOMETHING WENT WRONG!
         }
+
+
     }
 
-    switch (props.pageType3) {
-        case "deleteUser":
-            return (
-                <tr onClick={() => handleDeleteUser()} className="user-display">
-                    <td className="user-display-field">{props.firstName} {props.lastName}</td>
-                    <td className="user-display-field">{props.email}</td>
-                    <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
-                </tr>
-            );
-        case "editUser":
-            return (
-                <tr onClick={() => handleRowClick()} className="user-display">
-                    <td className="user-display-field">{props.firstName} {props.lastName}</td>
-                    <td className="user-display-field">{props.email}</td>
-                    <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
-                </tr>
-            );
+    function openDeleteUserModal() {
+        setIsModalOpen(true);
+        setModalText("Delete user: " + props.firstName + " " + props.lastName + "?");
+        setFunctionIfConfirmed(() => handleDeleteUser);
     }
+
+    function closeModal() {
+        setIsModalOpen(false)
+    }
+
+    function runSwitchCase() {
+        switch (props.pageType3) {
+            case "deleteUser":
+                return (
+                    <React.Fragment>
+                        {console.log("deleteUser case")}
+                        <ConfirmationModal
+                            functionToCloseModal={closeModal}
+                            isOpen={isModalOpen}
+                            modalText={modalText}
+                            functionIfConfirmed={functionIfConfirmed}
+                        />
+                        <tr onClick={() => openDeleteUserModal()} className="user-display">
+                            <td className="user-display-field">{props.firstName} {props.lastName}</td>
+                            <td className="user-display-field">{props.email}</td>
+                            <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
+                        </tr>
+                    </React.Fragment>
+                );
+            case "editUser":
+                return (
+                    <tr onClick={() => handleRowClick()} className="user-display">
+                        {console.log("editUser case")}
+                        <td className="user-display-field">{props.firstName} {props.lastName}</td>
+                        <td className="user-display-field">{props.email}</td>
+                        <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
+                    </tr>
+                );
+        }
+
+    }
+
+    return (
+        <React.Fragment>
+            {runSwitchCase()}
+        </React.Fragment>
+
+    )
+
 
 }

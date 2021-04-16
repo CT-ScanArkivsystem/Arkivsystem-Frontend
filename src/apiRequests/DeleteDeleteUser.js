@@ -4,6 +4,7 @@ import {currentIP} from "../App";
 export default async function DeleteDeleteUser(userId) {
     let result;
     try {
+        console.log("Trying to delete user with ID: " + userId)
         let res = await fetch(currentIP + '/admin/deleteUser', {
             method: 'DELETE',
             credentials: 'include',
@@ -12,18 +13,9 @@ export default async function DeleteDeleteUser(userId) {
             },
             body: JSON.stringify({userId: userId})
         });
-        result = await res.json();
-        if (res.ok) {
-            console.log("200 OK: Successfully deleted user")
-
-        } else {
-            result = [];
-            console.log("API call error");
-        }
-
     } catch (e) {
         onError(e);
-        console.log("User was not created due to an error!");
+        console.log("js api has caught an error");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
     return result;
