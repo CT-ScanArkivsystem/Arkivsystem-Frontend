@@ -42,36 +42,43 @@ export default function ProjectFiles(props) {
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
                                 setSelectedDefaultFolder("");
+                                setFilesToDownload([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
                                 setSelectedDefaultFolder("");
+                                setFilesToDownload([]);
                             }
                         }}
                         childFolders={foldersInSubFolder.map((defaultFolder) => {
-                                return(
-                                    <SubFolderDisplay
-                                        className="fileDisplay"
-                                        key={defaultFolder}
-                                        name={defaultFolder}
-                                        isChildFolder={true}
-                                        variant={selectedDefaultFolder === defaultFolder ? 'secondary' : 'outline-dark'}
-                                        onClick={() => {
-                                            if (selectedDefaultFolder === defaultFolder) {
-                                                setSelectedDefaultFolder("");
-                                            } else {
-                                                setIsLoading(true);
-                                                setSelectedDefaultFolder(defaultFolder);
-                                                getFiles(defaultFolder, ProjectStore.projectId, selectedSubFolder);
-
-                                                setIsLoading(false)
-                                            }
-                                        }}
-                                    />
-                                )
-                            })}
+                            return(
+                                <SubFolderDisplay
+                                    className="fileDisplay"
+                                    key={defaultFolder}
+                                    name={defaultFolder}
+                                    isChildFolder={true}
+                                    variant={selectedDefaultFolder === defaultFolder ? 'secondary' : 'outline-dark'}
+                                    onClick={() => {
+                                        if (selectedDefaultFolder === defaultFolder) {
+                                            setSelectedDefaultFolder("");
+                                            setFilesToDownload([]);
+                                            setFilesInDirectory([])
+                                        } else {
+                                            setIsLoading(true);
+                                            setFilesInDirectory([]);
+                                            setSelectedDefaultFolder(defaultFolder);
+                                            getFiles(defaultFolder, ProjectStore.projectId, selectedSubFolder);
+                                            setFilesToDownload([]);
+                                        }
+                                    }}
+                                />
+                            )
+                        })}
                     />
                 )
             })
+        }
+        else {
+            result = <span>Empty!</span>
         }
         return result;
     }
@@ -80,17 +87,14 @@ export default function ProjectFiles(props) {
         let result = await GetAllFileNames(directory, projectId, subFolder);
         console.log(result);
         setFilesInDirectory(result);
+        setIsLoading(false);
     }
 
     function renderFilesInFolder(fileList) {
-        let result = ["Choose a directory"];
+        let result = [];
 
-        console.log(fileList)
-
-        if (fileList) {
+        if (fileList.length > 0) {
             result = fileList.map((file) => {
-                console.log(file)
-                console.log(file.fileName)
                 return(
                     <FileDisplay
                         key={file.fileName}
@@ -99,6 +103,10 @@ export default function ProjectFiles(props) {
                     />
                 );
             })
+        } else if (isLoading) {
+            result = <span>Loading!</span>
+        } else {
+            result = <span>Empty!</span>
         }
 
         return result;

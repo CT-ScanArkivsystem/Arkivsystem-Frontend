@@ -31,7 +31,7 @@ export default async function PostDownloadFile(fileNames, projectId, subFolder) 
         const url = window.URL.createObjectURL(new Blob([dataAsBlob]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${fileNames.length > 1 ? `files.zip` : fileNames[0]}`);
+        link.setAttribute('download', `${fileNames.length > 1 ? (subFolder + `Files.zip`) : fileNames[0]}`);
 
         document.body.appendChild(link);
         link.click();
