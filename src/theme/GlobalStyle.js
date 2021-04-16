@@ -109,6 +109,11 @@ const GlobalStyle = createGlobalStyle`
   div.defaultBorder {
     border: ${secondaryColor} 2px solid;
   }
+  
+  button.noHighlight:focus {
+    box-shadow: none;
+  }
+  
 `;
 
 export default GlobalStyle

@@ -189,7 +189,7 @@ export default function Project() {
 
         result = projectPages.map((page) => {
             return(<Button
-                className="sideBarButton"
+                className="sideBarButton noHighlight"
                 key={page.pageName}
                 variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
                 disabled={isLoading}
@@ -201,7 +201,6 @@ export default function Project() {
                         setCurrentPage(page.pageName);
                     }
                 }}
-                isLoading={isLoading}
             >
                 {page.pageName}
             </Button>

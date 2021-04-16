@@ -38,7 +38,12 @@ export default function SubFolderDisplay ({...props}) {
                 variant={props.variant}
                 onClick={props.onClick}
                 size="sm"
-                className={`${props.isChildFolder ? 'subFolderDisplayButtonChild' : 'subFolderDisplayButton'} customBorderAndText`}>
+                className={`
+                    ${props.isChildFolder ? 'subFolderDisplayButtonChild' : 'subFolderDisplayButton'} 
+                    noHighlight 
+                    customBorderAndText`
+                }
+            >
                 <div className="subFolderDisplay">
                     <img className="subFolderDisplayIcon" src={folderIcon} alt="sub folder icon" />
                     <span className="subFolderDisplayName">{props.name}</span>

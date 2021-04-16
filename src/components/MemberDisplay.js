@@ -14,7 +14,7 @@ export default function MemberDisplay ({...props}) {
             variant={props.variant}
             onClick={props.onClick}
             size="sm"
-            className="memberDisplayLink">
+            className="memberDisplayLink noHighlight">
             <div className="memberDisplay">
                 <span className="memberDisplayName">{props.memberfirstname + " " + props.memberlastname}</span>
                 <span className="memberDisplayEmail">{props.memberemail}</span>

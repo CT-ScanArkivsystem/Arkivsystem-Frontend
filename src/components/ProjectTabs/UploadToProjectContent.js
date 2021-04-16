@@ -152,7 +152,6 @@ export default function UploadToProjectContent(props) {
             result = subFolderList.map((subFolder) => {
                 return(
                     <SubFolderDisplay
-                        className="fileDisplay"
                         isproject={false}
                         key={subFolder}
                         name={subFolder.slice(0, -1)}
