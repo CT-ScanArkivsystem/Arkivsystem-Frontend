@@ -41,10 +41,6 @@ export default function Project() {
             />
         },
         {
-            pageName: "Project images",
-            pageElement: <ProjectImages />
-        },
-        {
             pageName: "Project files",
             pageElement: <ProjectFiles
                 canDownloadFiles={checkPermission("specialPermission")}
