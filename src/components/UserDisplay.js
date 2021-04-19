@@ -3,7 +3,7 @@ import "./AdminTabs/FindUser.css";
 import UserEditStore from "../stores/UserEditStore";
 import "./UserDisplay.css";
 import {onError} from "../libs/errorLib";
-import DeleteDeleteUser from "../apiRequests/DeleteDeleteUser";
+import DeleteUser from "../apiRequests/DeleteUser";
 import ConfirmationModal from "./ConfirmationModal";
 
 export default function UserDisplay({...props}) {
@@ -28,7 +28,7 @@ export default function UserDisplay({...props}) {
         console.log("handleDeleteUser() " + props.firstName + " " + props.lastName + " (" + props.userId + ")")
 
         try {
-            let wasUserDeleted = await DeleteDeleteUser(props.userId)
+            let wasUserDeleted = await DeleteUser(props.userId)
             if (wasUserDeleted !== null) {
                 console.log("API return is not null");
                 window.location.reload(false);
