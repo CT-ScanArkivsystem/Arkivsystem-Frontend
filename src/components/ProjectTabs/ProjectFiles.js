@@ -85,7 +85,6 @@ export default function ProjectFiles(props) {
 
     async function getFiles(directory, projectId, subFolder) {
         let result = await GetAllFileNames(directory, projectId, subFolder);
-        console.log(result);
         setFilesInDirectory(result);
         setIsLoading(false);
     }
@@ -100,6 +99,7 @@ export default function ProjectFiles(props) {
                         key={file.fileName}
                         fileName={file.fileName}
                         toggleFileInList={() => toggleFileInList(file)}
+                        hasCheckbox={true}
                     />
                 );
             })
@@ -125,8 +125,9 @@ export default function ProjectFiles(props) {
     }
 
     async function downloadFiles(files, projectId, subFolder) {
+        setIsLoading(true);
         let result = await PostDownloadFile(files, projectId, subFolder);
-        console.log(result);
+        setIsLoading(false);
     }
 
   return (

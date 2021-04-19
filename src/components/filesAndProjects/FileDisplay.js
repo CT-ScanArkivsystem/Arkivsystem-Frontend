@@ -27,6 +27,7 @@ export default function FileDisplay ({...props}) {
     // This sets the default properties of the file.
     FileDisplay.defaultProps = {
         fileName: "Default name",
+        hasCheckbox: false
     }
 
     let filetypeHashmap = new Map([
@@ -77,14 +78,16 @@ export default function FileDisplay ({...props}) {
             <div className={'fileDisplay'}>
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.fileName}</span>
-                <Form.Check
-                    type="checkbox"
-                    className="tagCheckbox"
-                    onClick={() => {
-                        setIsChecked(!isChecked);
-                        props.toggleFileInList();
-                    }}
-                />
+                {props.hasCheckbox ?
+                    <Form.Check
+                        type="checkbox"
+                        className="tagCheckbox"
+                        onClick={() => {
+                            setIsChecked(!isChecked);
+                            props.toggleFileInList();
+                        }}
+                    /> : ''}
+
             </div>
         </div>
     );

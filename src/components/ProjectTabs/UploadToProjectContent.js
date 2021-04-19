@@ -67,15 +67,9 @@ export default function UploadToProjectContent(props) {
                 <FileDisplay
                     className="fileDisplay"
                     key={file.path}
-                    filename={file.path}
-                    fileowner=""
+                    fileName={file.path}
+                    fileOwner=""
                 />)))
-
-            /*
-            <li key={file.path}>
-                    {file.path} - {file.size} bytes
-                </li>
-             */
         }, [acceptedFiles]);
 
     /**
@@ -92,7 +86,8 @@ export default function UploadToProjectContent(props) {
             try {
                 let didFilesGetUploaded = await PostUploadFiles(acceptedFiles, ProjectStore.projectId, selectedSubFolder);
                 if (didFilesGetUploaded && !didFilesGetUploaded.length) {
-                    setUploadedFiles(uploadedFiles.concat(filesInQueue));
+
+                    setUploadedFiles(filesInQueue);
                     setFilesInQueue([]);
                     setIsLoading(false);
                     setErrorMessage("");
@@ -123,7 +118,6 @@ export default function UploadToProjectContent(props) {
     function filesNotUploadedToString(files) {
             let filesNotUploaded = "";
 
-            console.log(files);
             for (let i = 0; i < files.length; i++) {
                 if ((i+1) < files.length) {
                     filesNotUploaded = filesNotUploaded + files[i] + ", ";
@@ -131,7 +125,6 @@ export default function UploadToProjectContent(props) {
                     filesNotUploaded = filesNotUploaded + files[i];
                 }
             }
-            console.log(filesNotUploaded);
             return filesNotUploaded;
     }
 
