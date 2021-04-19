@@ -3,7 +3,6 @@ import "./Project.css";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
-import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
@@ -12,7 +11,6 @@ import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
 import GetProject from "../apiRequests/GetProject";
 import GetAllTags from "../apiRequests/GetAllTags";
-import GetAllFileNames from "../apiRequests/GetAllFileNames";
 import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
 import Button from "react-bootstrap/Button";
 
@@ -23,7 +21,6 @@ export default function Project() {
     const [projectTags, setProjectTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [subFoldersInProject, setSubFoldersInProject] = useState([]);
-    const [filesInProject, setFilesInProject] = useState([]);
     const [currentPage, setCurrentPage] = useState("Loading");
 
     const projectPages = [
@@ -56,7 +53,9 @@ export default function Project() {
         },
         {
             pageName: "Special Permission",
-            pageElement: <ProjectSpecialPermission />
+            pageElement: <ProjectSpecialPermission
+                canEditSpecialPermission={checkPermission("member")}
+            />
         }
     ];
 
