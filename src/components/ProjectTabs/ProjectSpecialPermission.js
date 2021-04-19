@@ -8,6 +8,7 @@ import MemberDisplay from "../MemberDisplay";
 import PutGrantSpecialPermission from "../../apiRequests/PutGrantSpecialPermission";
 import GetProject from "../../apiRequests/GetProject";
 import PutRevokeSpecialPermission from "../../apiRequests/PutRevokeSpecialPermission";
+import InformationBubble from "../InformationBubble";
 
 
 export default function ProjectSpecialPermission(props) {
@@ -140,7 +141,12 @@ export default function ProjectSpecialPermission(props) {
               functionIfConfirmed={functionIfConfirmed}
           />
           <div className="tabHeader">
-              <h2>Special permissions</h2>
+                  <h2>Special permissions</h2>
+                  <InformationBubble
+                  tipHeader="Special permissions"
+                  tipParagraph="A user with special permission can see and download files from the project"
+                  textToHoverOver="?"
+              />
           </div>
           <div className="tabContent tabContentSpecialPermission">
               <Form.Group size="lg" controlId="projectDescription" className="addMemberField">

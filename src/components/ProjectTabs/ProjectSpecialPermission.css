@@ -12,3 +12,9 @@
     margin-top: 10px;
     width: 50%;
 }
+
+.tabHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

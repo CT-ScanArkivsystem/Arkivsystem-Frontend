@@ -5,12 +5,6 @@ import gifIcon from "../../images/gif-icon.png";
 import jpegIcon from "../../images/jpeg-icon.png";
 import pngIcon from "../../images/Image-PNG-icon.png";
 import tiffIcon from "../../images/Image-TIFF-icon.png";
-import {Link} from "react-router-dom";
-import ProjectStore from "../../stores/ProjectStore";
-import Button from "react-bootstrap/Button";
-import {BsArrowRepeat} from "react-icons/bs";
-import LoaderButton from "../LoaderButton";
-import PostDownloadFile from "../../apiRequests/PostDownloadFile";
 import Form from "react-bootstrap/Form";
 
 /**

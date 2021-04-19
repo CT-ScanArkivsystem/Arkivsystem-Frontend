@@ -25,7 +25,7 @@ export default async function PutRevokeSpecialPermission(projectId, userEmail) {
         });
 
         if (res.ok) {
-            console.log("Special permission revoke!");
+            //console.log("Special permission revoke!");
             //console.log(res)
         } else {
             console.log("Did not revoke permissions!");
