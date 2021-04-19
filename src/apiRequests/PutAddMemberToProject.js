@@ -9,9 +9,9 @@ import {currentIP} from "../App";
  * @returns Promise result the result from the server. Contains the project that was updated.
  */
 export default async function PutAddMemberToProject(projectId, userEmail) {
-    let result = false;
+    let res;
     try {
-        let res = await fetch(currentIP + '/academic/addMemberToProject', {
+        res = await fetch(currentIP + '/academic/addMemberToProject', {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -25,15 +25,13 @@ export default async function PutAddMemberToProject(projectId, userEmail) {
 
         if (res.ok) {
             //console.log("Member was added!");
-            result = true;
         } else {
             console.log("User was not added as member!");
-            result = false;
         }
     } catch (e) {
         onError(e);
         console.log("User was not added as member due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return result;
+    return res;
 }

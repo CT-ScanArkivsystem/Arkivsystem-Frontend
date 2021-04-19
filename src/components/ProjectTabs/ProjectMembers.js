@@ -18,6 +18,7 @@ export default function ProjectMembers(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState(handleRemoveMember);
+    const [errorMessage, setErrorMessage] = useState("");
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -53,8 +54,26 @@ export default function ProjectMembers(props) {
     async function handleAddMember(projectId, emailOfUserToAdd) {
         if (emailOfUserToAdd) {
             let result = await PutAddMemberToProject(projectId, emailOfUserToAdd);
-            if (result) {
-                await updateProject(projectId);
+
+            switch (result.status) {
+                case '200':
+                    setErrorMessage("");
+                    await updateProject(projectId);
+                    break;
+                case '403':
+                    setErrorMessage("User does not have the permission to be added as a member!")
+                    break;
+                case '404':
+                    setErrorMessage("A user with that email does not exist!")
+                    break;
+                default:
+                    break;
+            }
+
+            if (result.ok) {
+            } else if (result.status === 403) {
+            } else if (result.status === 404) {
+                setErrorMessage("A user with that email does not exist!")
             }
         }
     }
@@ -66,12 +85,14 @@ export default function ProjectMembers(props) {
     }
 
     async function handleRemoveMember() {
+        setIsLoading(true);
         if (selectedMember.email) {
             let result = await PutRemoveMemberFromProject(ProjectStore.projectId, selectedMember.email);
             if (result) {
                 await updateProject(ProjectStore.projectId);
             }
         }
+        setIsLoading(false);
     }
 
     async function updateProject(projectId) {
@@ -90,12 +111,14 @@ export default function ProjectMembers(props) {
     }
 
     async function handleChangeOwner() {
+        setIsLoading(true);
         if (selectedMember.userId) {
             let result = await PutChangeProjectOwner(ProjectStore.projectId, selectedMember.userId);
             if (result) {
                 await updateProject(ProjectStore.projectId);
             }
         }
+        setIsLoading(false);
     }
 
     function closeModal() {
@@ -177,6 +200,7 @@ export default function ProjectMembers(props) {
                                     Add member
                                 </LoaderButton>
                             </div>
+                            <span className="errorMessage">{errorMessage}</span>
                         </Form.Group>
                 </div>
             </div>
