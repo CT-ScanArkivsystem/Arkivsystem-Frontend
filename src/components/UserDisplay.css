@@ -1,9 +1,7 @@
 .user-display {
-
 }
 
 .user-display:hover {
-    box-shadow: 1px 1px 50px 2px #4e3e22 inset;
+    box-shadow: 1px 1px 8px 1px #4e3e22 inset;
     cursor: pointer;
-
 }

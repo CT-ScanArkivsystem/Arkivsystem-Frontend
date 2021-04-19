@@ -22,8 +22,6 @@ function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
     const history = useHistory();
-    const [isAdmin, setIsAdmin] = useState(false);
-
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -47,18 +45,6 @@ function App() {
     }
 
     /**
-     * Checks if the logged in user is admin or not and saves to state
-     * @returns {Promise<void>}
-     */
-    function setIfAdmin() {
-        if (UserStore.role === "ROLE_ADMIN") {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-        }
-    }
-
-    /**
      * Sends a GET request to the server to check if user has a JWT token.
      * If token exists, it will log the user in.
      * @returns {Promise<void>}
@@ -67,9 +53,12 @@ function App() {
         try {
             let didGetCurrentUser = await GetCurrentUser();
             if (didGetCurrentUser) {
-                setIfAdmin()
                 userHasAuthenticated(true);
-                history.push("/userFrontpage");
+                if (history.location.pathname === "/") {
+                    history.push("/userFrontpage");
+                } else {
+                    history.push(history.location.pathname);
+                }
             } else {
                 if (localStorage.getItem("jwt") === undefined) {
                     console.log(localStorage.getItem("jwt"))
@@ -122,7 +111,7 @@ function App() {
                                                     Frontpage
                                                 </NavDropdown.Item>
                                             </LinkContainer>
-                                            {isAdmin ? (
+                                            {(UserStore.role === "ROLE_ADMIN") ? (
                                                 <LinkContainer to="/AdminPage">
                                                     <NavDropdown.Item href="/AdminPage">
                                                         Admin Page

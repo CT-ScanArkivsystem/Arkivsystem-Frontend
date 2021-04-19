@@ -27,9 +27,6 @@ export default function Routes() {
             <Route exact path="/createProject">
                 <CreateProject />
             </Route>
-            <Route exact path="/createUser">
-                <CreateUser />
-            </Route>
             <Route exact path="/adminPage">
                 <AdminPage />
             </Route>

@@ -1,9 +1,16 @@
 import React, { useState } from "react";
+import FindUser from "./FindUser";
+
 
 export default function DeleteUser() {
     //Something
 
     return (
-        <h4>You can delete users here!</h4>
+        <React.Fragment>
+            <FindUser
+                pageType1="deleteUser"
+                pageTitle="Delete user:"
+            />
+        </React.Fragment>
     )
 }

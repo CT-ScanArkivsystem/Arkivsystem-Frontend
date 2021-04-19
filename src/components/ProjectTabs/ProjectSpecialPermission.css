@@ -13,7 +13,7 @@
     width: 50%;
 }
 
-.tabHeader {
+.tabHeaderSpecialPermissions {
     display: flex;
     flex-direction: row;
     align-items: center;

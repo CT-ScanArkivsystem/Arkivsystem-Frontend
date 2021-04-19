@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import {useAppContext} from "../../libs/contextLib";
 import {onError} from "../../libs/errorLib";
@@ -16,7 +15,6 @@ export default function CreateUser() {
     const [password2, setPassword2] = useState("");
     const [role, setRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
-    const history = useHistory();
 
     /**
      * Checks if both form inputs have something put into them.
@@ -40,8 +38,8 @@ export default function CreateUser() {
             let didUserGetCreated = PostCreateUser(firstName, lastName, email, password1, role);
             if (didUserGetCreated) {
                 userHasAuthenticated(true);
-                // TODO: Should redirect to admin page when it is complete!!!
-                history.push("/userFrontpage");
+                setIsLoading(false);
+                window.location.reload(false);
             } else {
                 console.log("User was not created!");
             }

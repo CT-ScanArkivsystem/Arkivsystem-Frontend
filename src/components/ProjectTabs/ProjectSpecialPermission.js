@@ -140,7 +140,7 @@ export default function ProjectSpecialPermission(props) {
               modalText={modalText}
               functionIfConfirmed={functionIfConfirmed}
           />
-          <div className="tabHeader">
+          <div className="tabHeader tabHeaderSpecialPermissions">
                   <h2>Special permissions</h2>
                   <InformationBubble
                   tipHeader="Special permissions"

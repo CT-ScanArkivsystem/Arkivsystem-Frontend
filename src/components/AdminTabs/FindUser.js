@@ -87,7 +87,7 @@ export default function FindUser({...props}) {
         !isLoading && (
             <div className="findUser">
                 <div className="tabHeader">
-                    <h2>Edit user:</h2>
+                    <h2>{props.pageTitle}</h2>
                 </div>
                 <div className="thisPagesContent">
 
@@ -115,6 +115,7 @@ export default function FindUser({...props}) {
                             <UserResultRows
                                 filteredPersons={filteredPersons}
                                 EditPageEvent2={() => {props.EditPageEvent3()}}
+                                pageType2={props.pageType1}
                             />
                             </tbody>
                         </Table>
