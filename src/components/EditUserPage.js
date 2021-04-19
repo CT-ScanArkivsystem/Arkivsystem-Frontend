@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import FindUser from "./AdminTabs/FindUser";
 import LoadingPage from "../containers/LoadingPage";
 import ProjectDetails from "./ProjectTabs/ProjectDetails";
-import UploadToProjectContent from "./UploadToProjectContent";
+import UploadToProjectContent from "./ProjectTabs/UploadToProjectContent";
 import EditUser from "./AdminTabs/EditUser";
 import UserStore from "../stores/UserStore";
 
