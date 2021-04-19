@@ -19,8 +19,7 @@
     margin-right: 8px;
     text-align: center;
     flex: 1;
-    min-width: 30%;
-    max-width: 40%;
+    width: 30%;
 }
 
 .projectFileContainer {
@@ -28,6 +27,7 @@
     flex-direction: column;
     flex: 1;
     align-items: center;
+    width: 70%;
     height: 100%;
     padding-left: 4px;
     border-left: black solid 1px;

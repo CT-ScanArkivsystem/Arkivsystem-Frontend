@@ -95,6 +95,7 @@ const GlobalStyle = createGlobalStyle`
     border: ${secondaryColor} 2px solid;
     padding: 4px;
     display: flex;
+    max-width: 80%;
     flex-grow: 100;
   }
 
