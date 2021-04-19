@@ -6,10 +6,11 @@ import FindUser from "../components/AdminTabs/FindUser";
 import DeleteUser from "../components/AdminTabs/DeleteUser";
 import DeleteTags from "../components/AdminTabs/DeleteTags";
 import EditUserPage from "../components/AdminTabs/EditUserPage";
+import AdminWelcomePage from "../components/AdminWelcomePage";
 
 export default function AdminPage() {
 
-    const [pageContent, setPageContent] = useState(<CreateUser/>);
+    const [pageContent, setPageContent] = useState(<AdminWelcomePage/>);
     const [isLoading, setIsLoading] = useState(false);
 
 
