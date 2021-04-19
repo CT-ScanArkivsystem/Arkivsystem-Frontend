@@ -14,16 +14,14 @@ export default function ProjectMembers(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedMember, setSelectedMember] = useState([]);
     const [emailOfUserToAdd, setEmailOfUserToAdd] = useState("");
-    const [memberList, setMemberList] = useState([]);
+    const [memberList, setMemberList] = useState(ProjectStore.projectMembers);
+
+    //Modal helper states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState(handleRemoveMember);
+    //Error handling state
     const [errorMessage, setErrorMessage] = useState("");
-
-    //Functions in the React.useEffect() will be run once on load of site.
-    React.useEffect(() => {
-        setMemberList(ProjectStore.projectMembers);
-    }, []);
 
     function renderMemberList() {
         let result = [];
@@ -183,7 +181,7 @@ export default function ProjectMembers(props) {
                                 <Form.Control
                                     className="addMemberInput"
                                     type="email"
-                                    name="Project description"
+                                    name="Add member"
                                     placeholder="Enter email"
                                     disabled={isLoading || !props.canEditMembers}
                                     value={emailOfUserToAdd}
