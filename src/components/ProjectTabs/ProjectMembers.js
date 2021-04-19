@@ -53,26 +53,26 @@ export default function ProjectMembers(props) {
         if (emailOfUserToAdd) {
             let result = await PutAddMemberToProject(projectId, emailOfUserToAdd);
 
+            console.log(result.status)
+
             switch (result.status) {
-                case '200':
+                case 200:
                     setErrorMessage("");
                     await updateProject(projectId);
                     break;
-                case '403':
+                case  400:
+                    setErrorMessage("User is already a member!")
+                    break;
+                case 403:
                     setErrorMessage("User does not have the permission to be added as a member!")
                     break;
-                case '404':
+                case 404:
                     setErrorMessage("A user with that email does not exist!")
                     break;
                 default:
                     break;
             }
 
-            if (result.ok) {
-            } else if (result.status === 403) {
-            } else if (result.status === 404) {
-                setErrorMessage("A user with that email does not exist!")
-            }
         }
     }
 
@@ -192,7 +192,7 @@ export default function ProjectMembers(props) {
                                     size="sm"
                                     type="submit"
                                     isLoading={isLoading}
-                                    disabled={isLoading || !props.canEditMembers}
+                                    disabled={isLoading || !props.canEditMembers || emailOfUserToAdd.length < 1}
                                     onClick={() => {handleAddMember(ProjectStore.projectId, emailOfUserToAdd)}}
                                 >
                                     Add member
