@@ -4,8 +4,6 @@ import "./ProjectDetails.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../LoaderButton";
 import TagDisplay from "../TagDisplay";
-import GetProject from "../../apiRequests/GetProject";
-import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
@@ -17,16 +15,14 @@ export default function ProjectDetails(props) {
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
-    const [projectTags, setProjectTags] = useState(props.projectTags);
-    const [allTags, setAllTags] = useState(props.allTags);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
     const [tagsToBeRemoved, setTagsToBeRemoved] = useState([]);
 
     function renderProjectTags() {
         let result = [];
 
-        if (projectTags !== []) {
-            result = allTags.map(function(tagToDisplay) {
+        if (props.projectTags !== []) {
+            result = props.allTags.map(function(tagToDisplay) {
                 return (
                     <TagDisplay
                         key={"TagKey" + tagToDisplay.tagName}

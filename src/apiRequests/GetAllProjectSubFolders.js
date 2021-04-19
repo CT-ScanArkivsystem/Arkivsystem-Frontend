@@ -18,10 +18,15 @@ export default async function GetAllProjectSubFolders(projectId) {
             }
         });
 
-        result = await res.json();
+
 
         if (res.ok) {
-            //console.log("Got all sub folders!");
+            //Check if the request was 200 or not.
+            // Could possibly be 204 and don't want to read json if that is the case.
+            if (res.status === 200) {
+                result = await res.json();
+                //console.log("Got all sub folders!");
+            }
         } else {
             result = [];
             console.log("Could not get sub folders.");
