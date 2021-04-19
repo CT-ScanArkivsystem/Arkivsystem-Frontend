@@ -1,159 +1,215 @@
 import React, {useEffect, useState} from "react";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
-import LoaderButton from "../components/LoaderButton";
-import {Link} from "react-router-dom";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
 import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
-import UploadToProjectContent from "../components/UploadToProjectContent";
+import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectContent";
 import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
-
-
-function getProjectInformation() {
-    console.log(ProjectStore);
-
-    console.log(ProjectStore.projectId);
-    console.log(ProjectStore.projectName);
-    console.log(ProjectStore.projectDescription);
-    console.log(ProjectStore.projectOwner);
-    console.log("isPrivate: " + ProjectStore.isPrivate);
-    console.log(ProjectStore.creationDate);
-    console.log(ProjectStore.projectMembers);
-
-    return <p>
-        {ProjectStore.projectId}<br/>
-        {ProjectStore.projectName}<br/>
-        {ProjectStore.projectDescription}<br/>
-        {ProjectStore.projectOwner}<br/>
-        {ProjectStore.isPrivate}<br/>
-        {ProjectStore.creationDate}
-    </p>;
-}
+import GetProject from "../apiRequests/GetProject";
+import GetAllTags from "../apiRequests/GetAllTags";
+import GetAllFileNames from "../apiRequests/GetAllFileNames";
+import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
+import Button from "react-bootstrap/Button";
 
 export default function Project() {
 
-    const [canUserEdit, setCanUserEdit] = useState(false);
     const [pageContent, setPageContent] = useState(<LoadingPage />);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [projectTags, setProjectTags] = useState([]);
+    const [allTags, setAllTags] = useState([]);
+    const [subFoldersInProject, setSubFoldersInProject] = useState([]);
+    const [filesInProject, setFilesInProject] = useState([]);
+    const [currentPage, setCurrentPage] = useState("Loading");
+
+    const projectPages = [
+        {
+            pageName: "Project details",
+            pageElement: <ProjectDetails
+                canEdit={checkPermission("member")}
+                projectTags={projectTags}
+                allTags={allTags} />
+        },
+        {
+            pageName: "Upload files",
+            pageElement: <UploadToProjectContent
+                projectSubFolders={subFoldersInProject}
+            />
+        },
+        {
+            pageName: "Project files",
+            pageElement: <ProjectFiles
+                canDownloadFiles={checkPermission("specialPermission")}
+                canEditFiles={checkPermission("member")}
+                projectSubFolders={subFoldersInProject}
+            />
+        },
+        {
+            pageName: "Project members",
+            pageElement: <ProjectMembers
+                canEditMembers={checkPermission("owner")}
+            />
+        },
+        {
+            pageName: "Special Permission",
+            pageElement: <ProjectSpecialPermission />
+        }
+    ];
+
 
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         initialisation();
     }, []);
 
-    function initialisation() {
-        let canEdit = checkIfCanEdit();
-        setCanUserEdit(canEdit);
-        setPageContent(<ProjectDetails canEdit={canEdit} />);
+    async function initialisation() {
+        let project = await GetProject(ProjectStore.projectId);
+
+        let tagsInProject = trimTagArray(project.tags, project.tags);
+        setProjectTags(tagsInProject);
+
+        let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
+        setAllTags(allTagsTrimmed);
+        setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+        setCurrentPage("Project details")
+
+        let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
+        setSubFoldersInProject(allProjectSubFolders);
+
+        //let allFilesInProject = await GetAllFileNames("all", project.projectId, "mySubFolder");
+        //setFilesInProject(allFilesInProject);
+
+        //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
+        setIsLoading(false);
     }
 
-    function checkIfCanEdit() {
-        let canEdit = false;
-        //If any of these three are true, then the user is allowed to edit the project.
-        if (checkIfOwner(ProjectStore.projectOwner, UserStore) || checkIfMember(ProjectStore.projectMembers, UserStore) || checkIfAdmin(UserStore)) {
-            canEdit = true
-        }
-        return canEdit;
-    }
-
-    function checkIfOwner() {
-        return ProjectStore.projectOwner.userId === UserStore.userId;
-    }
-
-    function checkIfMember(memberList, user) {
-        let isUserMember = false;
-        for (let i = 0; memberList.length > i && isUserMember !== true; i++) {
-            if (memberList[i].userId === user.userId) {
-                isUserMember = true;
+    /**
+     * This function removes the unnecessary numberOfProjects part of the tags that is gotten from the requests.
+     * The function also calls to check if the tags are in the project and sets a variable that tells the site if it is in or not.
+     *
+     * @param arrayToTrim Array which contains tags and numberOfProjects the tags are in.
+     * @param projectTagArray The array of the project to check if the tags are in both.
+     * @returns *[] trimmedProjectTags The array with trimmed out numberOfProjects and has a new isInProject.
+     */
+    function trimTagArray(arrayToTrim, projectTagArray) {
+        let trimmedProjectTags = [];
+        if (arrayToTrim) {
+            for (let i = 0; i < arrayToTrim.length; i++) {
+                trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
             }
         }
-        return isUserMember;
+        return trimmedProjectTags;
     }
 
-    function checkIfAdmin(user) {
-        return user.role === "ROLE_ADMIN";
+    /**
+     * This function checks if a tag is in the project.
+     *
+     * @param tagToCheck The tag that should be checked if is in project.
+     * @param projectTagArray The array that contains all the tags in the project.
+     * @returns {boolean} isTagInProject returns true if the tag is in the project, else false.
+     */
+    function checkIfTagIsInProject(tagToCheck, projectTagArray) {
+        let isTagInProject = false;
+        if (projectTagArray && projectTagArray.length > 0) {
+            for (let i = 0; i < projectTagArray.length && isTagInProject === false; i++) {
+                if (tagToCheck === projectTagArray[i].tagName) {
+                    isTagInProject = true;
+                }
+            }
+        }
+        return isTagInProject;
     }
 
-    function contentToProjectDetails() {
-        setPageContent(<ProjectDetails canEdit={canUserEdit} />);
+    /**
+    This function checks if the user meets the permission requirements that is given.
+    If the user meets the permission needs they will be allowed to edit the page with said requirement.
+
+    @param permissionNeeded String that contains the permission that is going to be checked.
+     */
+    function checkPermission(permissionNeeded) {
+        let hasPermission = false;
+
+        if (checkIfAdmin(UserStore.role)) {
+            hasPermission = true;
+        } else {
+
+            switch (permissionNeeded) {
+                case 'member':
+                    if (checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId)) {
+                        hasPermission = true;
+                    }
+                    break;
+                case 'owner':
+                    if (checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId)) {
+                        hasPermission = true;
+                    }
+                    break;
+                case 'specialPermission':
+                    if (checkIfUserIsInList(ProjectStore.usersWithSpecialPermission, UserStore.userId)) {
+                        hasPermission = true;
+                    }
+                    break;
+                default:
+                    hasPermission = false;
+                    break;
+            }
+        }
+
+        return hasPermission;
     }
-    function contentToUploadToProject() {
-        setPageContent(<UploadToProjectContent />)
+
+    function checkIfAdmin(userRole) {
+        return userRole === "ROLE_ADMIN";
     }
-    function contentToProjectImages() {
-        setPageContent(<ProjectImages />)
+
+    function checkIfOwner(ownerId, userId) {
+        return ownerId === userId;
     }
-    function contentToProjectFiles() {
-        setPageContent(<ProjectFiles />)
+
+    function checkIfUserIsInList(memberList, userId) {
+        let isUserInList = false;
+        for (let i = 0; memberList.length > i && isUserInList !== true; i++) {
+            if (memberList[i].userId === userId) {
+                isUserInList = true;
+            }
+        }
+        return isUserInList;
     }
-    function contentToProjectMembers() {
-        setPageContent(<ProjectMembers canEditMembers={checkIfOwner()} />)
-    }
-    function contentToProjectSpecialPermission() {
-        setPageContent(<ProjectSpecialPermission />)
+
+    function createSideBarButtons() {
+        let result = [];
+
+        result = projectPages.map((page) => {
+            return(<Button
+                className="sideBarButton noHighlight"
+                key={page.pageName}
+                variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
+                disabled={isLoading}
+                onClick={() => {
+                    setPageContent(page.pageElement)
+                    if (currentPage === page.pageName) {
+                        setCurrentPage("");
+                    } else {
+                        setCurrentPage(page.pageName);
+                    }
+                }}
+            >
+                {page.pageName}
+            </Button>
+            )
+        })
+
+        return result;
     }
 
     return (
         <div className="CreateProject pageContainer">
             <SideBar>
                 <h3>Options</h3>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectDetails}
-                    isLoading={isLoading}
-                >
-                    Project details
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToUploadToProject}
-                    isLoading={isLoading}
-                >
-                    Upload files
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectImages}
-                    isLoading={isLoading}
-                >
-                    Project Images
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectFiles}
-                    isLoading={isLoading}
-                >
-                    Project Files
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectMembers}
-                    isLoading={isLoading}
-                >
-                    Project Members
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToProjectSpecialPermission}
-                    isLoading={isLoading}
-                >
-                    Special Permission
-                </LoaderButton>
-                <br/>
-                <Link to="/project">
-                    <LoaderButton
-                        size="bg"
-                        className="toProjectButton"
-                        isLoading={isLoading}
-                        onClick={() => setIsLoading(true)}
-                    >
-                        Go to project
-                    </LoaderButton>
-                </Link>
+                {createSideBarButtons()}
             </SideBar>
             <div className="pageContent">
                 {pageContent}

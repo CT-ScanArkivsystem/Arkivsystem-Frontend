@@ -27,8 +27,8 @@ export default async function PostCreateProject(projectName, isPrivate, creation
             })
         });
         result = await res.json();
-        if (result !== null && result !== "") {
-
+        if (res.ok) {
+            //console.log("Project was created")
         } else {
             result = [];
             console.log("Project was not created!");

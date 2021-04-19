@@ -1,0 +1,44 @@
+.subFolderDisplayContainer {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.subFolderDisplayButton {
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1;
+    align-items: center;
+    margin-bottom: 4px;
+    min-height: 25px;
+    padding: 4px;
+}
+
+.subFolderDisplayButtonChild {
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1;
+    margin-bottom: 4px;
+    min-height: 20px;
+    padding: 4px;
+    margin-left: 3em;
+}
+
+.subFolderDisplay {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+}
+
+.subFolderDisplayIcon {
+    min-height: 1.3em;
+    max-height: 1.5em;
+    margin: 4px 2px 4px 4px;
+}
+
+.subFolderDisplayName {
+    flex-grow: 1;
+    text-align: start;
+    font-size: 1.2em;
+    margin: 0 2px 0 4px;
+}

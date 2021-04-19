@@ -1,8 +1,14 @@
+.fileDisplayContainer {
+width: 100%;
+}
+
 .fileDisplay {
     display: flex;
     flex-flow: row nowrap;
+    flex: 1;
     align-items: center;
     margin-bottom: 8px;
+    border: solid 1px black;
 }
 
 .fileDisplayIcon {

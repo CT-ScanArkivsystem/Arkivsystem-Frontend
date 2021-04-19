@@ -20,8 +20,8 @@ export default async function GetAllTags() {
 
         result = await res.json();
 
-        if (result !== null && result.length > 0) {
-
+        if (res.ok) {
+            //console.log("Got all tags");
         }
         else {
             result = [];

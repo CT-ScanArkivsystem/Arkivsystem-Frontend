@@ -83,19 +83,19 @@ function App() {
     return (
         !isAuthenticating && (
             <>
-                <GlobalStyle/>
-                <div className="App container">
-                    <Navbar collapseOnSelect variant="dark" expand="md">
+                <GlobalStyle />
+                <div className="App">
+                    <Navbar collapseOnSelect variant="dark">
                         {isAuthenticated ? (
                             <LinkContainer to="/userFrontpage">
                                 <Navbar.Brand href="/" className="font-weight-bold">
-                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon"/>
+                                    <img className="navLogo" src={logo} alt="Site logo" />
                                 </Navbar.Brand>
                             </LinkContainer>
                         ) : (
                             <LinkContainer to="/">
                                 <Navbar.Brand href="/" className="font-weight-bold">
-                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon"/>
+                                    <img className="navLogo" src={logo} alt="Site logo" />
                                 </Navbar.Brand>
                             </LinkContainer>
                         )}

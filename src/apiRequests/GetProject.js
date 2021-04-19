@@ -23,7 +23,7 @@ export default async function GetProject(projectId) {
 
             result = await res.json();
 
-            if (result !== null && result !== "") {
+            if (res.ok) {
                 //console.log("Project was pulled");
                 //console.log(result);
             }

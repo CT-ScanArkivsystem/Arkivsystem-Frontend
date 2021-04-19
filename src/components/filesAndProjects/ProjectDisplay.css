@@ -1,0 +1,22 @@
+.projectDisplay {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.projectDisplayIcon {
+    height: 30px;
+    margin: 4px 2px 4px 4px;
+}
+
+.projectDisplayName {
+    flex-grow: 1;
+    text-align: start;
+    margin: 0 2px 0 6px;
+}
+
+.projectDisplayOwner {
+    margin: 0 4px 0 2px;
+    color: #565656;
+}
