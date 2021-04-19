@@ -54,7 +54,11 @@ function App() {
             let didGetCurrentUser = await GetCurrentUser();
             if (didGetCurrentUser) {
                 userHasAuthenticated(true);
-                history.push("/userFrontpage");
+                if (history.location.pathname === "/") {
+                    history.push("/userFrontpage");
+                } else {
+                    history.push(history.location.pathname);
+                }
             } else {
                 if (localStorage.getItem("jwt") === undefined) {
                     console.log(localStorage.getItem("jwt"))
