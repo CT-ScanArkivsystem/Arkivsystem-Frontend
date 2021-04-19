@@ -13,7 +13,7 @@ export default async function GetAllFileNames(directory, projectId, subFolder) {
         let res = await fetch(currentIP +
             '/user/getAllFileNames?directory=' + directory +
             '&projectId=' + projectId +
-            '&subFolder=' + subFolder,
+            '&subFolder=' + subFolder.replace("#", "%23"),
             {
             method: 'GET',
             credentials: 'include',

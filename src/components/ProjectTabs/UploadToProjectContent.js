@@ -9,6 +9,7 @@ import {useDropzone} from "react-dropzone";
 import PostUploadFiles from "../../apiRequests/PostUploadFiles";
 import FileDisplay from "../filesAndProjects/FileDisplay";
 import SubFolderDisplay from "../filesAndProjects/SubFolderDisplay";
+import sanitize from "sanitize-filename";
 
 const getColor = (props) => {
     if (props.isDragAccept) {
@@ -143,7 +144,7 @@ export default function UploadToProjectContent(props) {
 
         if (subFolderList) {
             result = subFolderList.map((subFolder) => {
-                return(
+                return (
                     <SubFolderDisplay
                         isproject={false}
                         key={subFolder}
@@ -171,7 +172,11 @@ export default function UploadToProjectContent(props) {
                     value={newFolderName}
                     onChange={(e) => setNewFolderName(e.target.value)}
                 />
-                <input type="submit" className="hiddenButton" tabIndex="-1" />
+                {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?
+                    <span className="errorMessage">Your folder contains illegal characters!</span> : ""}
+                <input type="submit"
+                       disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",")}
+                       className="hiddenButton" tabIndex="-1"/>
             </form>
         )
         return result;
