@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Nav, Navbar, NavDropdown} from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { useHistory } from "react-router-dom";
+import {LinkContainer} from "react-router-bootstrap";
+import {useHistory} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import GlobalStyle from "./theme/GlobalStyle";
 import Routes from "./Routes";
-import { AppContext } from "./libs/contextLib";
+import {AppContext} from "./libs/contextLib";
 import "./App.css";
 import {onError} from "./libs/errorLib";
 import UserStore from "./stores/UserStore";
@@ -22,6 +22,7 @@ function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
     const history = useHistory();
+    const [isAdmin, setIsAdmin] = useState(false);
 
 
     //Functions in the useEffect() will be run once on load of site.
@@ -46,6 +47,18 @@ function App() {
     }
 
     /**
+     * Checks if the logged in user is admin or not and saves to state
+     * @returns {Promise<void>}
+     */
+    function setIfAdmin() {
+        if (UserStore.role === "ROLE_ADMIN") {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
+    }
+
+    /**
      * Sends a GET request to the server to check if user has a JWT token.
      * If token exists, it will log the user in.
      * @returns {Promise<void>}
@@ -54,10 +67,10 @@ function App() {
         try {
             let didGetCurrentUser = await GetCurrentUser();
             if (didGetCurrentUser) {
+                setIfAdmin()
                 userHasAuthenticated(true);
                 history.push("/userFrontpage");
-            }
-            else {
+            } else {
                 if (localStorage.getItem("jwt") === undefined) {
                     console.log(localStorage.getItem("jwt"))
                     await GetLogout();
@@ -66,8 +79,7 @@ function App() {
                 history.push("/");
                 console.log("Failed to retrieve user information");
             }
-        }
-        catch (e) {
+        } catch (e) {
             onError(e);
             //Send the user to the home page. Prevents the user from accessing sites when not logged in.
             history.push("/");
@@ -75,6 +87,7 @@ function App() {
         }
         setIsAuthenticating(false);
     }
+
     // TODO: Create user link in navbar should only be shown to admins.
     // TODO: Change what is inside the dropdown button.
 
@@ -97,23 +110,27 @@ function App() {
                                 </Navbar.Brand>
                             </LinkContainer>
                         )}
-                        <Navbar.Toggle />
+                        <Navbar.Toggle/>
                         <Navbar.Collapse className="justify-content-end">
                             <Nav activeKey={window.location.pathname}>
                                 {isAuthenticated ? (
                                     <>
-                                        <NavDropdown id="navDropdownButton" alignRight active title={UserStore.firstName}>
+                                        <NavDropdown id="navDropdownButton" alignRight active
+                                                     title={UserStore.firstName}>
                                             <LinkContainer to="/userFrontpage">
                                                 <NavDropdown.Item>
                                                     Frontpage
                                                 </NavDropdown.Item>
                                             </LinkContainer>
-                                            <LinkContainer to="/createUser">
-                                                <NavDropdown.Item href="/createUser">
-                                                    Create user
-                                                </NavDropdown.Item>
-                                            </LinkContainer>
-                                            <NavDropdown.Divider />
+                                            {isAdmin ? (
+                                                <LinkContainer to="/AdminPage">
+                                                    <NavDropdown.Item href="/AdminPage">
+                                                        Admin Page
+                                                    </NavDropdown.Item>
+                                                </LinkContainer>
+                                            ) : (<React.Fragment/>)
+                                            }
+                                            <NavDropdown.Divider/>
                                             <NavDropdown.Item onClick={handleLogout}>
                                                 Logout
                                             </NavDropdown.Item>
@@ -129,8 +146,8 @@ function App() {
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
-                    <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-                        <Routes />
+                    <AppContext.Provider value={{isAuthenticated, userHasAuthenticated}}>
+                        <Routes/>
                     </AppContext.Provider>
                 </div>
             </>

@@ -114,6 +114,16 @@ const GlobalStyle = createGlobalStyle`
     box-shadow: none;
   }
   
+
+  div.tabHeader {
+    text-align: center;
+  }
+
+  div.tabContent {
+    display: flex;
+    flex-direction: row;
+  }
+
 `;
 
 export default GlobalStyle

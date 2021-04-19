@@ -1,0 +1,49 @@
+.editUser {
+    margin: 0 auto 0 auto;
+    min-width: 100%;
+}
+
+.tabContent {
+    display: flex;
+    flex-direction: row;
+}
+
+.formContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    min-width: 75%;
+}
+
+.first-lastname-box {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.firstName {
+    width: 50%;
+    margin-right: 2%;
+}
+
+.lastName {
+    width: 50%;
+    margin-left: 2%;
+}
+
+.password1 {
+    width: 50%;
+    margin-right: 2%;
+}
+
+.password2 {
+    width: 50%;
+    margin-left: 2%;
+}
+
+.password-box {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
