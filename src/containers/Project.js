@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import "./Project.css";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
 import LoaderButton from "../components/LoaderButton";

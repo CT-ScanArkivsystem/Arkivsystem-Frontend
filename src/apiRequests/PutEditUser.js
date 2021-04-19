@@ -33,8 +33,8 @@ export default async function PutEditUser(userId, email, firstName, lastName, ro
             })
         });
         result = await res.json();
-        if (result !== null && result !== "") {
-
+        if (res.ok) {
+            console.log("200 OK: Successfully edited user")
         } else {
             result = [];
             console.log("Project was not created!");
@@ -42,7 +42,7 @@ export default async function PutEditUser(userId, email, firstName, lastName, ro
 
     } catch (e) {
         onError(e);
-        console.log("User was not created due to an error!");
+        console.log("User was not edited due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
     return result;

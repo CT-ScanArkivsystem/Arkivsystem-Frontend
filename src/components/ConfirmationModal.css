@@ -1,0 +1,22 @@
+.Modal {
+    position: absolute;
+    padding: 20px;
+    top: 20%;
+    left: 20%;
+    right: 20%;
+    bottom: 50%;
+    border: gray 2px solid;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+}
+
+.modalButtons {
+    margin: 0 auto 0 auto;
+
+}
+
+.modalButton {
+    width: 20%;
+    margin: 8px;
+}

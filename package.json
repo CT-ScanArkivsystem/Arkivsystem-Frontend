@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "mobx": "^6.1.6",
+    "react-modal": "^3.13.1",
     "react-router-dom": "^5.2.0"
   }
 }
