@@ -1,7 +1,7 @@
 import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
-export default async function DeleteDeleteUser(userId) {
+export default async function DeleteUser(userId) {
     let result;
     try {
         console.log("Trying to delete user with ID: " + userId)
