@@ -1,0 +1,23 @@
+.Modal {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 20px;
+    top: 20%;
+    left: 30%;
+    right: 30%;
+    border: gray 2px solid;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+}
+
+.modalText {
+    flex-grow: 1;
+    height: 5em;
+}
+
+.modalButton {
+    width: 30%;
+    margin: 8px;
+}

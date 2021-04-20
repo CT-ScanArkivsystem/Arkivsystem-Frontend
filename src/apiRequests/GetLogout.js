@@ -7,7 +7,6 @@ import {currentIP} from "../App";
  * Note, this does not check if the users token is deleted, but whether or not any errors occurred during the process.
  * Request is sent to 'CurrentIP/auth/logout'
  *
- * @param currentIP is the currently used IP for the backend API which the frontend makes calls to.
  * @returns boolean didUserGetLoggedOut if the user got logged out successfully, returns true. Else false.
  */
 export default async function GetLogout() {

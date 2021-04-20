@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Nav, Navbar, NavDropdown} from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { useHistory } from "react-router-dom";
+import {LinkContainer} from "react-router-bootstrap";
+import {useHistory} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import GlobalStyle from "./theme/GlobalStyle";
 import Routes from "./Routes";
-import { AppContext } from "./libs/contextLib";
+import {AppContext} from "./libs/contextLib";
 import "./App.css";
 import {onError} from "./libs/errorLib";
 import UserStore from "./stores/UserStore";
@@ -22,7 +22,6 @@ function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
     const history = useHistory();
-
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -55,9 +54,12 @@ function App() {
             let didGetCurrentUser = await GetCurrentUser();
             if (didGetCurrentUser) {
                 userHasAuthenticated(true);
-                history.push("/userFrontpage");
-            }
-            else {
+                if (history.location.pathname === "/") {
+                    history.push("/userFrontpage");
+                } else {
+                    history.push(history.location.pathname);
+                }
+            } else {
                 if (localStorage.getItem("jwt") === undefined) {
                     console.log(localStorage.getItem("jwt"))
                     await GetLogout();
@@ -66,8 +68,7 @@ function App() {
                 history.push("/");
                 console.log("Failed to retrieve user information");
             }
-        }
-        catch (e) {
+        } catch (e) {
             onError(e);
             //Send the user to the home page. Prevents the user from accessing sites when not logged in.
             history.push("/");
@@ -75,6 +76,7 @@ function App() {
         }
         setIsAuthenticating(false);
     }
+
     // TODO: Create user link in navbar should only be shown to admins.
     // TODO: Change what is inside the dropdown button.
 
@@ -82,38 +84,42 @@ function App() {
         !isAuthenticating && (
             <>
                 <GlobalStyle />
-                <div className="App container">
-                    <Navbar collapseOnSelect variant="dark" expand="md">
+                <div className="App">
+                    <Navbar collapseOnSelect variant="dark">
                         {isAuthenticated ? (
                             <LinkContainer to="/userFrontpage">
                                 <Navbar.Brand href="/" className="font-weight-bold">
-                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
+                                    <img className="navLogo" src={logo} alt="Site logo" />
                                 </Navbar.Brand>
                             </LinkContainer>
                         ) : (
                             <LinkContainer to="/">
                                 <Navbar.Brand href="/" className="font-weight-bold">
-                                    <img className="fileDisplayIcon" src={logo} alt="Filetype icon" />
+                                    <img className="navLogo" src={logo} alt="Site logo" />
                                 </Navbar.Brand>
                             </LinkContainer>
                         )}
-                        <Navbar.Toggle />
+                        <Navbar.Toggle/>
                         <Navbar.Collapse className="justify-content-end">
                             <Nav activeKey={window.location.pathname}>
                                 {isAuthenticated ? (
                                     <>
-                                        <NavDropdown id="navDropdownButton" alignRight active title={UserStore.firstName}>
+                                        <NavDropdown id="navDropdownButton" alignRight active
+                                                     title={UserStore.firstName}>
                                             <LinkContainer to="/userFrontpage">
                                                 <NavDropdown.Item>
                                                     Frontpage
                                                 </NavDropdown.Item>
                                             </LinkContainer>
-                                            <LinkContainer to="/createUser">
-                                                <NavDropdown.Item href="/createUser">
-                                                    Create user
-                                                </NavDropdown.Item>
-                                            </LinkContainer>
-                                            <NavDropdown.Divider />
+                                            {(UserStore.role === "ROLE_ADMIN") ? (
+                                                <LinkContainer to="/AdminPage">
+                                                    <NavDropdown.Item href="/AdminPage">
+                                                        Admin Page
+                                                    </NavDropdown.Item>
+                                                </LinkContainer>
+                                            ) : (<React.Fragment/>)
+                                            }
+                                            <NavDropdown.Divider/>
                                             <NavDropdown.Item onClick={handleLogout}>
                                                 Logout
                                             </NavDropdown.Item>
@@ -129,8 +135,8 @@ function App() {
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
-                    <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-                        <Routes />
+                    <AppContext.Provider value={{isAuthenticated, userHasAuthenticated}}>
+                        <Routes/>
                     </AppContext.Provider>
                 </div>
             </>

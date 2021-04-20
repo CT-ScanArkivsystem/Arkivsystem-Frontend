@@ -3,7 +3,7 @@ import "./UserFrontpage.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import {Link} from "react-router-dom";
-import FileDisplay from "../components/FileDisplay";
+import ProjectDisplay from "../components/filesAndProjects/ProjectDisplay";
 import GetAllProjects from "../apiRequests/GetAllProjects";
 import GetAllTags from "../apiRequests/GetAllTags";
 import {onError} from "../libs/errorLib";
@@ -20,7 +20,6 @@ export default function UserFrontpage() {
 
     const [allTags, setAllTags] = useState([]);
 
-    const [filesToDisplay, setFilesToDisplay] = useState([]);
     const [maxFiles, setMaxFiles] = useState(10);
 
     //Functions in the React.useEffect() will be run once on load of site.
@@ -31,7 +30,6 @@ export default function UserFrontpage() {
     async function initialisation() {
         await initGetAllProjects();
         await initGetAllTags();
-        generateFileDisplays();
         setIsLoading(false);
     }
 
@@ -42,10 +40,10 @@ export default function UserFrontpage() {
     async function initGetAllProjects() {
         try {
             if (!doesHaveProjects) {
-                setAllProjects(await GetAllProjects());
-                if (allProjects.length <= 0) {
+                let tempAllProjects = await GetAllProjects();
+                if (tempAllProjects.length > 0) {
+                    setAllProjects(tempAllProjects);
                     setDoesHaveProjects(true);
-                    console.log("DoesHaveProjects: true")
                 }
             }
         }
@@ -60,29 +58,12 @@ export default function UserFrontpage() {
                 setAllTags(await GetAllTags());
                 if (allTags.length > 0) {
                     setDoesHaveTags(true);
-                    console.log("DoesHaveTags: true")
                 }
             }
         }
         catch (e) {
             onError(e)
         }
-    }
-
-    function generateFileDisplays() {
-        let result = [];
-
-        allProjects.map(function(fileToDisplay) {
-            return (
-                <FileDisplay
-                    className="fileDisplay"
-                    key={"ProjectName" + fileToDisplay.projectName}
-                    filetype="folder"
-                    filename={fileToDisplay.projectName}
-                    fileowner={fileToDisplay.owner.firstName + " " + fileToDisplay.owner.lastName}
-                />
-            )});
-        setFilesToDisplay(result);
     }
 
     /**
@@ -105,16 +86,18 @@ export default function UserFrontpage() {
             let i = 0;
             for (i; (i < max) && (i < allProjects.length); i++) {
                 result.push(
-                    <FileDisplay
-                        className="fileDisplay"
+                    <ProjectDisplay
+                        className="projectDisplay"
                         isproject={true}
                         key={allProjects[i].projectId}
-                        fileid={allProjects[i].projectId}
-                        filename={allProjects[i].projectName}
-                        filedescription={allProjects[i].description}
-                        fileowner={allProjects[i].owner.firstName + " " + allProjects[i].owner.lastName}
-                        fileisprivate={allProjects[i].isPrivate}
-                        filecreationdate={allProjects[i].creation}
+                        projectId={allProjects[i].projectId}
+                        projectName={allProjects[i].projectName}
+                        projectDescription={allProjects[i].description}
+                        projectOwner={allProjects[i].owner}
+                        projectIsPrivate={allProjects[i].isPrivate}
+                        projectCreationDate={allProjects[i].creation}
+                        projectMembers={allProjects[i].projectMembers}
+                        usersWithSpecialPermission={allProjects[i].usersWithSpecialPermission}
                     />
                 );
             }
@@ -194,7 +177,6 @@ export default function UserFrontpage() {
                 <div className="projectContainer">
                     <h1>Your frontpage!</h1>
                     <div className="projects">
-                        {filesToDisplay}
                         {renderFileDisplays(maxFiles)}
                     </div>
                 </div>

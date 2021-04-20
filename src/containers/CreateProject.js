@@ -3,72 +3,39 @@ import React, { useState } from "react";
 import "./CreateProject.css";
 import SideBar from "../components/SideBar";
 import CreateProjectContent from "../components/CreateProjectContent";
-import UploadToProjectContent from "../components/UploadToProjectContent";
+import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectContent";
 import ProjectStore from "../stores/ProjectStore";
 import LoaderButton from "../components/LoaderButton";
 import {Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 export default function CreateProject() {
 
-    const [pageContent, setPageContent] = useState(<CreateProjectContent contentToDetails={contentToDetails}/>);
+    const [pageContent, setPageContent] = useState(<CreateProjectContent />);
     const [creatingProject, setCreatingProject] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
     function contentToCreateProject() {
-        setPageContent(<CreateProjectContent contentToDetails={contentToDetails}/>);
+        // Need to pass contentToDetails to allow for a redirect when the project is created.
+        setPageContent(<CreateProjectContent />);
     }
 
-    function contentToDetails() {
-        setCreatingProject(false);
-        setPageContent(<UploadToProjectContent />)
-
-        /*
-        ProjectStore.projectName = "testProject";
-        ProjectStore.projectDescription = "test desc.";
-        ProjectStore.isPrivate = false;
-        ProjectStore.creationDate = "2021-03-15";
-        ProjectStore.projectId = "adccb882-bc05-4502-816f-6f122eb10728";
-         */
-
-    }
-
-        // <p className="errorMessage">{displayFormError()}</p>
-        // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
     return (
         <div className="CreateProject pageContainer">
             <SideBar>
                 <h3>Options</h3>
-                <LoaderButton
+                <Button
                     className="sideBarButton"
+                    variant="dark"
                     onClick={contentToCreateProject}
                     disabled={!creatingProject}
                 >
                     Create project
-                </LoaderButton>
-                <LoaderButton
-                    className="sideBarButton"
-                    onClick={contentToDetails}
-                    disabled={creatingProject}
-                >
-                    Upload files
-                </LoaderButton>
-                <br/>
-                <Link to="/project">
-                    <LoaderButton
-                        size="bg"
-                        className="toProjectButton"
-                        disabled={creatingProject}
-                        isLoading={isLoading}
-                        onClick={() => setIsLoading(true)}
-                    >
-                        Go to project
-                    </LoaderButton>
-                </Link>
+                </Button>
             </SideBar>
             <div className="pageContent">
-                {pageContent}
+                <CreateProjectContent />
             </div>
-
         </div>
     );
 }
