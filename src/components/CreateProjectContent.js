@@ -9,7 +9,7 @@ import UserStore from "../stores/UserStore";
 import PostCreateProject from "../apiRequests/PostCreateProject";
 
 
-export default function CreateProjectContent(props) {
+export default function CreateProjectContent() {
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [creationDate, setCreationDate] = useState("");
@@ -37,8 +37,6 @@ export default function CreateProjectContent(props) {
                 ProjectStore.isPrivate = isPrivate;
                 ProjectStore.creationDate = creationDate;
                 ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
-                // props.contentToDetails();
-                console.log("Project was created!")
                 history.push("/project");
             } else {
                 console.log("Project was not created!");

@@ -1,0 +1,9 @@
+.App {
+    width: 80vw;
+    min-width: 900px;
+    margin: 0 auto 0 auto;
+}
+
+.navLogo {
+    height: 30px;
+}

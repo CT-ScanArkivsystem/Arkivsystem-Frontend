@@ -1,0 +1,64 @@
+.uploadButton {
+    margin: 8px;
+    width: 35%;
+    min-width: 80px;
+}
+
+.uploadContent {
+    display: flex;
+    height: 100%;
+}
+
+.uploadFiles {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.uploadToProjectForm {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    min-height: 150px;
+    align-items: center;
+    text-align: center;
+}
+
+.projectSubFolderContainer {
+    margin-right: 8px;
+    text-align: center;
+    flex: 1;
+    min-width: 30%;
+    max-width: 40%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    text-align: center;
+    padding: 0 0 0 8px;
+    height: 100%;
+    border-left: 1px solid black;
+}
+
+.uploadHeader {
+    text-align: center;
+}
+
+.newFolderTextInput {
+    width: 100%;
+    height: 35px;
+}
+
+.hiddenButton {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+}
+
+.width100 {
+    width: 100%;
+}

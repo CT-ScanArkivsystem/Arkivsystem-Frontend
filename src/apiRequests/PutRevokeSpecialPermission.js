@@ -2,22 +2,20 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 /**
- * Sends an API PUT request to add a tag to a project.
+ * Sends an API PUT request to revoke a user special permissions from the project.
  *
  * @param projectId String that identifies the project the user wants to add tags to.
- * @param tagNames any[] that holds the tags the user wants to add to the project.
+ * @param userEmail the email of the member that is to be added to the project.
  * @returns Promise result the result from the server. Contains the project that was updated.
  */
-export default async function PutAddTag(projectId, tagNames) {
-    let result;
+export default async function PutRevokeSpecialPermission(projectId, userEmail) {
+    let res;
     try {
         let urlencoded = new URLSearchParams();
-        urlencoded.append("projectId", projectId)
-        tagNames.forEach(tag => {
-            urlencoded.append("tagNames", tag);
-        })
+        urlencoded.append("projectId", projectId);
+        urlencoded.append("userEmail", userEmail);
 
-        let res = await fetch(currentIP + '/academic/addTag', {
+        res = await fetch(currentIP + '/academic/revokeSpecialPermission', {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -25,17 +23,17 @@ export default async function PutAddTag(projectId, tagNames) {
             },
             body: urlencoded
         });
-        result = await res.json();
+
         if (res.ok) {
-            //console.log("Tags were added!");
+            //console.log("Special permission revoke!");
+            //console.log(res)
         } else {
-            result = [];
-            console.log("Tags were not added!");
+            console.log("Did not revoke permissions!");
         }
     } catch (e) {
         onError(e);
-        console.log("Tags were not added due to an error!");
+        console.log("Permissions were not revoked!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return result;
+    return res;
 }

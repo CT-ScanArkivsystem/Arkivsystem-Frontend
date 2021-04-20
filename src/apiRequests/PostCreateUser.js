@@ -28,10 +28,9 @@ export default async function PostCreateUser(firstName, lastName, email, passwor
                 role: role
             })
         });
-        let result = await res.json();
-        if (result !== null && result !== "") {
+
+        if (res.ok) {
             didUserGetCreated = true;
-            // TODO: Pull information about the newly made user and show it on the page!
         } else {
             console.log("User was not created!");
         }

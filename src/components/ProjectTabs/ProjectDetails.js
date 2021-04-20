@@ -4,8 +4,6 @@ import "./ProjectDetails.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../LoaderButton";
 import TagDisplay from "../TagDisplay";
-import GetProject from "../../apiRequests/GetProject";
-import GetAllTags from "../../apiRequests/GetAllTags";
 import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
@@ -17,53 +15,14 @@ export default function ProjectDetails(props) {
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
-    const [allTags, setAllTags] = useState([]);
-    const [projectTags, setProjectTags] = useState([]);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
     const [tagsToBeRemoved, setTagsToBeRemoved] = useState([]);
-
-    //Functions in the React.useEffect() will be run once on load of site.
-    React.useEffect(() => {
-        initialisation();
-    }, []);
-
-    async function initialisation() {
-        let project = await GetProject(ProjectStore.projectId);
-
-        let tagsVar = trimTagArray(project.tags, project.tags);
-        setProjectTags(tagsVar);
-
-        tagsVar = trimTagArray(await GetAllTags(), project.tags);
-        setAllTags(tagsVar);
-    }
-
-    function trimTagArray(arrayToTrim, projectTagArray) {
-        let trimmedProjectTags = [];
-        if (arrayToTrim) {
-            for (let i = 0; i < arrayToTrim.length; i++) {
-                trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
-            }
-        }
-        return trimmedProjectTags;
-    }
-
-    function checkIfTagIsInProject(tagToCheck, projectTagArray) {
-        let isTagInProject = false;
-        if (projectTagArray && projectTagArray.length > 0) {
-            for (let i = 0; i < projectTagArray.length && isTagInProject === false; i++) {
-                if (tagToCheck === projectTagArray[i].tagName) {
-                    isTagInProject = true;
-                }
-            }
-        }
-        return isTagInProject;
-    }
 
     function renderProjectTags() {
         let result = [];
 
-        if (projectTags !== []) {
-            result = allTags.map(function(tagToDisplay) {
+        if (props.projectTags !== []) {
+            result = props.allTags.map(function(tagToDisplay) {
                 return (
                     <TagDisplay
                         key={"TagKey" + tagToDisplay.tagName}

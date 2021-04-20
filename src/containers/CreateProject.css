@@ -1,13 +1,11 @@
-@media all and (min-width: 480px) {
-    .CreateProject {
-        padding: 60px 0;
-    }
+.CreateProject {
+    padding: 60px 0;
+}
 
-    .errorMessage {
-        color: red;
-    }
+.errorMessage {
+    color: red;
+}
 
-    .toProjectButton {
-        width: 100%;
-    }
+.toProjectButton {
+    width: 100%;
 }

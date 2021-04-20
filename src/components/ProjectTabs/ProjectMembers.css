@@ -2,8 +2,6 @@
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
-    margin: 0 auto 0 auto;
-    width: 100%;
 }
 
 .tabHeader {
@@ -16,21 +14,37 @@
 }
 
 .memberListContainer {
-    width: 50%;
+}
+
+.informationAndAddMember {
+    width: 95%;
+}
+
+.memberList {
+    padding: 4px 0 4px 0;
+    margin-right: 4px;
+    overflow: auto;
+    width: 30vw;
+    max-height: 40vh;
 }
 
 .memberButtons {
     display: flex;
     flex-direction: row;
+    margin-top: 8px;
 }
 
 .grantOwnershipButton {
-    color: blue;
+    width: 50%;
+    margin: 0 4px 0 4px;
 }
 
-.informationAndAddMember {
+.removeMemberButton {
     width: 50%;
+    margin: 0 4px 0 4px;
 }
+
+
 
 .addMember {
     display: flex;
