@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import ProjectDisplay from "../components/filesAndProjects/ProjectDisplay";
 import GetAllProjects from "../apiRequests/GetAllProjects";
 import GetAllTags from "../apiRequests/GetAllTags";
+import GetSearchForProjects from "../apiRequests/GetSearchForProjects";
 import {onError} from "../libs/errorLib";
 import TagDisplay from "../components/TagDisplay";
 import SideBar from "../components/SideBar";
@@ -15,6 +16,7 @@ export default function UserFrontpage() {
     const [isLoading, setIsLoading] = useState(true);
     const [doesHaveProjects, setDoesHaveProjects] = useState(false);
     const [doesHaveTags, setDoesHaveTags] = useState(false);
+    const [checkedTags, setCheckedTags] = useState([]);
 
     const [allProjects, setAllProjects] = useState([]);
 
@@ -75,9 +77,9 @@ export default function UserFrontpage() {
     }
 
     /**
-     * Renders the next Projects as FileDisplays onto the page.
-     * @param max decides the max amount of FileDisplays that can be shown at one time.
-     * @returns {[]} An array of FileDisplays
+     * Renders the next Projects as ProjectDisplays onto the page.
+     * @param max decides the max amount of ProjectDisplays that can be shown at one time.
+     * @returns {[]} An array of ProjectDisplays
      */
     function renderFileDisplays(max) {
         let result = [];
@@ -120,13 +122,30 @@ export default function UserFrontpage() {
                 key={"TagName" + tagToDisplay.tagName}
                 id={"TagName" + tagToDisplay.tagName}
                 label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
-                index={tagToDisplay.numberOfProjects}
                 value={tagToDisplay.tagName}
+                onClick={() => toggleTagInList(tagToDisplay)}
             />
             )
         });
 
         return result;
+    }
+
+    /**
+     * If the file provided is in the filesToDownload list it will remove it.
+     * If the file is not in the list, it will be added.
+     * @param tag that is to be added or removed.
+     */
+    function toggleTagInList(tag) {
+        if (checkedTags.indexOf(tag.tagName) !== -1) {
+            let tempArray = [...checkedTags];
+            let indexToRemove = tempArray.indexOf(tag.tagName);
+            tempArray.splice(indexToRemove, 1);
+            setCheckedTags(tempArray);
+        }
+        else {
+            setCheckedTags(checkedTags.concat([tag.tagName]));
+        }
     }
 
     /**
@@ -136,6 +155,9 @@ export default function UserFrontpage() {
      */
     async function handleSubmit(event) {
         event.preventDefault();
+
+        let result = await GetSearchForProjects(searchInput, checkedTags);
+
         console.log("HandleSubmit! in UserFrontpage")
     }
 
@@ -175,7 +197,6 @@ export default function UserFrontpage() {
             </SideBar>
             <div className="frontPageContainer pageContent">
                 <div className="projectContainer">
-                    <h1>Your frontpage!</h1>
                     <div className="projects">
                         {renderFileDisplays(maxFiles)}
                     </div>
