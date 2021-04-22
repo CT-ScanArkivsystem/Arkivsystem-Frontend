@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import "./ProjectDisplay.css";
-import folderIcon from "../../images/Image-Folder-icon.png";
+import projectIcon from "../../images/fileIcons/zip.svg";
+import privateProjectIcon from "../../images/fileIcons/privateProject.svg";
 import ProjectStore from "../../stores/ProjectStore";
 
 /**
@@ -29,7 +30,7 @@ export default function ProjectDisplay ({...props}) {
     return (
         <Link onClick={setProjectIdToStore} to="/project" className="noUnderlineOnHover">
             <div className="projectDisplay customBorderAndText highlightOnHover noUnderLineOnHover">
-                <img className="projectDisplayIcon" src={props.projectIsPrivate ? folderIcon : folderIcon} alt="Project icon" />
+                <img className="projectDisplayIcon" src={props.projectIsPrivate ? privateProjectIcon : projectIcon} alt="Project icon" />
                 <span className="projectDisplayName">{props.projectName}</span>
                 <span className="projectDisplayOwner">
                     {props.projectOwnerName
