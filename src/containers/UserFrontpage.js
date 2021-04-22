@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./UserFrontpage.css";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
@@ -10,6 +10,8 @@ import GetSearchForProjects from "../apiRequests/GetSearchForProjects";
 import {onError} from "../libs/errorLib";
 import TagDisplay from "../components/TagDisplay";
 import SideBar from "../components/SideBar";
+import Button from "react-bootstrap/Button";
+import {Dropdown} from "react-bootstrap";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -18,8 +20,12 @@ export default function UserFrontpage() {
     const [doesHaveTags, setDoesHaveTags] = useState(false);
     const [checkedTags, setCheckedTags] = useState([]);
 
-    const [allProjects, setAllProjects] = useState([]);
-    const [projectsToDisplay, setProjectsToDisplay] = useState([])
+    const [projectsToDisplay, setProjectsToDisplay] = useState([]);
+    const [projectDisplay, setProjectDisplay] = useState([]);
+
+    const [didSearch, setDidSearch] = useState(false);
+    const [sortBy, setSortBy] = useState("none");
+    const [sortByUserText, setSortByUserText] = useState("None");
 
     const [allTags, setAllTags] = useState([]);
 
@@ -45,7 +51,6 @@ export default function UserFrontpage() {
             if (!doesHaveProjects) {
                 let tempAllProjects = await GetAllProjects();
                 if (tempAllProjects.length > 0) {
-                    setAllProjects(tempAllProjects);
                     setProjectsToDisplay(tempAllProjects);
                     setDoesHaveProjects(true);
                 }
@@ -59,8 +64,9 @@ export default function UserFrontpage() {
     async function initGetAllTags() {
         try {
             if (!doesHaveTags) {
-                setAllTags(await GetAllTags());
-                if (allTags.length > 0) {
+                let tempAllTags = await GetAllTags();
+                if (tempAllTags.length > 0) {
+                    setAllTags(tempAllTags);
                     setDoesHaveTags(true);
                 }
             }
@@ -80,14 +86,19 @@ export default function UserFrontpage() {
 
     /**
      * Renders the next Projects as ProjectDisplays onto the page.
-     * @param max decides the max amount of ProjectDisplays that can be shown at one time.
+     * @param projectList the list of projects that will be the starting point for what we render.
+     * @param currentSortBy the string that decides what the projects will be sorted by.
      * @returns {[]} An array of ProjectDisplays
      */
-    function renderFileDisplays(max) {
+    function renderProjectDisplay(projectList, currentSortBy) {
         let result = [];
 
-        if (projectsToDisplay) {
-            result = projectsToDisplay.map((project) => {
+        let sortedList = sortProjectList(projectList, currentSortBy);
+        console.log("sorted list:")
+        console.log(sortedList)
+
+        if (sortedList) {
+            result = sortedList.map((project) => {
                 return(
                     <ProjectDisplay
                         className="projectDisplay"
@@ -100,6 +111,19 @@ export default function UserFrontpage() {
                     />
                 );
             })
+        }
+
+        return result;
+    }
+
+    function sortProjectList(projectList, currentSortBy) {
+        let result = [];
+
+        if (didSearch && currentSortBy !== "none") {
+            result = projectList.filter(project => project.resultInfo.some(info => info === currentSortBy))
+            console.log(result)
+        } else {
+            result = projectList;
         }
 
         return result;
@@ -158,8 +182,8 @@ export default function UserFrontpage() {
         switch (res.status) {
             case 200:
                 result = await res.json();
-                console.log(result)
                 setProjectsToDisplay(result);
+                setDidSearch(true);
                 break;
             case 204:
                 result = [];
@@ -175,9 +199,38 @@ export default function UserFrontpage() {
                 break;
         }
 
-
-
         return result;
+    }
+
+    function getSortByUserText(currentSortBy) {
+        let sortByUserText;
+        switch (currentSortBy) {
+            case "none":
+                sortByUserText = "None";
+                break;
+            case "name":
+                sortByUserText = "Project name";
+                break;
+            case "owner":
+                sortByUserText = "Project owner";
+                break;
+            case "description":
+                sortByUserText = "Project description";
+                break;
+            case "member":
+                sortByUserText = "Project members";
+                break;
+            case "project_Tag":
+                sortByUserText = "Project tags";
+                break;
+            case "file_tag":
+                sortByUserText = "File tags";
+                break;
+            default:
+                sortByUserText = "None";
+                break;
+        }
+        return sortByUserText;
     }
 
     function validateForm() {
@@ -199,10 +252,6 @@ export default function UserFrontpage() {
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group size="lg" className="checkboxContainer">
-                        {renderAllTags()}
-                    </Form.Group>
-
                     <LoaderButton
                         block
                         size="sm"
@@ -212,12 +261,33 @@ export default function UserFrontpage() {
                     >
                         Search
                     </LoaderButton>
+                    <Form.Group className="dropdown">
+                        <Dropdown className="test">
+                            <Dropdown.Toggle size="sm" variant="outline-dark" className="dropdownButton">
+                                Sort by: {getSortByUserText(sortBy)}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onSelect={() => setSortBy("none")}>None</Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Item onSelect={() => setSortBy("name")}>Project name</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("owner")}>Project owner</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("description")}>Project description</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("member")}>Project members</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("project_Tag")}>Project tags</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("file_tag")}>File tags</Dropdown.Item>
+
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Form.Group>
+                    <Form.Group size="lg" className="checkboxContainer">
+                        {renderAllTags()}
+                    </Form.Group>
                 </Form>
             </SideBar>
             <div className="frontPageContainer pageContent">
                 <div className="projectContainer">
                     <div className="projects">
-                        {renderFileDisplays(maxFiles)}
+                        {renderProjectDisplay(projectsToDisplay, sortBy)}
                     </div>
                 </div>
                 <div className="containerFooter">
