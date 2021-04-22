@@ -13,34 +13,30 @@ import ProjectStore from "../../stores/ProjectStore";
 export default function ProjectDisplay ({...props}) {
 
     // This sets the default properties of the file. Also works as a guide to what needs to be input.
+    // Some of these are not needed anymore as they will be gotten when going to the project.
     ProjectDisplay.defaultProps = {
         projectId: "Default ID",
         projectName: "Default name",
-        projectDescription: "Default description",
         projectOwner: "Default Owner",
-        projectIsPrivate: true,
-        projectCreationDate: "2021-04-14",
-        projectMembers: [],
-        usersWithSpecialPermission: []
+        projectOwnerName: undefined,
+        projectIsPrivate: false
     }
 
-    function putProjectIntoStore() {
-            ProjectStore.projectId = props.projectId;
-            ProjectStore.projectName = props.projectName;
-            ProjectStore.projectDescription = props.projectDescription;
-            ProjectStore.projectOwner = props.projectOwner;
-            ProjectStore.isPrivate = props.projectIsPrivate;
-            ProjectStore.creationDate = props.projectCreationDate;
-            ProjectStore.projectMembers = props.projectMembers;
-            ProjectStore.usersWithSpecialPermission = props.usersWithSpecialPermission;
+    function setProjectIdToStore() {
+        ProjectStore.projectId = props.projectId;
     }
 
     return (
-        <Link onClick={putProjectIntoStore} to="/project" className="noUnderlineOnHover">
+        <Link onClick={setProjectIdToStore} to="/project" className="noUnderlineOnHover">
             <div className="projectDisplay customBorderAndText highlightOnHover noUnderLineOnHover">
-                <img className="projectDisplayIcon" src={folderIcon} alt="Project icon" />
+                <img className="projectDisplayIcon" src={props.projectIsPrivate ? folderIcon : folderIcon} alt="Project icon" />
                 <span className="projectDisplayName">{props.projectName}</span>
-                <span className="projectDisplayOwner">{props.projectOwner.firstName + " " + props.projectOwner.lastName}</span>
+                <span className="projectDisplayOwner">
+                    {props.projectOwnerName
+                        ? props.projectOwnerName
+                        : props.projectOwner.firstName + " " + props.projectOwner.lastName
+                    }
+                </span>
             </div>
         </Link>
     );

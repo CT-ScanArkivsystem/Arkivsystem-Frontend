@@ -8,9 +8,9 @@ import {currentIP} from "../App";
  * @returns Promise result the result from the server. This contains all the projects that fit the parameters.
  */
 export default async function GetSearchForProjects(searchParam, tagFilter) {
-    let result = [];
+    let res;
     try {
-        let res = await fetch(currentIP +
+        res = await fetch(currentIP +
             '/user/search?search=' + searchParam +
             '&tagFilter=' + tagFilter,
             {
@@ -21,13 +21,11 @@ export default async function GetSearchForProjects(searchParam, tagFilter) {
             },
         });
 
-        result = await res.json();
-
         if (res.ok) {
             //console.log("Got all projects");
         }
         else {
-            result = [];
+            res = false;
             console.log("Could not get projects.");
         }
 
@@ -35,5 +33,5 @@ export default async function GetSearchForProjects(searchParam, tagFilter) {
         onError(e);
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return (result);
+    return (res);
 }

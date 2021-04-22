@@ -67,6 +67,8 @@ export default function Project() {
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
 
+        putProjectIntoStore(project);
+
         let tagsInProject = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsInProject);
 
@@ -83,6 +85,21 @@ export default function Project() {
 
         //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
         setIsLoading(false);
+    }
+
+    /**
+     * This function will set all the information in the project into the store.
+     * @param project that the user is currently viewing.
+     */
+    function putProjectIntoStore(project) {
+        ProjectStore.projectId = project.projectId;
+        ProjectStore.projectName = project.projectName;
+        ProjectStore.projectDescription = project.description;
+        ProjectStore.projectOwner = project.owner;
+        ProjectStore.isPrivate = project.isPrivate;
+        ProjectStore.creationDate = project.creation;
+        ProjectStore.projectMembers = project.projectMembers;
+        ProjectStore.usersWithSpecialPermission = project.usersWithSpecialPermission;
     }
 
     /**
@@ -182,22 +199,23 @@ export default function Project() {
         let result = [];
 
         result = projectPages.map((page) => {
-            return(<Button
-                className="sideBarButton noHighlight"
-                key={page.pageName}
-                variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
-                disabled={isLoading}
-                onClick={() => {
-                    setPageContent(page.pageElement)
-                    if (currentPage === page.pageName) {
-                        setCurrentPage("");
-                    } else {
-                        setCurrentPage(page.pageName);
-                    }
-                }}
-            >
-                {page.pageName}
-            </Button>
+            return(
+                <Button
+                    className="sideBarButton noHighlight"
+                    key={page.pageName}
+                    variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
+                    disabled={isLoading}
+                    onClick={() => {
+                        setPageContent(page.pageElement)
+                        if (currentPage === page.pageName) {
+                            setCurrentPage("");
+                        } else {
+                            setCurrentPage(page.pageName);
+                        }
+                    }}
+                >
+                    {page.pageName}
+                </Button>
             )
         })
 

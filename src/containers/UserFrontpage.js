@@ -19,6 +19,7 @@ export default function UserFrontpage() {
     const [checkedTags, setCheckedTags] = useState([]);
 
     const [allProjects, setAllProjects] = useState([]);
+    const [projectsToDisplay, setProjectsToDisplay] = useState([])
 
     const [allTags, setAllTags] = useState([]);
 
@@ -45,6 +46,7 @@ export default function UserFrontpage() {
                 let tempAllProjects = await GetAllProjects();
                 if (tempAllProjects.length > 0) {
                     setAllProjects(tempAllProjects);
+                    setProjectsToDisplay(tempAllProjects);
                     setDoesHaveProjects(true);
                 }
             }
@@ -84,28 +86,22 @@ export default function UserFrontpage() {
     function renderFileDisplays(max) {
         let result = [];
 
-        if (doesHaveProjects) {
-            let i = 0;
-            for (i; (i < max) && (i < allProjects.length); i++) {
-                result.push(
+        if (projectsToDisplay) {
+            result = projectsToDisplay.map((project) => {
+                return(
                     <ProjectDisplay
                         className="projectDisplay"
-                        isproject={true}
-                        key={allProjects[i].projectId}
-                        projectId={allProjects[i].projectId}
-                        projectName={allProjects[i].projectName}
-                        projectDescription={allProjects[i].description}
-                        projectOwner={allProjects[i].owner}
-                        projectIsPrivate={allProjects[i].isPrivate}
-                        projectCreationDate={allProjects[i].creation}
-                        projectMembers={allProjects[i].projectMembers}
-                        usersWithSpecialPermission={allProjects[i].usersWithSpecialPermission}
+                        key={project.projectId}
+                        projectId={project.projectId}
+                        projectName={project.projectName}
+                        projectOwner={project.owner}
+                        projectOwnerName={project.ownerName}
+                        projectIsPrivate={project.isPrivate}
                     />
                 );
-            }
-        } else {
-            result = ["No projects found!"];
+            })
         }
+
         return result;
     }
 
@@ -156,9 +152,32 @@ export default function UserFrontpage() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let result = await GetSearchForProjects(searchInput, checkedTags);
+        let res = await GetSearchForProjects(searchInput, checkedTags);
+        let result;
 
-        console.log("HandleSubmit! in UserFrontpage")
+        switch (res.status) {
+            case 200:
+                result = await res.json();
+                console.log(result)
+                setProjectsToDisplay(result);
+                break;
+            case 204:
+                result = [];
+                break;
+            case 400:
+                console.log("Bad request in GetSearchForProjects");
+                break;
+            case 500:
+                console.log("An unknown error occurred! 500");
+                break;
+            default:
+                console.log("Unknown status code!")
+                break;
+        }
+
+
+
+        return result;
     }
 
     function validateForm() {
