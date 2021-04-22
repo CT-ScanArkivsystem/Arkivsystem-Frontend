@@ -7,7 +7,7 @@ export default async function DeleteTags(tagNames) {
     try {
         let urlencoded = new URLSearchParams();
         tagNames.forEach(tag => {
-            urlencoded.append("tagNames", tag);
+            urlencoded.append("tagNames", tag.tagName);
         })
 
         let res = await fetch(currentIP + '/admin/deleteTags', {
