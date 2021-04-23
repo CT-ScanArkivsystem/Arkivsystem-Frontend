@@ -207,7 +207,7 @@ export default function UserFrontpage() {
         setIsLoading(true);
         let res;
 
-        if (searchInput === "") {
+        if (searchInput === "" && checkedTags.length < 1) {
             res = await GetAllProjects();
             gotFromSearch = false;
         } else {
