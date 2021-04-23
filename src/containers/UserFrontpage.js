@@ -307,6 +307,6 @@ export default function UserFrontpage() {
                         </Link>
                     </div>
                 </div>
-                </div>
+        </div>
     );
 }

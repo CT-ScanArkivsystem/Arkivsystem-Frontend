@@ -95,8 +95,7 @@ const GlobalStyle = createGlobalStyle`
     border: ${secondaryColor} 2px solid;
     padding: 4px;
     display: flex;
-    max-width: 80%;
-    flex-grow: 100;
+    width: 100%;
   }
 
   div.containerFooter {
@@ -114,7 +113,6 @@ const GlobalStyle = createGlobalStyle`
   button.noHighlight:focus {
     box-shadow: none;
   }
-  
 
   div.tabHeader {
     text-align: center;
@@ -123,6 +121,7 @@ const GlobalStyle = createGlobalStyle`
   div.tabContent {
     display: flex;
     flex-direction: row;
+    width: 100%;
   }
 
 `;
