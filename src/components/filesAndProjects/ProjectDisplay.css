@@ -12,8 +12,18 @@
 
 .projectDisplayName {
     flex-grow: 1;
+    min-width: 20em;
+    max-width: 20em;
     text-align: start;
     margin: 0 2px 0 6px;
+}
+
+.projectResultInfo {
+    flex-grow: 1;
+    margin-left: 4px;
+    margin-right: 4px;
+    text-align: left;
+    color: #565656;
 }
 
 .projectDisplayOwner {

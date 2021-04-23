@@ -30,7 +30,7 @@ export default function FileDisplay ({...props}) {
         hasCheckbox: false
     }
 
-    let filetypeHashmap = new Map([
+    const filetypeHashmap = new Map([
         ["unknown", unknownIcon],
         ["gif", imageIcon],
         // All JPEG formats

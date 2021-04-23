@@ -20,11 +20,39 @@ export default function ProjectDisplay ({...props}) {
         projectName: "Default name",
         projectOwner: "Default Owner",
         projectOwnerName: undefined,
-        projectIsPrivate: false
+        projectIsPrivate: false,
+        projectResultInfo: ""
     }
+
+    const resultInfoHashmap = new Map([
+        ["name", "Name"],
+        ["owner", "Owner"],
+        ["description", "Description"],
+        ["member", "Member"],
+        ["project_Tag", "Project tag"],
+        ["file_tag", "File tag"],
+    ])
+
+    let infoToDisplay = "";
 
     function setProjectIdToStore() {
         ProjectStore.projectId = props.projectId;
+    }
+
+    function checkResultInfo(projectResultInfo) {
+
+    }
+
+    function getResultInfo() {
+        // Checks if the extension found is the same as the filename. If it is it's a folder.
+        if (props.projectResultInfo) {
+            if (resultInfoHashmap.has(props.projectResultInfo[0])) {
+                infoToDisplay = resultInfoHashmap.get(props.projectResultInfo[0]);
+            } else {
+                infoToDisplay = "";
+            }
+        }
+        return(infoToDisplay);
     }
 
     return (
@@ -32,6 +60,7 @@ export default function ProjectDisplay ({...props}) {
             <div className="projectDisplay customBorderAndText highlightOnHover noUnderLineOnHover">
                 <img className="projectDisplayIcon" src={props.projectIsPrivate ? privateProjectIcon : projectIcon} alt="Project icon" />
                 <span className="projectDisplayName">{props.projectName}</span>
+                <span className="projectResultInfo">{getResultInfo()}</span>
                 <span className="projectDisplayOwner">
                     {props.projectOwnerName
                         ? props.projectOwnerName

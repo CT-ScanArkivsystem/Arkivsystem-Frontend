@@ -10,7 +10,7 @@ import GetSearchForProjects from "../apiRequests/GetSearchForProjects";
 import {onError} from "../libs/errorLib";
 import TagDisplay from "../components/TagDisplay";
 import SideBar from "../components/SideBar";
-import Button from "react-bootstrap/Button";
+import LoadingPage from "./LoadingPage";
 import {Dropdown} from "react-bootstrap";
 
 export default function UserFrontpage() {
@@ -50,8 +50,8 @@ export default function UserFrontpage() {
         try {
             if (!doesHaveProjects) {
                 let tempAllProjects = await GetAllProjects();
-                if (tempAllProjects.length > 0) {
-                    setProjectsToDisplay(tempAllProjects);
+                if (tempAllProjects.ok) {
+                    setProjectsToDisplay(await tempAllProjects.json());
                     setDoesHaveProjects(true);
                 }
             }
@@ -94,11 +94,9 @@ export default function UserFrontpage() {
         let result = [];
 
         let sortedList = sortProjectList(projectList, currentSortBy);
-        console.log("sorted list:")
-        console.log(sortedList)
 
         if (sortedList) {
-            result = sortedList.map((project) => {
+            result = sortedList.slice(0, maxFiles).map((project) => {
                 return(
                     <ProjectDisplay
                         className="projectDisplay"
@@ -108,6 +106,7 @@ export default function UserFrontpage() {
                         projectOwner={project.owner}
                         projectOwnerName={project.ownerName}
                         projectIsPrivate={project.isPrivate}
+                        projectResultInfo={project.resultInfo}
                     />
                 );
             })
@@ -121,7 +120,6 @@ export default function UserFrontpage() {
 
         if (didSearch && currentSortBy !== "none") {
             result = projectList.filter(project => project.resultInfo.some(info => info === currentSortBy))
-            console.log(result)
         } else {
             result = projectList;
         }
@@ -168,6 +166,36 @@ export default function UserFrontpage() {
         }
     }
 
+    function getSortByUserText(currentSortBy) {
+        let sortByUserText = "";
+        switch (currentSortBy) {
+            case "none":
+                sortByUserText = "None";
+                break;
+            case "name":
+                sortByUserText = "Project name";
+                break;
+            case "description":
+                sortByUserText = "Project description";
+                break;
+            case "owner":
+                sortByUserText = "Project owner";
+                break;
+            case "member":
+                sortByUserText = "Project members";
+                break;
+            case "project_Tag":
+                sortByUserText = "Project tags";
+                break;
+            case "file_tag":
+                sortByUserText = "File tags";
+                break;
+            default:
+                break;
+        }
+        return sortByUserText;
+    }
+
     /**
      * When the user clicks the search button and searches for projects
      * @param event holds the information in the forms when the submit button was pressed.
@@ -175,8 +203,14 @@ export default function UserFrontpage() {
      */
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
+        let res;
 
-        let res = await GetSearchForProjects(searchInput, checkedTags);
+        if (searchInput === "") {
+            res = await GetAllProjects();
+        } else {
+            res = await GetSearchForProjects(searchInput, checkedTags);
+        }
         let result;
 
         switch (res.status) {
@@ -198,48 +232,19 @@ export default function UserFrontpage() {
                 console.log("Unknown status code!")
                 break;
         }
-
+        setIsLoading(false);
         return result;
     }
 
-    function getSortByUserText(currentSortBy) {
-        let sortByUserText;
-        switch (currentSortBy) {
-            case "none":
-                sortByUserText = "None";
-                break;
-            case "name":
-                sortByUserText = "Project name";
-                break;
-            case "owner":
-                sortByUserText = "Project owner";
-                break;
-            case "description":
-                sortByUserText = "Project description";
-                break;
-            case "member":
-                sortByUserText = "Project members";
-                break;
-            case "project_Tag":
-                sortByUserText = "Project tags";
-                break;
-            case "file_tag":
-                sortByUserText = "File tags";
-                break;
-            default:
-                sortByUserText = "None";
-                break;
-        }
-        return sortByUserText;
-    }
+
 
     function validateForm() {
         return true;
         // TODO: Validate when you know how to validate
         //return email.length > 0 && password.length > 0;
     }
+
     return (
-        !isLoading && (
         <div className="userFrontpage pageContainer">
             <SideBar>
                 <Form onSubmit={handleSubmit}>
@@ -267,15 +272,14 @@ export default function UserFrontpage() {
                                 Sort by: {getSortByUserText(sortBy)}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item onSelect={() => setSortBy("none")}>None</Dropdown.Item>
-                                <Dropdown.Divider />
                                 <Dropdown.Item onSelect={() => setSortBy("name")}>Project name</Dropdown.Item>
-                                <Dropdown.Item onSelect={() => setSortBy("owner")}>Project owner</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("description")}>Project description</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("owner")}>Project owner</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("member")}>Project members</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("project_Tag")}>Project tags</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("file_tag")}>File tags</Dropdown.Item>
-
+                                <Dropdown.Divider />
+                                <Dropdown.Item onSelect={() => setSortBy("none")}>None</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Form.Group>
@@ -284,33 +288,35 @@ export default function UserFrontpage() {
                     </Form.Group>
                 </Form>
             </SideBar>
-            <div className="frontPageContainer pageContent">
-                <div className="projectContainer">
-                    <div className="projects">
-                        {renderProjectDisplay(projectsToDisplay, sortBy)}
+                <div className="frontPageContainer pageContent">
+                    <div className="projectContainer">
+                        {isLoading ? <LoadingPage/> :
+                        <div className="projects">
+                            {renderProjectDisplay(projectsToDisplay, sortBy)}
+                        </div>
+                        }
                     </div>
-                </div>
-                <div className="containerFooter">
-                    <Link to="/createProject">
+                    <div className="containerFooter">
+                        <Link to="/createProject">
+                            <LoaderButton
+                                size="sm"
+                                variant="dark"
+                                isLoading={isLoading}
+                                className="createProjectButton"
+                            >
+                                New project
+                            </LoaderButton>
+                        </Link>
                         <LoaderButton
                             size="sm"
                             variant="dark"
                             isLoading={isLoading}
+                            onClick={changeMaxFiles}
                         >
-                            New project
+                            Get next projects
                         </LoaderButton>
-                    </Link>
-                    <LoaderButton
-                        size="sm"
-                        variant="dark"
-                        isLoading={isLoading}
-                        onClick={changeMaxFiles}
-                    >
-                        Get next projects
-                    </LoaderButton>
+                    </div>
                 </div>
-            </div>
-        </div>
-        )
+                </div>
     );
 }
