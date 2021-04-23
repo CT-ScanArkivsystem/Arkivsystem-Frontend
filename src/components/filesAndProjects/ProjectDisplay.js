@@ -39,10 +39,6 @@ export default function ProjectDisplay ({...props}) {
         ProjectStore.projectId = props.projectId;
     }
 
-    function checkResultInfo(projectResultInfo) {
-
-    }
-
     function getResultInfo() {
         // Checks if the extension found is the same as the filename. If it is it's a folder.
         if (props.projectResultInfo) {

@@ -236,8 +236,6 @@ export default function UserFrontpage() {
         return result;
     }
 
-
-
     function validateForm() {
         return true;
         // TODO: Validate when you know how to validate
@@ -283,7 +281,7 @@ export default function UserFrontpage() {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Form.Group>
-                    <Form.Group size="lg" className="checkboxContainer">
+                    <Form.Group className="checkboxContainer">
                         {renderAllTags()}
                     </Form.Group>
                 </Form>
@@ -299,7 +297,6 @@ export default function UserFrontpage() {
                     <div className="containerFooter">
                         <Link to="/createProject">
                             <LoaderButton
-                                size="sm"
                                 variant="dark"
                                 isLoading={isLoading}
                                 className="createProjectButton"
@@ -308,7 +305,6 @@ export default function UserFrontpage() {
                             </LoaderButton>
                         </Link>
                         <LoaderButton
-                            size="sm"
                             variant="dark"
                             isLoading={isLoading}
                             onClick={changeMaxFiles}

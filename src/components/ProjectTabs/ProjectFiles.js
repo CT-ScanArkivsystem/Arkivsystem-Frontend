@@ -166,6 +166,7 @@ export default function ProjectFiles(props) {
                   </div>
               </div>
               <div className="projectFileContainer">
+                  <h4>Files</h4>
                   <LoaderButton
                       className="downloadButton"
                       size="sm"
@@ -174,10 +175,24 @@ export default function ProjectFiles(props) {
                       disabled={isLoading || !props.canDownloadFiles || filesToDownload.length < 1}
                       onClick={() => {
                           downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
-                          //handleRemoveMember(ProjectStore.projectId, selectedMember.email)
                       }}
                   >
                       Download file{filesToDownload.length > 1 ? "s" : ""}
+                  </LoaderButton>
+                  <LoaderButton
+                      className="downloadButton"
+                      size="sm"
+                      variant="outline-dark"
+                      isLoading={isLoading}
+                      disabled={isLoading || !props.canDownloadFiles || filesInDirectory.length < 1}
+                      onClick={() => {
+                          let allFilesToDownload = [...filesInDirectory].map(file => {
+                              return(file.fileName)
+                          });
+                          downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                      }}
+                  >
+                      Download all
                   </LoaderButton>
                   {renderFilesInFolder(filesInDirectory)}
               </div>
