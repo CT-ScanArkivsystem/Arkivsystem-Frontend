@@ -203,13 +203,16 @@ export default function UserFrontpage() {
      */
     async function handleSubmit(event) {
         event.preventDefault();
+        let gotFromSearch;
         setIsLoading(true);
         let res;
 
         if (searchInput === "") {
             res = await GetAllProjects();
+            gotFromSearch = false;
         } else {
             res = await GetSearchForProjects(searchInput, checkedTags);
+            gotFromSearch = true;
         }
         let result;
 
@@ -217,7 +220,11 @@ export default function UserFrontpage() {
             case 200:
                 result = await res.json();
                 setProjectsToDisplay(result);
-                setDidSearch(true);
+                if (gotFromSearch) {
+                    setDidSearch(true);
+                } else {
+                    setDidSearch(false);
+                }
                 break;
             case 204:
                 result = [];
