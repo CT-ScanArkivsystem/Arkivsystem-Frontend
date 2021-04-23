@@ -29,8 +29,6 @@ export default function UserFrontpage() {
 
     const [allTags, setAllTags] = useState([]);
 
-    const [maxFiles, setMaxFiles] = useState(10);
-
     //Functions in the React.useEffect() will be run once on load of site.
     React.useEffect(() => {
         initialisation();
@@ -77,14 +75,6 @@ export default function UserFrontpage() {
     }
 
     /**
-     * Sets a new maxFiles value to increase the number of FileDisplays on the page.
-     * Also starts the generating of new FileDisplays.
-     */
-    function changeMaxFiles() {
-        setMaxFiles(maxFiles + 5);
-    }
-
-    /**
      * Renders the next Projects as ProjectDisplays onto the page.
      * @param projectList the list of projects that will be the starting point for what we render.
      * @param currentSortBy the string that decides what the projects will be sorted by.
@@ -96,7 +86,7 @@ export default function UserFrontpage() {
         let sortedList = sortProjectList(projectList, currentSortBy);
 
         if (sortedList) {
-            result = sortedList.slice(0, maxFiles).map((project) => {
+            result = sortedList.map((project) => {
                 return(
                     <ProjectDisplay
                         className="projectDisplay"
@@ -228,6 +218,10 @@ export default function UserFrontpage() {
                 break;
             case 204:
                 result = [];
+                setProjectsToDisplay(result);
+                if (gotFromSearch) {
+                    setDidSearch(true);
+                }
                 break;
             case 400:
                 console.log("Bad request in GetSearchForProjects");
@@ -311,13 +305,6 @@ export default function UserFrontpage() {
                                 New project
                             </LoaderButton>
                         </Link>
-                        <LoaderButton
-                            variant="dark"
-                            isLoading={isLoading}
-                            onClick={changeMaxFiles}
-                        >
-                            Get next projects
-                        </LoaderButton>
                     </div>
                 </div>
                 </div>
