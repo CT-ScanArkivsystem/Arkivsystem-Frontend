@@ -16,6 +16,10 @@ export default function DeleteTagsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
+    const [testArray, setTestArray] = useState([]);
+    const [testArrayIsEmpty, setTestArrayIsEmpty] = useState(true);
+    const [buttonEnabled, setButtonEnabled] = useState(false)
+
 
     // const [errorText, setErrorText] = useState("No tags selected!");
 
@@ -24,6 +28,16 @@ export default function DeleteTagsPage() {
 
     React.useEffect(() => {
         //elementsToDelete = []
+/*
+        if (testArrayIsEmpty) {
+            console.log("if check: array is empty")
+            setButtonEnabled(false)
+        } else {
+            console.log("if check: array is NOT empty")
+            setButtonEnabled(true)
+        }
+        console.log("Empty: " + testArrayIsEmpty)
+*/
         initGetAllTags();
     }, []);
 
@@ -50,27 +64,55 @@ export default function DeleteTagsPage() {
     }
 
     function addTagToSelected(tag) {
-        console.log("Adding tag '" + tag.tagName + "' to elementsToDelete")
-        elementsToDelete.push(tag)
+        console.log("Adding tag '" + tag.tagName + "' to testArray state")
+        // elementsToDelete.push(tag)
+        let tempArray = testArray
+        tempArray.push(tag)
+        setTestArray(tempArray)
+
+        console.log("Setting: not empty")
+        setTestArrayIsEmpty(false)
+
+
     }
 
     function removeTagFromSelected(someTag) {
-        console.log("Removing tag '" + someTag.tagName + "' from elementsToDelete")
-        elementsToDelete = elementsToDelete.filter(
+        console.log("Removing tag '" + someTag.tagName + "' from testArray state")
+        let tempArray = testArray
+
+        tempArray = tempArray.filter(
             tag => {
                 return (
                     tag.tagId !== someTag.tagId
                 )
             }
         )
+        setTestArray(tempArray)
+
+        // Print below is always too slow
+        console.log("length: " + tempArray.length)
+        if (tempArray.length < 1) {
+            console.log("Setting: empty")
+            setTestArrayIsEmpty(true)
+        }
     }
 
     function handleCheck(tagToDisplay) {
-        if (!elementsToDelete.some(aTag => aTag.tagName === tagToDisplay.tagName)) {
+        // Usikker på om .some funker på array state...
+        if (!testArray.some(aTag => aTag.tagName === tagToDisplay.tagName)) {
             addTagToSelected(tagToDisplay)
+            console.log(testArray)
         } else {
             removeTagFromSelected(tagToDisplay)
+
+            // This is too slow to update
+            console.log(testArray)
         }
+    }
+
+    function printText() {
+        console.log(testArray)
+        console.log("Empty: " + testArrayIsEmpty)
     }
 
     function renderTags() {
@@ -145,6 +187,8 @@ export default function DeleteTagsPage() {
         for (let i = 0; i < clist.length; ++i) {
             clist[i].checked = false
         }
+        setTestArray([])
+        setTestArrayIsEmpty(true)
     }
 
     return (
@@ -168,9 +212,17 @@ export default function DeleteTagsPage() {
                     className="thisButton"
                     variant="dark"
                     onClick={() => openModal()}
-                    disabled={isLoading}
+                    disabled={testArrayIsEmpty}
                 >
                     Delete tags
+                </Button>
+                <Button
+                    className="thisButton"
+                    variant="dark"
+                    onClick={() => printText()}
+                    disabled={false}
+                >
+                    Print
                 </Button>
             </div>
         )
