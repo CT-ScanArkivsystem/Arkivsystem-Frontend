@@ -168,6 +168,9 @@ export default function UserFrontpage() {
             case "description":
                 sortByUserText = "Project description";
                 break;
+            case "date":
+                sortByUserText = "Project date"
+                break;
             case "owner":
                 sortByUserText = "Project owner";
                 break;
@@ -273,6 +276,7 @@ export default function UserFrontpage() {
                             <Dropdown.Menu>
                                 <Dropdown.Item onSelect={() => setSortBy("name")}>Project name</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("description")}>Project description</Dropdown.Item>
+                                <Dropdown.Item onSelect={() => setSortBy("date")}>Project date</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("owner")}>Project owner</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("member")}>Project members</Dropdown.Item>
                                 <Dropdown.Item onSelect={() => setSortBy("project_Tag")}>Project tags</Dropdown.Item>

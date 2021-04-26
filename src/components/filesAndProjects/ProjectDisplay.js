@@ -28,6 +28,7 @@ export default function ProjectDisplay ({...props}) {
         ["name", "Name"],
         ["owner", "Owner"],
         ["description", "Description"],
+        ["date", "Date"],
         ["member", "Member"],
         ["project_Tag", "Project tag"],
         ["file_tag", "File tag"],
