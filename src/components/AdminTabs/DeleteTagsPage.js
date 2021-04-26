@@ -6,113 +6,69 @@ import ConfirmationModal from "../ConfirmationModal";
 import Button from "react-bootstrap/Button";
 import DeleteTags from "../../apiRequests/DeleteTags";
 import "./DeleteTagsPage.css"
+import {Table} from "react-bootstrap";
 
 export default function DeleteTagsPage() {
 
     const [isLoading, setIsLoading] = useState(true);
-
     const [allTags, setAllTags] = useState([]);
-    const [doesHaveTags, setDoesHaveTags] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
     const [testArray, setTestArray] = useState([]);
     const [testArrayIsEmpty, setTestArrayIsEmpty] = useState(true);
-    const [buttonEnabled, setButtonEnabled] = useState(false)
-
-
-    // const [errorText, setErrorText] = useState("No tags selected!");
-
-    let elementsToDelete = [];
 
 
     React.useEffect(() => {
-        //elementsToDelete = []
-/*
-        if (testArrayIsEmpty) {
-            console.log("if check: array is empty")
-            setButtonEnabled(false)
-        } else {
-            console.log("if check: array is NOT empty")
-            setButtonEnabled(true)
-        }
-        console.log("Empty: " + testArrayIsEmpty)
-*/
         initGetAllTags();
     }, []);
 
 
     async function initGetAllTags() {
         try {
-            if (!doesHaveTags) {
-                let tags = await GetAllTags()
-                console.log("Raw tags: " + tags)
+            let tags = await GetAllTags()
+            console.log(tags)
 
-                let cleanTags = trimTagArray(tags)
-                console.log(cleanTags)
+            setAllTags(tags)
+            setIsLoading(false)
 
-                setAllTags(cleanTags)
-                if (allTags.length >= 0) {
-                    setDoesHaveTags(true)
-                    setIsLoading(false)
-                }
-
-            }
         } catch (e) {
             onError(e)
         }
     }
 
     function addTagToSelected(tag) {
-        console.log("Adding tag '" + tag.tagName + "' to testArray state")
-        // elementsToDelete.push(tag)
         let tempArray = testArray
         tempArray.push(tag)
         setTestArray(tempArray)
-
-        console.log("Setting: not empty")
         setTestArrayIsEmpty(false)
 
 
     }
 
     function removeTagFromSelected(someTag) {
-        console.log("Removing tag '" + someTag.tagName + "' from testArray state")
         let tempArray = testArray
 
         tempArray = tempArray.filter(
             tag => {
                 return (
-                    tag.tagId !== someTag.tagId
+                    tag.tagName !== someTag.tagName
                 )
             }
         )
         setTestArray(tempArray)
 
-        // Print below is always too slow
-        console.log("length: " + tempArray.length)
         if (tempArray.length < 1) {
-            console.log("Setting: empty")
             setTestArrayIsEmpty(true)
         }
     }
 
     function handleCheck(tagToDisplay) {
-        // Usikker på om .some funker på array state...
         if (!testArray.some(aTag => aTag.tagName === tagToDisplay.tagName)) {
             addTagToSelected(tagToDisplay)
-            console.log(testArray)
         } else {
             removeTagFromSelected(tagToDisplay)
-
-            // This is too slow to update
-            console.log(testArray)
         }
-    }
-
-    function printText() {
-        console.log(testArray)
-        console.log("Empty: " + testArrayIsEmpty)
     }
 
     function renderTags() {
@@ -123,7 +79,7 @@ export default function DeleteTagsPage() {
                 return (
                     <TagDisplay
                         key={"TagKey" + tagToDisplay.tagName}
-                        id={"TagId" + tagToDisplay.tagName}
+                        id={"TagId" + tagToDisplay.tagName} // handleCheck is not called on tag name click if this line is removed
                         label={tagToDisplay.tagName}
                         value={tagToDisplay.tagName}
                         // disabled={!editingTags}
@@ -147,11 +103,9 @@ export default function DeleteTagsPage() {
     }
 
     async function handleDeleteTags() {
-        console.log("DELETING THE SELECTED TAGS")
         try {
-            let wasUserDeleted = await DeleteTags(elementsToDelete)
+            let wasUserDeleted = await DeleteTags(testArray)
             if (wasUserDeleted !== null) {
-                console.log("API return is not null");
                 window.location.reload(false);
             } else {
                 console.log("API return is null");
@@ -165,15 +119,36 @@ export default function DeleteTagsPage() {
 
     function openModal() {
         setIsModalOpen(true);
-        // setModalText("Are you sure you want to delete " + elementsToDelete.length + " tags?\n\n" + "This action cannot be undone!");
         setModalText(
-            <span>
-                Are you sure you want to delete {elementsToDelete.length} tags? <br/><br/>
+            <div>
+                Are you sure you want to delete {testArray.length} tags? <br/><br/>
+                <Table className="tag-table">
+                    <tbody>
+                    {listOfTagNumbers()}
+                    </tbody>
+
+                </Table><br/>
                 This action cannot be undone!
-            </span>
+            </div>
         );
         setFunctionIfConfirmed(() => handleDeleteTags);
+    }
 
+    function listOfTagNumbers() {
+        let result = [];
+
+        result = testArray.map(
+            function (thisTag) {
+                return (
+                    <tr>
+                        <td className="toTheLeft">{thisTag.tagName}</td>
+                        <td className="tag-details-1 toTheRight">Used in:</td>
+                        <td className="tag-details-2 toTheLeft">{thisTag.numberOfProjects} projects</td>
+                    </tr>
+                )
+            }
+        )
+        return result;
 
     }
 
@@ -205,8 +180,6 @@ export default function DeleteTagsPage() {
                         functionIfConfirmed={functionIfConfirmed}
                     />
                     {renderTags()}
-
-                    {/*<p className="errorMessage">{errorText}</p>*/}
                 </div>
                 <Button
                     className="thisButton"
@@ -215,14 +188,6 @@ export default function DeleteTagsPage() {
                     disabled={testArrayIsEmpty}
                 >
                     Delete tags
-                </Button>
-                <Button
-                    className="thisButton"
-                    variant="dark"
-                    onClick={() => printText()}
-                    disabled={false}
-                >
-                    Print
                 </Button>
             </div>
         )
