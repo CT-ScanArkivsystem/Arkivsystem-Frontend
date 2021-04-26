@@ -50,7 +50,6 @@ export default function FindUser({...props}) {
     }, []);
 
     async function initialisation() {
-        setIsLoading(false);
         await initGetAllUsers()
         console.log("Getting all users")
     }

@@ -5,6 +5,7 @@ import TagDisplay from "../TagDisplay";
 import ConfirmationModal from "../ConfirmationModal";
 import Button from "react-bootstrap/Button";
 import DeleteTags from "../../apiRequests/DeleteTags";
+import "./DeleteTagsPage.css"
 
 export default function DeleteTagsPage() {
 
@@ -15,6 +16,8 @@ export default function DeleteTagsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
+
+    // const [errorText, setErrorText] = useState("No tags selected!");
 
     let elementsToDelete = [];
 
@@ -63,16 +66,10 @@ export default function DeleteTagsPage() {
     }
 
     function handleCheck(tagToDisplay) {
-        console.log("Clicked tag: " + tagToDisplay.tagName)
-
         if (!elementsToDelete.some(aTag => aTag.tagName === tagToDisplay.tagName)) {
-            console.log("Tag not already in delete list:")
             addTagToSelected(tagToDisplay)
-            console.log(elementsToDelete)
         } else {
-            console.log("Tag already in delete list")
             removeTagFromSelected(tagToDisplay)
-            console.log(elementsToDelete)
         }
     }
 
@@ -126,8 +123,16 @@ export default function DeleteTagsPage() {
 
     function openModal() {
         setIsModalOpen(true);
-        setModalText("Are you sure you want to delete " + elementsToDelete.length + " tags?");
+        // setModalText("Are you sure you want to delete " + elementsToDelete.length + " tags?\n\n" + "This action cannot be undone!");
+        setModalText(
+            <span>
+                Are you sure you want to delete {elementsToDelete.length} tags? <br/><br/>
+                This action cannot be undone!
+            </span>
+        );
         setFunctionIfConfirmed(() => handleDeleteTags);
+
+
     }
 
     function closeModal() {
@@ -141,7 +146,6 @@ export default function DeleteTagsPage() {
             clist[i].checked = false
         }
     }
-
 
     return (
         !isLoading && (
@@ -157,15 +161,17 @@ export default function DeleteTagsPage() {
                         functionIfConfirmed={functionIfConfirmed}
                     />
                     {renderTags()}
-                    <Button
-                        className="sideBarButton"
-                        variant="dark"
-                        onClick={() => openModal()}
-                        disabled={isLoading}
-                    >
-                        Delete tags
-                    </Button>
+
+                    {/*<p className="errorMessage">{errorText}</p>*/}
                 </div>
+                <Button
+                    className="thisButton"
+                    variant="dark"
+                    onClick={() => openModal()}
+                    disabled={isLoading}
+                >
+                    Delete tags
+                </Button>
             </div>
         )
     )

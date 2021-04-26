@@ -1,0 +1,14 @@
+.deleteTag {
+    margin: 0 auto 0 auto;
+}
+
+.thisPagesContent {
+    overflow-y: scroll;
+    max-height: 50vh;
+}
+
+.thisButton {
+    min-width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}

@@ -58,7 +58,6 @@ export default function UserDisplay({...props}) {
             case "deleteUser":
                 return (
                     <React.Fragment>
-                        {console.log("deleteUser case")}
                         <ConfirmationModal
                             functionToCloseModal={closeModal}
                             isOpen={isModalOpen}
@@ -75,7 +74,6 @@ export default function UserDisplay({...props}) {
             case "editUser":
                 return (
                     <tr onClick={() => handleRowClick()} className="user-display">
-                        {console.log("editUser case")}
                         <td className="user-display-field">{props.firstName} {props.lastName}</td>
                         <td className="user-display-field">{props.email}</td>
                         <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
