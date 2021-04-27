@@ -120,4 +120,3 @@ sketch
 .env.production.local
 
 # End of https://www.toptal.com/developers/gitignore/api/react,intellij+iml
-package-lock.json
