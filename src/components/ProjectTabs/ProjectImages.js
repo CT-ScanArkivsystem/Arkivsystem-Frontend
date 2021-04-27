@@ -173,6 +173,10 @@ export default function ProjectImages(props) {
         return result;
     }
 
+    function findTotalPages(allImages) {
+        return Math.ceil(allImages.length / 6);
+    }
+
     /**
      * Sets the site to loading then sends an API request to download the files
      * specified from the Images in the project specified.
@@ -200,7 +204,7 @@ export default function ProjectImages(props) {
                   </div>
               </div>
               <div className="projectImagesContainer">
-                  <h4>Files</h4>
+                  <h4>{selectedSubFolder ? selectedSubFolder : "Files"}</h4>
                   <div className="flex-row">
                       <LoaderButton
                           className="downloadButton"
@@ -215,7 +219,7 @@ export default function ProjectImages(props) {
                               await downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
                           }}
                       >
-                          Download file{filesToDownload.length > 1 ? "s" : ""}
+                          Download image{filesToDownload.length > 1 ? "s" : ""}
                       </LoaderButton>
                   </div>
                   <div className="imagesContainer">
@@ -233,6 +237,9 @@ export default function ProjectImages(props) {
                       >
                           &gt;
                       </Button>
+                      <div className="pageCounter">
+                          <h4>Page {selectedSubFolder ? currentPage + " of " + findTotalPages(imagesInSubFolder) : "0"}</h4>
+                      </div>
                       <Button
                           className="downloadButton"
                           size="sm"

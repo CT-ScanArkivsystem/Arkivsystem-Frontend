@@ -21,3 +21,8 @@
     padding-left: 4px;
     border-left: black solid 1px;
 }
+
+.pageCounter {
+    text-align: center;
+    margin-top: 6px;
+}
