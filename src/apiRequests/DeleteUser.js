@@ -4,7 +4,6 @@ import {currentIP} from "../App";
 export default async function DeleteUser(userId) {
     let result;
     try {
-        console.log("Trying to delete user with ID: " + userId)
         let res = await fetch(currentIP + '/admin/deleteUser', {
             method: 'DELETE',
             credentials: 'include',

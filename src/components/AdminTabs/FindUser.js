@@ -59,8 +59,6 @@ export default function FindUser({...props}) {
         try {
             if (!doesHaveUsers) {
                 let users = await GetAllUsers()
-                console.log(users)
-
                 setAllUsers(users)
                 if (allUsers.length >= 0) {
                     setDoesHaveUsers(true)

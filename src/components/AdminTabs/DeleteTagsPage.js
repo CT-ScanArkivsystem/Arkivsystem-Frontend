@@ -27,8 +27,6 @@ export default function DeleteTagsPage() {
     async function initGetAllTags() {
         try {
             let tags = await GetAllTags()
-            console.log(tags)
-
             setAllTags(tags)
             setIsLoading(false)
 
@@ -42,8 +40,6 @@ export default function DeleteTagsPage() {
         tempArray.push(tag)
         setTestArray(tempArray)
         setTestArrayIsEmpty(false)
-
-
     }
 
     function removeTagFromSelected(someTag) {

@@ -25,12 +25,9 @@ export default function UserDisplay({...props}) {
     }
 
     async function handleDeleteUser() {
-        console.log("handleDeleteUser() " + props.firstName + " " + props.lastName + " (" + props.userId + ")")
-
         try {
             let wasUserDeleted = await DeleteUser(props.userId)
             if (wasUserDeleted !== null) {
-                console.log("API return is not null");
                 props.initUsersAgain1()
             } else {
                 console.log("API return is null");
