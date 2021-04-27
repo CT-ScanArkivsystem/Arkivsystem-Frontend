@@ -4,7 +4,7 @@ import LoaderButton from "../components/LoaderButton";
 import CreateUser from "../components/AdminTabs/CreateUser";
 import FindUser from "../components/AdminTabs/FindUser";
 import DeleteUser from "../components/AdminTabs/DeleteUser";
-import DeleteTags from "../components/AdminTabs/DeleteTags";
+import DeleteTagsPage from "../components/AdminTabs/DeleteTagsPage";
 import EditUserPage from "../components/AdminTabs/EditUserPage";
 import AdminWelcomePage from "../components/AdminWelcomePage";
 
@@ -27,7 +27,7 @@ export default function AdminPage() {
     }
 
     function contentToDeleteTags() {
-        setPageContent(<DeleteTags/>)
+        setPageContent(<DeleteTagsPage/>)
     }
 
     return (

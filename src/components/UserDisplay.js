@@ -25,13 +25,10 @@ export default function UserDisplay({...props}) {
     }
 
     async function handleDeleteUser() {
-        console.log("handleDeleteUser() " + props.firstName + " " + props.lastName + " (" + props.userId + ")")
-
         try {
             let wasUserDeleted = await DeleteUser(props.userId)
             if (wasUserDeleted !== null) {
-                console.log("API return is not null");
-                window.location.reload(false);
+                props.initUsersAgain1()
             } else {
                 console.log("API return is null");
             }
@@ -58,7 +55,6 @@ export default function UserDisplay({...props}) {
             case "deleteUser":
                 return (
                     <React.Fragment>
-                        {console.log("deleteUser case")}
                         <ConfirmationModal
                             functionToCloseModal={closeModal}
                             isOpen={isModalOpen}
@@ -75,7 +71,6 @@ export default function UserDisplay({...props}) {
             case "editUser":
                 return (
                     <tr onClick={() => handleRowClick()} className="user-display">
-                        {console.log("editUser case")}
                         <td className="user-display-field">{props.firstName} {props.lastName}</td>
                         <td className="user-display-field">{props.email}</td>
                         <td className="capitalize user-display-field">{props.role.replace("ROLE_", "").toLowerCase()}</td>
