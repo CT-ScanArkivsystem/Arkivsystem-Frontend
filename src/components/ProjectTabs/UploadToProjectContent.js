@@ -148,7 +148,7 @@ export default function UploadToProjectContent(props) {
                     <SubFolderDisplay
                         isproject={false}
                         key={subFolder}
-                        name={subFolder.slice(0, -1)}
+                        name={subFolder}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         onClick={() => {
                             if (selectedSubFolder === subFolder) {
@@ -185,7 +185,7 @@ export default function UploadToProjectContent(props) {
     function handleSubFolderSubmit(event) {
         event.preventDefault();
         let tempSubFolderArray = projectSubFolders;
-        tempSubFolderArray.push(newFolderName + "/");
+        tempSubFolderArray.push(newFolderName);
 
         setProjectSubFolders(tempSubFolderArray);
         setNewFolderName("");

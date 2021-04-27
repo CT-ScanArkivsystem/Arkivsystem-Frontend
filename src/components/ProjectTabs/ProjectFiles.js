@@ -39,7 +39,7 @@ export default function ProjectFiles(props) {
                     <SubFolderDisplay
                         className="fileDisplay"
                         key={subFolder}
-                        name={subFolder.slice(0, -1)}
+                        name={subFolder}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         hideChildren={selectedSubFolder !== subFolder}
                         showDropDownArrow={true}
