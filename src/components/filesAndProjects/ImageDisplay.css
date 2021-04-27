@@ -1,0 +1,22 @@
+.imageDisplayContainer {
+    margin: 4px;
+    width: 200px;
+}
+
+.imageDisplay:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.imageSelected {
+    border: black dashed 1px;
+}
+
+.imageNotSelected {
+    border: black solid 1px;
+}
+
+.imageDisplay {
+    width: 100%;
+}
+

@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
+import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectContent";
 import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
@@ -41,6 +42,13 @@ export default function Project() {
             pageElement: <ProjectFiles
                 canDownloadFiles={checkPermission("specialPermission")}
                 canEditFiles={checkPermission("member")}
+                projectSubFolders={subFoldersInProject}
+            />
+        },
+        {
+            pageName: "Project images",
+            pageElement: <ProjectImages
+                canViewFiles={checkPermission("specialPermission")}
                 projectSubFolders={subFoldersInProject}
             />
         },
