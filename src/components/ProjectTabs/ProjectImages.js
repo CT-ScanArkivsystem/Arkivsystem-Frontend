@@ -80,14 +80,16 @@ export default function ProjectImages(props) {
                         key={subFolder}
                         name={subFolder}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
-                        onClick={() => {
+                        onClick={async function() {
                             setCurrentPage(0);
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
                                 setImagesToRender([]);
                             } else {
+                                setIsLoading(true);
                                 setSelectedSubFolder(subFolder);
-                                getImages(directoryWithImages, ProjectStore.projectId, subFolder, true, 0);
+                                let imageNames = await getImageNamesInSubFolder(directoryWithImages, ProjectStore.projectId, subFolder);
+                                await getImages(imageNames, ProjectStore.projectId, subFolder, true, 0);
                             }
                         }}
                     />
@@ -102,26 +104,30 @@ export default function ProjectImages(props) {
         return result;
     }
 
+    async function getImageNamesInSubFolder(directory, projectId, subFolder) {
+        let allImages = await GetAllFileNames(directory, projectId, subFolder);
+        setImagesInSubFolder(allImages);
+
+        return allImages;
+    }
+
     /**
      * This function will get the next or previous page of images in the sub folder in the project specified.
-     * @param directory Decides which directory in the sub folder the function will look for images in.
+     * @param imageNames Names of all the images in the sub folder.
      * @param projectId Decides which project it will look through.
      * @param subFolder Decides which sub folder in the project it will look through.
      * @param nextPage Decides whether to pull the next 6 images or the previous 6 images.
      * @param currentPageNumber The page the user is currently on.
      */
-    async function getImages(directory, projectId, subFolder, nextPage, currentPageNumber) {
+    async function getImages(imageNames, projectId, subFolder, nextPage, currentPageNumber) {
         setIsLoading(true);
         let result = [];
 
-        let allImages = await GetAllFileNames(directory, projectId, subFolder);
-        setImagesInSubFolder(allImages);
-
-        if (allImages.length > 0) {
+        if (imageNames.length > 0) {
             if (nextPage) {
-                result = await getNextPageOfImages(projectId, subFolder, allImages, currentPageNumber);
+                result = await getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber);
             } else if (!nextPage) {
-                result = await getPreviousPageOfImages(projectId, subFolder, allImages, currentPageNumber);
+                result = await getPreviousPageOfImages(projectId, subFolder, imageNames, currentPageNumber);
             }
         }
 
@@ -133,15 +139,15 @@ export default function ProjectImages(props) {
      * Will get the next 6 images and return them in an array.
      * @param projectId The ID for the project to get images from.
      * @param subFolder The sub folder to get images from.
-     * @param allImages Array with all the images in the sub folder.
+     * @param imageNames Array with all the images in the sub folder.
      * @param currentPageNumber The page the user is currently on.
      * @returns {Promise<*[]>} An array of objects that holds the links to the pictures.
      */
-    async function getNextPageOfImages(projectId, subFolder, allImages, currentPageNumber) {
+    async function getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
         let result = [];
         let i = currentPageNumber * 6;
-        for (i; i < (currentPageNumber + 1) * 6 && i < allImages.length; i++) {
-            let currentImage = await PostGetImage(allImages[i].fileName, projectId, subFolder, imageWidth);
+        for (i; i < (currentPageNumber + 1) * 6 && i < imageNames.length; i++) {
+            let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
             result.push(currentImage);
         }
         setCurrentPage(currentPageNumber + 1);
@@ -152,15 +158,15 @@ export default function ProjectImages(props) {
      * Will get the previous 6 images and return them in an array.
      * @param projectId The ID for the project to get images from.
      * @param subFolder The sub folder to get images from.
-     * @param allImages Array with all the images in the sub folder.
+     * @param imageNames Array with all the images in the sub folder.
      * @param currentPageNumber The page the user is currently on.
      * @returns {Promise<*[]>} An array of objects that holds the links to the pictures.
      */
-    async function getPreviousPageOfImages(projectId, subFolder, allImages, currentPageNumber) {
+    async function getPreviousPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
         let result = [];
         let i = (currentPageNumber - 2) * 6;
-        for (i; i < (currentPageNumber - 1) * 6 && i < allImages.length; i++) {
-            let currentImage = await PostGetImage(allImages[i].fileName, projectId, subFolder, imageWidth);
+        for (i; i < (currentPageNumber - 1) * 6 && i < imageNames.length; i++) {
+            let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
             result.push(currentImage);
         }
         setCurrentPage(currentPageNumber - 1);
@@ -184,7 +190,7 @@ export default function ProjectImages(props) {
   return (
       <div className="projectFiles">
           <div className="tabHeader">
-              <h2>Project files</h2>
+              <h2>Project images</h2>
           </div>
           <div className="tabContent">
               <div className="projectImagesSubFolderContainer">
@@ -202,11 +208,11 @@ export default function ProjectImages(props) {
                           variant="outline-dark"
                           isLoading={isLoading}
                           disabled={isLoading || !props.canViewFiles || filesToDownload.length < 1}
-                          onClick={() => {
+                          onClick={async function() {
                               let allFilesToDownload = [...filesToDownload].map(file => {
                                   return(file.imageName)
                               });
-                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                              await downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
                           }}
                       >
                           Download file{filesToDownload.length > 1 ? "s" : ""}
@@ -221,8 +227,8 @@ export default function ProjectImages(props) {
                           size="sm"
                           variant="dark"
                           disabled={isLoading || imagesToRender.length < 1 || (currentPage * 6) > imagesInSubFolder.length}
-                          onClick={() => {
-                              getImages(directoryWithImages, ProjectStore.projectId, selectedSubFolder, true, currentPage)
+                          onClick={async function() {
+                              await getImages(imagesInSubFolder, ProjectStore.projectId, selectedSubFolder, true, currentPage)
                           }}
                       >
                           &gt;
@@ -232,8 +238,8 @@ export default function ProjectImages(props) {
                           size="sm"
                           variant="dark"
                           disabled={isLoading || imagesToRender.length < 1 || currentPage === 1}
-                          onClick={() => {
-                              getImages(directoryWithImages, ProjectStore.projectId, selectedSubFolder, false, currentPage)
+                          onClick={async function() {
+                              await getImages(imagesInSubFolder, ProjectStore.projectId, selectedSubFolder, false, currentPage)
                           }}
                       >
                           &lt;

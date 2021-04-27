@@ -192,45 +192,45 @@ export default function UploadToProjectContent(props) {
     }
 
     return (
-      <div className="uploadFiles">
-          <h2 className="uploadHeader">Upload to project {ProjectStore.projectName}:</h2>
-              <div className="uploadContent">
-                  <div className="projectSubFolderContainer">
-                      <h4>Sub-folders</h4>
-                      <div className="projectSubFolders">
-                          {renderSubFolders(projectSubFolders)}
+        <div className="uploadFiles">
+             <h2 className="uploadHeader">Upload to project</h2>
+                  <div className="uploadContent">
+                      <div className="projectSubFolderContainer">
+                          <h4>Sub-folders</h4>
+                          <div className="projectSubFolders">
+                              {renderSubFolders(projectSubFolders)}
+                          </div>
                       </div>
-                  </div>
-                  <div className="container">
-                      <h5>Upload</h5>
-                      <Form onSubmit={handleSubmit} className="uploadToProjectForm">
-                          <Container className="dragAndDrop" {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
-                              <input {...getInputProps()} />
-                              <span>Drag 'n' drop some files here, or click to select files</span>
-                          </Container>
-                          <LoaderButton
-                              className="uploadButton"
-                              type="submit"
-                              isLoading={isLoading}
-                              disabled={!validateFiles() || !hasSelectedSubFolder}
-                              onClick={handleSubmit}
-                          >
-                              Upload
-                          </LoaderButton>
-                      </Form>
-                      <div className="width100">
-                          <h2>Files to upload</h2>
-                          {errorMessage}
-                          <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
-                      </div>
-                      <div className="width100">
-                          <h2>Files uploaded</h2>
-                          <div>
-                              {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded yet."}
+                      <div className="container">
+                          <h4>Upload</h4>
+                          <Form onSubmit={handleSubmit} className="uploadToProjectForm">
+                              <Container className="dragAndDrop" {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
+                                  <input {...getInputProps()} />
+                                  <span>Drag 'n' drop some files here, or click to select files</span>
+                              </Container>
+                              <LoaderButton
+                                  className="uploadButton"
+                                  type="submit"
+                                  isLoading={isLoading}
+                                  disabled={!validateFiles() || !hasSelectedSubFolder}
+                                  onClick={handleSubmit}
+                              >
+                                  Upload
+                              </LoaderButton>
+                          </Form>
+                          <div className="width100">
+                              <h2>Files to upload</h2>
+                              {errorMessage}
+                              <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
+                          </div>
+                          <div className="width100">
+                              <h2>Files uploaded</h2>
+                              <div>
+                                  {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded yet."}
+                              </div>
                           </div>
                       </div>
                   </div>
-              </div>
-      </div>
+        </div>
     );
 }
