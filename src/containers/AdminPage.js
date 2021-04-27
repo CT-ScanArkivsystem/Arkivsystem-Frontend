@@ -7,6 +7,7 @@ import DeleteUser from "../components/AdminTabs/DeleteUser";
 import DeleteTagsPage from "../components/AdminTabs/DeleteTagsPage";
 import EditUserPage from "../components/AdminTabs/EditUserPage";
 import AdminWelcomePage from "../components/AdminWelcomePage";
+import ServerRestart from "../components/AdminTabs/ServerRestart";
 
 export default function AdminPage() {
 
@@ -28,6 +29,10 @@ export default function AdminPage() {
 
     function contentToDeleteTags() {
         setPageContent(<DeleteTagsPage/>)
+    }
+
+    function contentToServerRestart() {
+        setPageContent(<ServerRestart/>)
     }
 
     return (
@@ -61,6 +66,13 @@ export default function AdminPage() {
                     isLoading={isLoading}
                 >
                     Delete Tags
+                </LoaderButton>
+                <LoaderButton
+                    className="sideBarButton"
+                    onClick={contentToServerRestart}
+                    isLoading={isLoading}
+                >
+                    Server Restart
                 </LoaderButton>
             </SideBar>
             <div className="pageContent">
