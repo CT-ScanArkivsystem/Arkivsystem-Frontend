@@ -106,7 +106,8 @@ export default function DeleteTagsPage() {
         try {
             let wasUserDeleted = await DeleteTags(testArray)
             if (wasUserDeleted !== null) {
-                window.location.reload(false);
+                setIsLoading(true)
+                initGetAllTags();
             } else {
                 console.log("API return is null");
             }

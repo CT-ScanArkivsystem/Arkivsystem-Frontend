@@ -31,7 +31,7 @@ export default function UserDisplay({...props}) {
             let wasUserDeleted = await DeleteUser(props.userId)
             if (wasUserDeleted !== null) {
                 console.log("API return is not null");
-                window.location.reload(false);
+                props.initUsersAgain1()
             } else {
                 console.log("API return is null");
             }

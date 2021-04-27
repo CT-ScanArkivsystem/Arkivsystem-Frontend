@@ -20,7 +20,7 @@ export default async function DeleteTags(tagNames) {
         });
         result = await res.json();
         if (res.ok) {
-            console.log("200: OK");
+            //console.log("deleteTags: 200 OK");
         } else {
             result = [];
             console.log("Tags were not deleted!");

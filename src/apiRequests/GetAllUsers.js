@@ -11,7 +11,6 @@ import {currentIP} from "../App";
 export default async function GetAllUsers() {
     let result = [];
     try {
-        console.log("Sending GetAllUsers request: ")
         let res = await fetch(currentIP + '/admin/allUsers', {
             method: 'GET',
             credentials: 'include',
@@ -22,12 +21,12 @@ export default async function GetAllUsers() {
 
         result = await res.json();
 
-        if (result !== null && result.length > 0) {
-            console.log("API: Got all users!");
+        if (res.ok) {
+            // console.log("API: Got all users!");
         }
         else {
             result = [];
-            console.log("Could not get users.");
+            console.log("API: Could not get users.");
         }
 
     } catch (e) {
