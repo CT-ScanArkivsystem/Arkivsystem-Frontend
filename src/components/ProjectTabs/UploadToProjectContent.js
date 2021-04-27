@@ -196,7 +196,7 @@ export default function UploadToProjectContent(props) {
           <h2 className="uploadHeader">Upload to project {ProjectStore.projectName}:</h2>
               <div className="uploadContent">
                   <div className="projectSubFolderContainer">
-                      <h5>Sub-folders</h5>
+                      <h4>Sub-folders</h4>
                       <div className="projectSubFolders">
                           {renderSubFolders(projectSubFolders)}
                       </div>

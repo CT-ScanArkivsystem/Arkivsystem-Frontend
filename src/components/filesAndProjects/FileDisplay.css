@@ -1,5 +1,5 @@
 .fileDisplayContainer {
-width: 100%;
+    width: 100%;
 }
 
 .fileDisplay {
@@ -20,6 +20,10 @@ width: 100%;
     flex-grow: 1;
     text-align: start;
     margin: 0 2px 0 6px;
+    width: 100%;
+    display: inline-block;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .fileDisplayOwner {

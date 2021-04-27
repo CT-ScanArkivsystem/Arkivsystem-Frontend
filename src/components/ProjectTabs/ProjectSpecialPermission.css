@@ -1,0 +1,20 @@
+.projectMembers {
+    margin: 0 auto 0 auto;
+    align-items: center;
+}
+
+.tabContentSpecialPermission {
+    align-items: center;
+    flex-direction: column !important;
+}
+
+.removeSpecialPermissionButton {
+    margin-top: 10px;
+    width: 50%;
+}
+
+.tabHeaderSpecialPermissions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

@@ -41,6 +41,7 @@ export default function CreateProjectContent() {
             } else {
                 console.log("Project was not created!");
             }
+            setIsLoading(false);
         }
         catch (e) {
             setIsLoading(false);

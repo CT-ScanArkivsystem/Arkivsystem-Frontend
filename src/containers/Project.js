@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import ProjectStore from "../stores/ProjectStore";
 import SideBar from "../components/SideBar";
 import ProjectDetails from "../components/ProjectTabs/ProjectDetails";
-import ProjectImages from "../components/ProjectTabs/ProjectImages";
 import ProjectMembers from "../components/ProjectTabs/ProjectMembers";
 import ProjectSpecialPermission from "../components/ProjectTabs/ProjectSpecialPermission";
 import ProjectFiles from "../components/ProjectTabs/ProjectFiles";
@@ -11,7 +10,6 @@ import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
 import GetProject from "../apiRequests/GetProject";
 import GetAllTags from "../apiRequests/GetAllTags";
-import GetAllFileNames from "../apiRequests/GetAllFileNames";
 import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
 import Button from "react-bootstrap/Button";
 
@@ -22,7 +20,6 @@ export default function Project() {
     const [projectTags, setProjectTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [subFoldersInProject, setSubFoldersInProject] = useState([]);
-    const [filesInProject, setFilesInProject] = useState([]);
     const [currentPage, setCurrentPage] = useState("Loading");
 
     const projectPages = [
@@ -55,7 +52,9 @@ export default function Project() {
         },
         {
             pageName: "Special Permission",
-            pageElement: <ProjectSpecialPermission />
+            pageElement: <ProjectSpecialPermission
+                canEditSpecialPermission={checkPermission("member")}
+            />
         }
     ];
 
@@ -67,6 +66,8 @@ export default function Project() {
 
     async function initialisation() {
         let project = await GetProject(ProjectStore.projectId);
+
+        putProjectIntoStore(project);
 
         let tagsInProject = trimTagArray(project.tags, project.tags);
         setProjectTags(tagsInProject);
@@ -84,6 +85,21 @@ export default function Project() {
 
         //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
         setIsLoading(false);
+    }
+
+    /**
+     * This function will set all the information in the project into the store.
+     * @param project that the user is currently viewing.
+     */
+    function putProjectIntoStore(project) {
+        ProjectStore.projectId = project.projectId;
+        ProjectStore.projectName = project.projectName;
+        ProjectStore.projectDescription = project.description;
+        ProjectStore.projectOwner = project.owner;
+        ProjectStore.isPrivate = project.isPrivate;
+        ProjectStore.creationDate = project.creation;
+        ProjectStore.projectMembers = project.projectMembers;
+        ProjectStore.usersWithSpecialPermission = project.usersWithSpecialPermission;
     }
 
     /**
@@ -183,22 +199,23 @@ export default function Project() {
         let result = [];
 
         result = projectPages.map((page) => {
-            return(<Button
-                className="sideBarButton noHighlight"
-                key={page.pageName}
-                variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
-                disabled={isLoading}
-                onClick={() => {
-                    setPageContent(page.pageElement)
-                    if (currentPage === page.pageName) {
-                        setCurrentPage("");
-                    } else {
-                        setCurrentPage(page.pageName);
-                    }
-                }}
-            >
-                {page.pageName}
-            </Button>
+            return(
+                <Button
+                    className="sideBarButton noHighlight"
+                    key={page.pageName}
+                    variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
+                    disabled={isLoading}
+                    onClick={() => {
+                        setPageContent(page.pageElement)
+                        if (currentPage === page.pageName) {
+                            setCurrentPage("");
+                        } else {
+                            setCurrentPage(page.pageName);
+                        }
+                    }}
+                >
+                    {page.pageName}
+                </Button>
             )
         })
 

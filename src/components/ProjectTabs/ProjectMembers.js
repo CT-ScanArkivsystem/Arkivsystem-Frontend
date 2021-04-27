@@ -14,16 +14,14 @@ export default function ProjectMembers(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedMember, setSelectedMember] = useState([]);
     const [emailOfUserToAdd, setEmailOfUserToAdd] = useState("");
-    const [memberList, setMemberList] = useState([]);
+    const [memberList, setMemberList] = useState(ProjectStore.projectMembers);
+
+    //Modal helper states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState(handleRemoveMember);
+    //Error handling state
     const [errorMessage, setErrorMessage] = useState("");
-
-    //Functions in the React.useEffect() will be run once on load of site.
-    React.useEffect(() => {
-        setMemberList(ProjectStore.projectMembers);
-    }, []);
 
     function renderMemberList() {
         let result = [];
@@ -55,26 +53,26 @@ export default function ProjectMembers(props) {
         if (emailOfUserToAdd) {
             let result = await PutAddMemberToProject(projectId, emailOfUserToAdd);
 
+            console.log(result.status)
+
             switch (result.status) {
-                case '200':
+                case 200:
                     setErrorMessage("");
                     await updateProject(projectId);
                     break;
-                case '403':
+                case  400:
+                    setErrorMessage("User is already a member!")
+                    break;
+                case 403:
                     setErrorMessage("User does not have the permission to be added as a member!")
                     break;
-                case '404':
+                case 404:
                     setErrorMessage("A user with that email does not exist!")
                     break;
                 default:
                     break;
             }
 
-            if (result.ok) {
-            } else if (result.status === 403) {
-            } else if (result.status === 404) {
-                setErrorMessage("A user with that email does not exist!")
-            }
         }
     }
 
@@ -183,7 +181,7 @@ export default function ProjectMembers(props) {
                                 <Form.Control
                                     className="addMemberInput"
                                     type="email"
-                                    name="Project description"
+                                    name="Add member"
                                     placeholder="Enter email"
                                     disabled={isLoading || !props.canEditMembers}
                                     value={emailOfUserToAdd}
@@ -194,7 +192,7 @@ export default function ProjectMembers(props) {
                                     size="sm"
                                     type="submit"
                                     isLoading={isLoading}
-                                    disabled={isLoading || !props.canEditMembers}
+                                    disabled={isLoading || !props.canEditMembers || emailOfUserToAdd.length < 1}
                                     onClick={() => {handleAddMember(ProjectStore.projectId, emailOfUserToAdd)}}
                                 >
                                     Add member

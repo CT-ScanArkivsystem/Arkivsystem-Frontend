@@ -8,9 +8,9 @@ import {currentIP} from "../App";
  * @returns Promise result the result from the server. This contains all the Projects in the database.
  */
 export default async function GetAllProjects() {
-    let result = [];
+    let res = [];
     try {
-        let res = await fetch(currentIP + '/user/getAllProjects', {
+        res = await fetch(currentIP + '/user/getAllProjects', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -18,13 +18,10 @@ export default async function GetAllProjects() {
             },
         });
 
-        result = await res.json();
-
         if (res.ok) {
             //console.log("Got all projects!");
             //console.log(result);
         } else {
-            result = [];
             console.log("Could not get projects.");
         }
 
@@ -34,5 +31,5 @@ export default async function GetAllProjects() {
         //Send the user to the home page. Prevents the user from accessing sites when not logged in.
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return (result);
+    return (res);
 }
