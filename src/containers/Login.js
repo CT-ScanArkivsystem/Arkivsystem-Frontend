@@ -52,18 +52,21 @@ export default function Login() {
                     break;
                 case 401:
                     setErrorMessage("Email and/or password was incorrect.");
+                    setIsLoading(false);
                     break;
                 case 404:
                     setErrorMessage("Login attempt failed. Error code 404!");
+                    setIsLoading(false);
                     break;
                 case 500:
                     setErrorMessage("An internal server error occurred! Error code 500!");
+                    setIsLoading(false);
                     break;
                 default:
                     setErrorMessage("An unexpected error occurred! Unexpected error code!");
+                    setIsLoading(false);
                     break;
             }
-            setIsLoading(false);
         }
         catch (e) {
             setIsLoading(false);
