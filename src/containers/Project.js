@@ -34,6 +34,7 @@ export default function Project() {
         {
             pageName: "Upload files",
             pageElement: <UploadToProjectContent
+                canUpload={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
             />
         },

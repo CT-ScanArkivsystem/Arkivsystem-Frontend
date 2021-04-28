@@ -33,7 +33,7 @@ export default function ProjectFiles(props) {
     function renderSubFolders(subFolderList) {
         let result = [];
 
-        if (subFolderList) {
+        if (subFolderList.length > 0) {
             result = subFolderList.map((subFolder) => {
                 return(
                     <SubFolderDisplay
@@ -83,7 +83,9 @@ export default function ProjectFiles(props) {
                 )
             })
         }
-        else {
+        else if (isLoading) {
+            result = <span>Loading!</span>
+        } else {
             result = <span>Empty!</span>
         }
         return result;

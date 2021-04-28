@@ -142,7 +142,7 @@ export default function UploadToProjectContent(props) {
     function renderSubFolders(subFolderList) {
         let result = [];
 
-        if (subFolderList) {
+        if (subFolderList.length > 0) {
             result = subFolderList.map((subFolder) => {
                 return (
                     <SubFolderDisplay
@@ -162,6 +162,10 @@ export default function UploadToProjectContent(props) {
                     />
                 )
             })
+        } else if (isLoading) {
+            result = [<span>Loading!</span>];
+        } else {
+            result = [<span>Empty!</span>];
         }
         result.push(
             <form onSubmit={handleSubFolderSubmit} className="newFolderForm" key="addNewFolder">
@@ -169,15 +173,16 @@ export default function UploadToProjectContent(props) {
                     <input
                         type="text"
                         className="newFolderTextInput"
+                        disabled={!props.canUpload}
                         placeholder="Add new folder"
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
                     />
                     <input
                         type="submit"
-                        value="Create"
-                        disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",")}
                         className="addNewFolderButton"
+                        value="Create"
+                        disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",") || !props.canUpload}
                     />
                 </div>
                 {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?

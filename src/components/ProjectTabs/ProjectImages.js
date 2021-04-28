@@ -37,7 +37,7 @@ export default function ProjectImages(props) {
     function renderImages(imagesList) {
         let result;
 
-        if (imagesList) {
+        if (imagesList.length > 0) {
             result = imagesList.map((image) => {
                 return(
                     <ImageDisplay
