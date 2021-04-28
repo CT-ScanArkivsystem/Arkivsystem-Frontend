@@ -1,38 +1,41 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import "./ServerRestart.css"
-import LoaderButton from "../LoaderButton";
 import Button from "react-bootstrap/Button";
 import ConfirmationModal from "../ConfirmationModal";
-import {Table} from "react-bootstrap";
 import TimePicker from 'react-time-picker';
+import TimezoneSelect from 'react-timezone-select'
+import RestartServer from "../../apiRequests/RestartServer";
+import {onError} from "../../libs/errorLib";
 
 export default function ServerRestart() {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [restartDate, setRestartDate] = useState()
-    const [restartTime, setRestartTime] = useState()
-    const [restartZone, setRestartZone] = useState()
+    const [restartDate, setRestartDate] = useState("")
+    const [restartTime, setRestartTime] = useState("")
+    const [restartZone, setRestartZone] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
 
 
-
     async function handleSubmit() {
-        console.log(restartDate.toString())
-
-
+        try {
+            let didSetRestart = await RestartServer(restartDate, restartTime, restartZone)
+            if (didSetRestart !== null) {
+                // console.log("Not returned null");
+            } else {
+                console.log("Restart not set");
+            }
+        } catch (e) {
+            onError(e)
+        }
     }
 
     function validateForm() {
         return (
-            restartDate !== "" && restartTime !== "" && restartZone !== ""
+            restartDate !== "" && restartDate !== null && restartTime !== "" && restartTime !== null && restartZone !== "" && restartZone !== null
         )
-    }
-
-    function displayFormError() {
-
     }
 
     function openModal() {
@@ -42,10 +45,22 @@ export default function ServerRestart() {
     }
 
     function closeModal() {
+        setRestartDate("")
+        setRestartTime("")
         setIsModalOpen(false)
     }
 
-
+    function fixString(string) {
+        let startParenthesis = string.indexOf("(")
+        let endParenthesis = string.indexOf(")")
+        let removedStuff = string.slice(startParenthesis + 4, endParenthesis).replace(":", "")
+        if (removedStuff.length === 4) {
+            let result = removedStuff.slice(0, 1) + "0" + removedStuff.slice(1)
+            return result
+        } else {
+            return removedStuff
+        }
+    }
 
     return (
         !isLoading && (
@@ -74,29 +89,26 @@ export default function ServerRestart() {
                             <TimePicker
                                 className="time-picker-element"
                                 value={restartTime}
-                                onChange={(e) => setRestartTime(e)} //Why??
+                                onChange={(e) => setRestartTime(e)}
                                 locale="nb-NO"
                                 format="HH:mm"
-
                             />
                         </Form.Group>
                         <Form.Group size="lg" controlId="restartZone">
                             <Form.Label>Time zone:</Form.Label>
-                            <Form.Control
-                                type="text"
+                            <TimezoneSelect
+                                // default={restartZone}
                                 value={restartZone}
-                                onChange={(e) => setRestartZone(e.target.value)}
+                                onChange={(e) => setRestartZone(fixString(e.label))}
                             />
                         </Form.Group>
                         <Button
                             variant="dark"
-                            onClick={() => console.log(restartTime.toString())}
-                            disabled={false}
+                            onClick={() => openModal()}
+                            disabled={!validateForm()}
                         >
                             Submit
                         </Button>
-
-                        <p className="errorMessage">{displayFormError()}</p>
                     </Form>
                 </div>
             </div>
