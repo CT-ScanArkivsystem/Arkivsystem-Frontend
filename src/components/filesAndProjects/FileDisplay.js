@@ -95,7 +95,13 @@ export default function FileDisplay ({...props}) {
     }
 
     return (
-        <div className="fileDisplayContainer">
+        <div
+            className="fileDisplayContainer"
+            onClick={() => {
+                setIsChecked(!isChecked);
+                props.toggleFileInList();
+            }}
+        >
             <div className={'fileDisplay'}>
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.fileName}</span>
@@ -103,10 +109,9 @@ export default function FileDisplay ({...props}) {
                     <input
                         type="checkbox"
                         className="fileDisplayCheckbox"
-                        onClick={() => {
-                            setIsChecked(!isChecked);
-                            props.toggleFileInList();
-                        }}
+                        checked={isChecked}
+                        readOnly={true}
+                        
                     /> : ''}
             </div>
         </div>
