@@ -92,7 +92,7 @@ export default function UploadToProjectContent(props) {
                     setFilesInQueue([]);
                     setIsLoading(false);
                     setErrorMessage("");
-                    console.log("All files were uploaded successfully!")
+                    //console.log("All files were uploaded successfully!")
                 } else if (didFilesGetUploaded && didFilesGetUploaded.length) {
                     setIsLoading(false);
                     setErrorMessage(
@@ -164,20 +164,26 @@ export default function UploadToProjectContent(props) {
             })
         }
         result.push(
-            <form onSubmit={handleSubFolderSubmit} key="addNewFolder">
-                <input
-                    type="text"
-                    className="newFolderTextInput"
-                    placeholder="Add new folder"
-                    value={newFolderName}
-                    onChange={(e) => setNewFolderName(e.target.value)}
-                />
+            <form onSubmit={handleSubFolderSubmit} className="newFolderForm" key="addNewFolder">
+                <div className="newFolderInputs">
+                    <input
+                        type="text"
+                        className="newFolderTextInput"
+                        placeholder="Add new folder"
+                        value={newFolderName}
+                        onChange={(e) => setNewFolderName(e.target.value)}
+                    />
+                    <input
+                        type="submit"
+                        value="Create"
+                        disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",")}
+                        className="addNewFolderButton"
+                    />
+                </div>
                 {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?
                     <span className="errorMessage">Your folder contains illegal characters!</span> : ""}
-                <input type="submit"
-                       disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",")}
-                       className="hiddenButton" tabIndex="-1"/>
             </form>
+
         )
         return result;
     }
