@@ -7,12 +7,14 @@ import "./Login.css";
 import LoaderButton from "../components/LoaderButton";
 import PostLogin from "../apiRequests/PostLogin";
 import GetCurrentUser from "../apiRequests/GetCurrentUser";
+import {set} from "mobx";
 
 export default function Login() {
     const { userHasAuthenticated } = useAppContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const history = useHistory();
 
     /**
@@ -35,19 +37,33 @@ export default function Login() {
             event.preventDefault();
             setIsLoading(true);
             let didUserGetLoggedIn = await PostLogin(email, password);
-            if (didUserGetLoggedIn) {
-                let couldGetCurrentUser = await GetCurrentUser();
-                if (couldGetCurrentUser) {
-                    userHasAuthenticated(true);
-                    history.push("/userFrontpage");
-                } else {
-                    console.log("User is not logged in.");
-                    setIsLoading(false);
-                }
-            } else {
-                console.log("Did not log in");
-                setIsLoading(false);
+
+            switch (didUserGetLoggedIn.status) {
+                case 200:
+                    let couldGetCurrentUser = await GetCurrentUser();
+                    if (couldGetCurrentUser) {
+                        userHasAuthenticated(true);
+                        history.push("/userFrontpage");
+                    } else {
+                        console.log("User is not logged in.");
+                        setIsLoading(false);
+                    }
+                    //setErrorMessage("Login attempt worked but you didn't get logged in?")
+                    break;
+                case 401:
+                    setErrorMessage("Email and/or password was incorrect.");
+                    break;
+                case 404:
+                    setErrorMessage("Login attempt failed. Error code 404!");
+                    break;
+                case 500:
+                    setErrorMessage("An internal server error occurred! Error code 500!");
+                    break;
+                default:
+                    setErrorMessage("An unexpected error occurred! Unexpected error code!");
+                    break;
             }
+            setIsLoading(false);
         }
         catch (e) {
             setIsLoading(false);
@@ -85,6 +101,7 @@ export default function Login() {
                 >
                     Login
                 </LoaderButton>
+                <span className="errorMessage">{errorMessage}</span>
             </Form>
         </div>
     );
