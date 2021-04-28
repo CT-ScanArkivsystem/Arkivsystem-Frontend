@@ -26,7 +26,7 @@ export default function ProjectImages(props) {
     const [currentPage, setCurrentPage] = useState(0);
 
     const directoryWithImages = "images"; // The directory the server will find images in
-    const imageWidth = 200; // In pixels
+    const imageWidth = 300; // In pixels
     const projectSubFolders = props.projectSubFolders; // All the sub folders in the project
 
     /**
@@ -204,7 +204,7 @@ export default function ProjectImages(props) {
                   </div>
               </div>
               <div className="projectImagesContainer">
-                  <h4>{selectedSubFolder ? selectedSubFolder : "Files"}</h4>
+                  <h4>{selectedSubFolder ? selectedSubFolder : "Images"}</h4>
                   <div className="flex-row">
                       <LoaderButton
                           className="downloadButton"
@@ -238,7 +238,7 @@ export default function ProjectImages(props) {
                           &gt;
                       </Button>
                       <div className="pageCounter">
-                          <h4>Page {selectedSubFolder ? currentPage + " of " + findTotalPages(imagesInSubFolder) : "0"}</h4>
+                          <span>Page {selectedSubFolder ? currentPage + " of " + findTotalPages(imagesInSubFolder) : "0"}</span>
                       </div>
                       <Button
                           className="downloadButton"

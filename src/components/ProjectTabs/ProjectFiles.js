@@ -48,6 +48,7 @@ export default function ProjectFiles(props) {
                                 setSelectedSubFolder("");
                                 setSelectedDefaultFolder("");
                                 setFilesToDownload([]);
+                                setFilesInDirectory([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
                                 setSelectedDefaultFolder("");
@@ -66,7 +67,7 @@ export default function ProjectFiles(props) {
                                         if (selectedDefaultFolder === defaultFolder) {
                                             setSelectedDefaultFolder("");
                                             setFilesToDownload([]);
-                                            setFilesInDirectory([])
+                                            setFilesInDirectory([]);
                                         } else {
                                             setIsLoading(true);
                                             setFilesInDirectory([]);

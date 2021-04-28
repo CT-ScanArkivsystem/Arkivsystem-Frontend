@@ -24,5 +24,9 @@
 
 .pageCounter {
     text-align: center;
-    margin-top: 6px;
+    background-color: white;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 1.3em;
+    margin-top: 5px;
 }
