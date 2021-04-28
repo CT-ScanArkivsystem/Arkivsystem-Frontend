@@ -13,6 +13,7 @@ export default function MemberDisplay ({...props}) {
         <Button
             variant={props.variant}
             onClick={props.onClick}
+            disabled={props.disabled}
             size="sm"
             className="memberDisplayLink noHighlight">
             <div className="memberDisplay">

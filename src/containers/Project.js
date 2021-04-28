@@ -98,8 +98,10 @@ export default function Project() {
             setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
             setCurrentPage("Project details")
 
-            let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
-            setSubFoldersInProject(allProjectSubFolders);
+            if (UserStore.role !== "ROLE_USER" || checkPermission("specialPermission")) {
+                let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
+                setSubFoldersInProject(allProjectSubFolders);
+            }
 
             setIsLoading(false);
         }

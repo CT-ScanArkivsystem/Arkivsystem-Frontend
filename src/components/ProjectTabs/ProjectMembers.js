@@ -39,6 +39,7 @@ export default function ProjectMembers(props) {
                     }}
                     key={memberToDisplay.userId}
                     id={memberToDisplay.userId}
+                    disabled={!props.canEditMembers}
                     memberfirstname={memberToDisplay.firstName}
                     memberlastname={memberToDisplay.lastName}
                     memberemail={memberToDisplay.email}

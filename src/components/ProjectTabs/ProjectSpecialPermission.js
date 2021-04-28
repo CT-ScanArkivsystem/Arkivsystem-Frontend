@@ -39,6 +39,7 @@ export default function ProjectSpecialPermission(props) {
                     }}
                     key={userToDisplay.userId}
                     id={userToDisplay.userId}
+                    disabled={!props.canEditSpecialPermission}
                     memberfirstname={userToDisplay.firstName}
                     memberlastname={userToDisplay.lastName}
                     memberemail={userToDisplay.email}
