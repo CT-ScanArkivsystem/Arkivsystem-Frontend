@@ -100,15 +100,14 @@ export default function FileDisplay ({...props}) {
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.fileName}</span>
                 {props.hasCheckbox ?
-                    <Form.Check
+                    <input
                         type="checkbox"
-                        className="tagCheckbox"
+                        className="fileDisplayCheckbox"
                         onClick={() => {
                             setIsChecked(!isChecked);
                             props.toggleFileInList();
                         }}
                     /> : ''}
-
             </div>
         </div>
     );

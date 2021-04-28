@@ -30,3 +30,25 @@
     margin: 0 4px 0 2px;
     color: #565656;
 }
+
+.fileDisplayCheckbox {
+    appearance: none;
+    margin: 8px;
+    width: 29px;
+    height: 25px;
+    border: rgba(0, 0, 0, 0.7) solid 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: url("../../images/checkmark.svg") no-repeat;
+    background-size: 0;
+    transition: all 0.1s;
+}
+
+.fileDisplayCheckbox:hover {
+    border: rgba(0, 0, 0, 0.3) solid 1px;
+}
+
+.fileDisplayCheckbox:checked {
+    background: url("../../images/checkmark.svg") no-repeat;
+    background-size: 100%;
+}

@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import ProjectStore from "../stores/ProjectStore";
 import UserStore from "../stores/UserStore";
 import PostCreateProject from "../apiRequests/PostCreateProject";
-import GetCurrentUser from "../apiRequests/GetCurrentUser";
 
 
 export default function CreateProjectContent() {
