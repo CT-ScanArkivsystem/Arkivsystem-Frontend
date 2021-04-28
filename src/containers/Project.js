@@ -13,6 +13,7 @@ import GetProject from "../apiRequests/GetProject";
 import GetAllTags from "../apiRequests/GetAllTags";
 import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
 import Button from "react-bootstrap/Button";
+import {useHistory} from "react-router-dom";
 
 export default function Project() {
 
@@ -22,6 +23,7 @@ export default function Project() {
     const [allTags, setAllTags] = useState([]);
     const [subFoldersInProject, setSubFoldersInProject] = useState([]);
     const [currentPage, setCurrentPage] = useState("Loading");
+    const history = useHistory();
 
     const projectPages = [
         {
@@ -29,14 +31,16 @@ export default function Project() {
             pageElement: <ProjectDetails
                 canEdit={checkPermission("member")}
                 projectTags={projectTags}
-                allTags={allTags} />
+                allTags={allTags} />,
+            permissionToView: "none"
         },
         {
             pageName: "Upload files",
             pageElement: <UploadToProjectContent
                 canUpload={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
-            />
+            />,
+            permissionToView: "member"
         },
         {
             pageName: "Project files",
@@ -44,26 +48,30 @@ export default function Project() {
                 canDownloadFiles={checkPermission("specialPermission")}
                 canEditFiles={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
-            />
+            />,
+            permissionToView: "specialPermission"
         },
         {
             pageName: "Project images",
             pageElement: <ProjectImages
                 canViewFiles={checkPermission("specialPermission")}
                 projectSubFolders={subFoldersInProject}
-            />
+            />,
+            permissionToView: "specialPermission"
         },
         {
             pageName: "Project members",
             pageElement: <ProjectMembers
                 canEditMembers={checkPermission("owner")}
-            />
+            />,
+            permissionToView: "none"
         },
         {
             pageName: "Special Permission",
             pageElement: <ProjectSpecialPermission
                 canEditSpecialPermission={checkPermission("member")}
-            />
+            />,
+            permissionToView: "none"
         }
     ];
 
@@ -74,26 +82,27 @@ export default function Project() {
     }, []);
 
     async function initialisation() {
-        let project = await GetProject(ProjectStore.projectId);
+        // Check if the projectId is present. If it is not send the user to the frontpage.
+        if (!ProjectStore.projectId) {
+            history.push("/userFrontpage");
+        } else {
+            let project = await GetProject(ProjectStore.projectId);
 
-        putProjectIntoStore(project);
+            putProjectIntoStore(project);
 
-        let tagsInProject = trimTagArray(project.tags, project.tags);
-        setProjectTags(tagsInProject);
+            let tagsInProject = trimTagArray(project.tags, project.tags);
+            setProjectTags(tagsInProject);
 
-        let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
-        setAllTags(allTagsTrimmed);
-        setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
-        setCurrentPage("Project details")
+            let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
+            setAllTags(allTagsTrimmed);
+            setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+            setCurrentPage("Project details")
 
-        let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
-        setSubFoldersInProject(allProjectSubFolders);
+            let allProjectSubFolders = await GetAllProjectSubFolders(project.projectId);
+            setSubFoldersInProject(allProjectSubFolders);
 
-        //let allFilesInProject = await GetAllFileNames("all", project.projectId, "mySubFolder");
-        //setFilesInProject(allFilesInProject);
-
-        //let allFilesInProject = GetAllFileNames(ProjectStore.projectId);
-        setIsLoading(false);
+            setIsLoading(false);
+        }
     }
 
     /**
@@ -160,7 +169,6 @@ export default function Project() {
         if (checkIfAdmin(UserStore.role)) {
             hasPermission = true;
         } else {
-
             switch (permissionNeeded) {
                 case 'member':
                     if (checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId)) {
@@ -177,6 +185,9 @@ export default function Project() {
                         hasPermission = true;
                     }
                     break;
+                case 'none':
+                        hasPermission = true;
+                    break
                 default:
                     hasPermission = false;
                     break;
@@ -213,12 +224,10 @@ export default function Project() {
                     className="sideBarButton noHighlight"
                     key={page.pageName}
                     variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
-                    disabled={isLoading}
+                    disabled={isLoading || !checkPermission(page.permissionToView)}
                     onClick={() => {
-                        setPageContent(page.pageElement)
-                        if (currentPage === page.pageName) {
-                            setCurrentPage("");
-                        } else {
+                        if (currentPage !== page.pageName) {
+                            setPageContent(page.pageElement);
                             setCurrentPage(page.pageName);
                         }
                     }}
