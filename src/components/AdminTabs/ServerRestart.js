@@ -5,13 +5,14 @@ import LoaderButton from "../LoaderButton";
 import Button from "react-bootstrap/Button";
 import ConfirmationModal from "../ConfirmationModal";
 import {Table} from "react-bootstrap";
+import TimePicker from 'react-time-picker';
 
 export default function ServerRestart() {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [restartDate, setRestartDate] = useState("")
-    const [restartTime, setRestartTime] = useState("")
-    const [restartZone, setRestartZone] = useState("")
+    const [restartDate, setRestartDate] = useState()
+    const [restartTime, setRestartTime] = useState()
+    const [restartZone, setRestartZone] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
@@ -68,12 +69,15 @@ export default function ServerRestart() {
                                 onChange={(e) => setRestartDate(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group size="lg" controlId="restartTime">
+                        <Form.Group size="lg" controlId="restartTime" className="put-on-rows">
                             <Form.Label>Time:</Form.Label>
-                            <Form.Control
-                                type="text"
+                            <TimePicker
+                                className="time-picker-element"
                                 value={restartTime}
-                                onChange={(e) => setRestartTime(e.target.value)}
+                                onChange={(e) => setRestartTime(e)} //Why??
+                                locale="nb-NO"
+                                format="HH:mm"
+
                             />
                         </Form.Group>
                         <Form.Group size="lg" controlId="restartZone">
@@ -86,8 +90,8 @@ export default function ServerRestart() {
                         </Form.Group>
                         <Button
                             variant="dark"
-                            onClick={() => openModal()}
-                            disabled={!validateForm()}
+                            onClick={() => console.log(restartTime.toString())}
+                            disabled={false}
                         >
                             Submit
                         </Button>

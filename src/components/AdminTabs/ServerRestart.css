@@ -14,3 +14,15 @@
     margin: 0 auto 0 auto;
     min-width: 50%;
 }
+
+.time-picker-element {
+    /*margin: 5px 5px 5px 5px;*/
+    background-color: white;
+}
+
+.put-on-rows {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+}
