@@ -12,6 +12,8 @@ import TagDisplay from "../components/TagDisplay";
 import SideBar from "../components/SideBar";
 import LoadingPage from "./LoadingPage";
 import {Dropdown} from "react-bootstrap";
+import UserStore from "../stores/UserStore";
+import GetMyProjects from "../apiRequests/GetMyProjects";
 
 export default function UserFrontpage() {
     const [searchInput, setSearchInput] = useState("");
@@ -47,7 +49,12 @@ export default function UserFrontpage() {
     async function initGetAllProjects() {
         try {
             if (!doesHaveProjects) {
-                let tempAllProjects = await GetAllProjects();
+                let tempAllProjects;
+                if (UserStore.role === "ROLE_ACADEMIC" || UserStore.role === "ROLE_ADMIN") {
+                    tempAllProjects = await GetMyProjects();
+                } else {
+                    tempAllProjects = await GetAllProjects();
+                }
                 if (tempAllProjects.ok) {
                     setProjectsToDisplay(await tempAllProjects.json());
                     setDoesHaveProjects(true);
