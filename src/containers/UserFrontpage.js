@@ -306,7 +306,7 @@ export default function UserFrontpage() {
                         </div>
                         }
                     </div>
-                    <div className="containerFooter">
+                    {UserStore.role === "ROLE_USER" ? "" : <div className="containerFooter">
                         <Link to="/createProject">
                             <LoaderButton
                                 variant="dark"
@@ -316,7 +316,7 @@ export default function UserFrontpage() {
                                 New project
                             </LoaderButton>
                         </Link>
-                    </div>
+                    </div>}
                 </div>
         </div>
     );
