@@ -178,7 +178,7 @@ export default function ProjectFiles(props) {
                           isLoading={isLoading}
                           disabled={isLoading || !props.canDownloadFiles || filesToDownload.length < 1}
                           onClick={() => {
-                              downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                              downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download file{filesToDownload.length > 1 ? "s" : ""}
@@ -193,7 +193,7 @@ export default function ProjectFiles(props) {
                               let allFilesToDownload = [...filesInDirectory].map(file => {
                                   return(file.fileName)
                               });
-                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download all
