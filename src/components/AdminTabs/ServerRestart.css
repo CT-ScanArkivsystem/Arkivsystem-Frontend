@@ -16,8 +16,14 @@
 }
 
 .time-picker-element {
-    /*margin: 5px 5px 5px 5px;*/
     background-color: white;
+    min-height: 38px;
+}
+
+.react-time-picker__wrapper {
+    border: thin solid #ced4da !important;
+    border-radius: 5px;
+
 }
 
 .put-on-rows {

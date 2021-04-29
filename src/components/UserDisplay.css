@@ -2,6 +2,7 @@
 }
 
 .user-display:hover {
+    /*outline: thin solid black !important;*/
     box-shadow: 1px 1px 8px 1px #4e3e22 inset;
     cursor: pointer;
 }
