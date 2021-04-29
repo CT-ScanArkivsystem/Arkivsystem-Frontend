@@ -10,9 +10,9 @@ import {currentIP} from "../App";
  * @returns boolean didUserGetLoggedIn if the login was a success, returns true. Else false.
  */
 export default async function PostLogin(email, password) {
-    let didUserGetLoggedIn = false;
+    let res;
     try {
-        let res = await fetch (currentIP + '/auth/login', {
+        res = await fetch (currentIP + '/auth/login', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -25,16 +25,16 @@ export default async function PostLogin(email, password) {
             })
         });
 
-        let result = await res.json();
-        if (result.success) {
-            didUserGetLoggedIn = true;
+        if (res.ok) {
+            //console.log("User was logged in")
+        } else {
+            console.log("User was not logged in");
         }
     }
     catch (e) {
         onError(e);
-        didUserGetLoggedIn = false;
         //Send the user to the home page. Prevents the user from accessing sites when not logged in.
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return(didUserGetLoggedIn);
+    return(res);
 }

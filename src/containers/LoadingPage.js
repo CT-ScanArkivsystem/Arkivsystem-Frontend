@@ -1,7 +1,7 @@
 import React from "react";
 import "./LoadingPage.css";
 
-export default function NotFound() {
+export default function LoadingPage() {
     return (
         <div className="Loading text-center">
             <h3>Loading</h3>

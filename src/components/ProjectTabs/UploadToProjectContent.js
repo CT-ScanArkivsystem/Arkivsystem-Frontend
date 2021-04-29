@@ -92,7 +92,7 @@ export default function UploadToProjectContent(props) {
                     setFilesInQueue([]);
                     setIsLoading(false);
                     setErrorMessage("");
-                    console.log("All files were uploaded successfully!")
+                    //console.log("All files were uploaded successfully!")
                 } else if (didFilesGetUploaded && didFilesGetUploaded.length) {
                     setIsLoading(false);
                     setErrorMessage(
@@ -142,13 +142,13 @@ export default function UploadToProjectContent(props) {
     function renderSubFolders(subFolderList) {
         let result = [];
 
-        if (subFolderList) {
+        if (subFolderList.length > 0) {
             result = subFolderList.map((subFolder) => {
                 return (
                     <SubFolderDisplay
                         isproject={false}
                         key={subFolder}
-                        name={subFolder.slice(0, -1)}
+                        name={subFolder}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         onClick={() => {
                             if (selectedSubFolder === subFolder) {
@@ -162,22 +162,33 @@ export default function UploadToProjectContent(props) {
                     />
                 )
             })
+        } else if (isLoading) {
+            result = [<span>Loading!</span>];
+        } else {
+            result = [<span>Empty!</span>];
         }
         result.push(
-            <form onSubmit={handleSubFolderSubmit} key="addNewFolder">
-                <input
-                    type="text"
-                    className="newFolderTextInput"
-                    placeholder="Add new folder"
-                    value={newFolderName}
-                    onChange={(e) => setNewFolderName(e.target.value)}
-                />
+            <form onSubmit={handleSubFolderSubmit} className="newFolderForm" key="addNewFolder">
+                <div className="newFolderInputs">
+                    <input
+                        type="text"
+                        className="newFolderTextInput"
+                        disabled={!props.canUpload}
+                        placeholder="Add new folder"
+                        value={newFolderName}
+                        onChange={(e) => setNewFolderName(e.target.value)}
+                    />
+                    <input
+                        type="submit"
+                        className="addNewFolderButton"
+                        value="Create"
+                        disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",") || !props.canUpload}
+                    />
+                </div>
                 {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?
                     <span className="errorMessage">Your folder contains illegal characters!</span> : ""}
-                <input type="submit"
-                       disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",")}
-                       className="hiddenButton" tabIndex="-1"/>
             </form>
+
         )
         return result;
     }
@@ -185,52 +196,52 @@ export default function UploadToProjectContent(props) {
     function handleSubFolderSubmit(event) {
         event.preventDefault();
         let tempSubFolderArray = projectSubFolders;
-        tempSubFolderArray.push(newFolderName + "/");
+        tempSubFolderArray.push(newFolderName);
 
         setProjectSubFolders(tempSubFolderArray);
         setNewFolderName("");
     }
 
     return (
-      <div className="uploadFiles">
-          <h2 className="uploadHeader">Upload to project {ProjectStore.projectName}:</h2>
-              <div className="uploadContent">
-                  <div className="projectSubFolderContainer">
-                      <h4>Sub-folders</h4>
-                      <div className="projectSubFolders">
-                          {renderSubFolders(projectSubFolders)}
+        <div className="uploadFiles">
+             <h2 className="uploadHeader">Upload to project</h2>
+                  <div className="uploadContent">
+                      <div className="projectSubFolderContainer">
+                          <h4>Sub-folders</h4>
+                          <div className="projectSubFolders">
+                              {renderSubFolders(projectSubFolders)}
+                          </div>
                       </div>
-                  </div>
-                  <div className="container">
-                      <h5>Upload</h5>
-                      <Form onSubmit={handleSubmit} className="uploadToProjectForm">
-                          <Container className="dragAndDrop" {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
-                              <input {...getInputProps()} />
-                              <span>Drag 'n' drop some files here, or click to select files</span>
-                          </Container>
-                          <LoaderButton
-                              className="uploadButton"
-                              type="submit"
-                              isLoading={isLoading}
-                              disabled={!validateFiles() || !hasSelectedSubFolder}
-                              onClick={handleSubmit}
-                          >
-                              Upload
-                          </LoaderButton>
-                      </Form>
-                      <div className="width100">
-                          <h2>Files to upload</h2>
-                          {errorMessage}
-                          <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
-                      </div>
-                      <div className="width100">
-                          <h2>Files uploaded</h2>
-                          <div>
-                              {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded yet."}
+                      <div className="container">
+                          <h4>Upload</h4>
+                          <Form onSubmit={handleSubmit} className="uploadToProjectForm">
+                              <Container className="dragAndDrop" {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
+                                  <input {...getInputProps()} />
+                                  <span>Drag 'n' drop some files here, or click to select files</span>
+                              </Container>
+                              <LoaderButton
+                                  className="uploadButton"
+                                  type="submit"
+                                  isLoading={isLoading}
+                                  disabled={!validateFiles() || !hasSelectedSubFolder}
+                                  onClick={handleSubmit}
+                              >
+                                  Upload
+                              </LoaderButton>
+                          </Form>
+                          <div className="width100">
+                              <h2>Files to upload</h2>
+                              {errorMessage}
+                              <div>{filesInQueue.length > 0 ? filesInQueue : "No files have been added to the queue yet."}</div>
+                          </div>
+                          <div className="width100">
+                              <h2>Files uploaded</h2>
+                              <div>
+                                  {uploadedFiles.length > 0 ? uploadedFiles : "No files have been uploaded yet."}
+                              </div>
                           </div>
                       </div>
                   </div>
-              </div>
-      </div>
+        </div>
     );
 }

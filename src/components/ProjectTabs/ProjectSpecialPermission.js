@@ -39,6 +39,7 @@ export default function ProjectSpecialPermission(props) {
                     }}
                     key={userToDisplay.userId}
                     id={userToDisplay.userId}
+                    disabled={!props.canEditSpecialPermission}
                     memberfirstname={userToDisplay.firstName}
                     memberlastname={userToDisplay.lastName}
                     memberemail={userToDisplay.email}
@@ -149,47 +150,51 @@ export default function ProjectSpecialPermission(props) {
               />
           </div>
           <div className="tabContent tabContentSpecialPermission">
-              <Form.Group size="lg" controlId="projectDescription" className="addMemberField">
-                  <Form.Label className="addMemberLabel">Grant permission</Form.Label>
-                  <div className="formInputAndButton">
-                      <Form.Control
-                          className="grantSpecialPermissionInput"
-                          type="email"
-                          name="Grant special permission"
-                          placeholder="Enter email"
-                          disabled={isLoading || !props.canEditSpecialPermission}
-                          value={emailOfUserToGrant}
-                          onChange={(e) => setEmailOfUserToGrant(e.target.value)}
-                      />
-                      <LoaderButton
-                          className="addMemberButton"
-                          size="sm"
-                          type="submit"
-                          isLoading={isLoading}
-                          disabled={isLoading || !props.canEditSpecialPermission || emailOfUserToGrant.length < 1}
-                          onClick={() => {handleGrantSpecialPermission(ProjectStore.projectId, emailOfUserToGrant)}}
-                      >
-                          Grant permission
-                      </LoaderButton>
-                  </div>
-                  <span className="errorMessage">{errorMessage}</span>
-              </Form.Group>
+              {props.canEditSpecialPermission ?
+                  <Form.Group size="lg" controlId="projectDescription" className="addMemberField">
+                      <Form.Label className="addMemberLabel">Grant permission</Form.Label>
+                      <div className="formInputAndButton">
+                          <Form.Control
+                              className="grantSpecialPermissionInput"
+                              type="email"
+                              name="Grant special permission"
+                              placeholder="Enter email"
+                              disabled={isLoading || !props.canEditSpecialPermission}
+                              value={emailOfUserToGrant}
+                              onChange={(e) => setEmailOfUserToGrant(e.target.value)}
+                          />
+                          <LoaderButton
+                              className="addMemberButton"
+                              size="sm"
+                              type="submit"
+                              isLoading={isLoading}
+                              disabled={isLoading || !props.canEditSpecialPermission || emailOfUserToGrant.length < 1}
+                              onClick={() => {handleGrantSpecialPermission(ProjectStore.projectId, emailOfUserToGrant)}}
+                          >
+                              Grant permission
+                          </LoaderButton>
+                      </div>
+                      <span className="errorMessage">{errorMessage}</span>
+                  </Form.Group>
+              : ""}
               <div className="memberList">
                   {userListForRender}
               </div>
-              <LoaderButton
-                  className="removeSpecialPermissionButton"
-                  size="sm"
-                  variant="outline-danger"
-                  isLoading={isLoading}
-                  disabled={isLoading || !props.canEditSpecialPermission || !selectedUser.email}
-                  onClick={() => {
-                      openRevokeModal(ProjectStore.projectId, selectedUser.email);
-                      //handleRemoveSpecialPermission(ProjectStore.projectId, selectedUser.email);
-                  }}
-              >
-                  Remove member
-              </LoaderButton>
+              {props.canEditSpecialPermission ?
+                  <LoaderButton
+                      className="removeSpecialPermissionButton"
+                      size="sm"
+                      variant="outline-danger"
+                      isLoading={isLoading}
+                      disabled={isLoading || !props.canEditSpecialPermission || !selectedUser.email}
+                      onClick={() => {
+                          openRevokeModal(ProjectStore.projectId, selectedUser.email);
+                          //handleRemoveSpecialPermission(ProjectStore.projectId, selectedUser.email);
+                      }}
+                  >
+                      Remove member
+                  </LoaderButton>
+              : ""}
           </div>
       </div>
   );

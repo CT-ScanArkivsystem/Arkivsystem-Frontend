@@ -33,13 +33,13 @@ export default function ProjectFiles(props) {
     function renderSubFolders(subFolderList) {
         let result = [];
 
-        if (subFolderList) {
+        if (subFolderList.length > 0) {
             result = subFolderList.map((subFolder) => {
                 return(
                     <SubFolderDisplay
                         className="fileDisplay"
                         key={subFolder}
-                        name={subFolder.slice(0, -1)}
+                        name={subFolder}
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         hideChildren={selectedSubFolder !== subFolder}
                         showDropDownArrow={true}
@@ -48,6 +48,7 @@ export default function ProjectFiles(props) {
                                 setSelectedSubFolder("");
                                 setSelectedDefaultFolder("");
                                 setFilesToDownload([]);
+                                setFilesInDirectory([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
                                 setSelectedDefaultFolder("");
@@ -66,7 +67,7 @@ export default function ProjectFiles(props) {
                                         if (selectedDefaultFolder === defaultFolder) {
                                             setSelectedDefaultFolder("");
                                             setFilesToDownload([]);
-                                            setFilesInDirectory([])
+                                            setFilesInDirectory([]);
                                         } else {
                                             setIsLoading(true);
                                             setFilesInDirectory([]);
@@ -82,7 +83,9 @@ export default function ProjectFiles(props) {
                 )
             })
         }
-        else {
+        else if (isLoading) {
+            result = <span>Loading!</span>
+        } else {
             result = <span>Empty!</span>
         }
         return result;
@@ -175,7 +178,7 @@ export default function ProjectFiles(props) {
                           isLoading={isLoading}
                           disabled={isLoading || !props.canDownloadFiles || filesToDownload.length < 1}
                           onClick={() => {
-                              downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                              downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download file{filesToDownload.length > 1 ? "s" : ""}
@@ -190,7 +193,7 @@ export default function ProjectFiles(props) {
                               let allFilesToDownload = [...filesInDirectory].map(file => {
                                   return(file.fileName)
                               });
-                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder.slice(0, -1));
+                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download all

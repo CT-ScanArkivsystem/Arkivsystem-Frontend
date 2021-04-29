@@ -47,16 +47,26 @@
     text-align: center;
 }
 
-.newFolderTextInput {
-    width: 100%;
-    height: 35px;
+.newFolderForm {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
 }
 
-.hiddenButton {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
+.newFolderInputs {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.newFolderTextInput {
+    height: 35px;
+    flex-grow: 1;
+}
+
+.addNewFolderButton {
+    min-width: 0;
+    flex-grow: 1;
 }
 
 .width100 {

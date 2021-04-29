@@ -123,6 +123,10 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: row;
     width: 100%;
   }
+  span.errorMessage {
+    color: red;
+    text-align: center;
+  }
 
 `;
 
