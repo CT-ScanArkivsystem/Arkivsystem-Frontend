@@ -17,7 +17,6 @@ import GetLogout from "./apiRequests/GetLogout";
 
 export const currentIP = "http://localhost:8080";
 
-
 function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);

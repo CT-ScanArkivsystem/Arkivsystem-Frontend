@@ -8,40 +8,87 @@ import PutAddTag from "../../apiRequests/PutAddTag";
 import PutRemoveTag from "../../apiRequests/PutRemoveTag";
 import PutSetProjectPrivacy from "../../apiRequests/PutSetProjectPrivacy";
 import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription";
+import {Table} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import PostCreateTag from "../../apiRequests/PostCreateTag";
 
 export default function ProjectDetails(props) {
     const [isLoading, setIsLoading] = useState(false);
+    const [searchInput, setSearchInput] = useState("");
     const [projectDescription, setProjectDescription] = useState(ProjectStore.projectDescription);
     const [editingDescription, setEditingDescription] = useState(false);
     const [editingTags, setEditingTags] = useState(false);
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
     const [tagsToBeRemoved, setTagsToBeRemoved] = useState([]);
+    const [allTags, setAllTags] = useState(props.allTags);
+    const [projectTags, setProjectTags] = useState(props.projectTags);
 
-    function renderProjectTags() {
+    function renderTagsInProject(projectTags, currentSearch) {
         let result = [];
+        let tagsToList = [];
+        if (currentSearch && projectTags) {
+            projectTags.forEach((tag) => {
+                if (tag.tagName.toLowerCase().includes(currentSearch.toLowerCase())) {
+                    tagsToList.push(tag);
+                }
+            })
+        } else {
+            tagsToList = projectTags;
+        }
 
-        if (props.projectTags !== []) {
-            result = props.allTags.map(function(tagToDisplay) {
+        if (tagsToList) {
+            result = tagsToList.map((tagToDisplay) => {
                 return (
-                    <TagDisplay
-                        key={"TagKey" + tagToDisplay.tagName}
-                        id={"TagId" + tagToDisplay.tagName}
-                        label={tagToDisplay.tagName}
-                        value={tagToDisplay.tagName}
-                        disabled={!editingTags}
-                        defaultChecked={tagToDisplay.isInProject}
-                        onChange={() => {
-                            tagToDisplay.isInProject = !tagToDisplay.isInProject;
-                            if (tagToDisplay.isInProject === true) {
-                                addTagsToArray(tagToDisplay);
-                            } else if (tagToDisplay.isInProject === false) {
-                                removeTagsFromArray(tagToDisplay);
-                            }
-                        }}
-                    />
+                    <tr className="tagNameDisplayRow">
+                        <td className="tagNameDisplay">{tagToDisplay.tagName}</td>
+                    </tr>
                 )
             })
+        }
+        return result;
+    }
+
+    function renderAllTags(allTags, currentSearch) {
+        let result = [];
+        let tagsToList = [];
+        if (currentSearch && allTags) {
+            allTags.forEach((tag) => {
+                if (tag.tagName.toLowerCase().includes(currentSearch.toLowerCase())) {
+                    tagsToList.push(tag);
+                }
+            })
+        } else {
+            tagsToList = allTags;
+        }
+
+        if (tagsToList) {
+            result = tagsToList.map((tagToDisplay) => {
+                return (
+                    <tr className="tagNameDisplayRow">
+                        <td className="tagNameDisplay">
+                            <TagDisplay
+                                key={"TagKey" + tagToDisplay.tagName}
+                                id={"TagId" + tagToDisplay.tagName}
+                                customCheckbox={true}
+                                label={tagToDisplay.tagName}
+                                value={tagToDisplay.tagName}
+                                disabled={!editingTags}
+                                defaultChecked={tagToDisplay.isInProject}
+                                onChange={() => {
+                                    tagToDisplay.isInProject = !tagToDisplay.isInProject;
+                                    if (tagToDisplay.isInProject === true) {
+                                        addTagsToArray(tagToDisplay);
+                                    } else if (tagToDisplay.isInProject === false) {
+                                        removeTagsFromArray(tagToDisplay);
+                                    }
+                                }}
+                            />
+                        </td>
+                    </tr>
+                )
+            })
+
         }
         return result;
     }
@@ -70,25 +117,49 @@ export default function ProjectDetails(props) {
 
     async function addTagsToProject() {
         if (tagsToBeAdded.length > 0) {
-            await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
+            let result = await PutAddTag(ProjectStore.projectId, tagsToBeAdded);
+            if (result) {
+                tagsToBeAdded.forEach((tag) => {
+                    projectTags.push({tagName: tag, isInProject: true});
+                })
+            }
             setTagsToBeAdded([]);
         }
     }
 
     async function removeTagsFromProject() {
         if (tagsToBeRemoved.length > 0) {
-            await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
+            let result = await PutRemoveTag(ProjectStore.projectId, tagsToBeRemoved);
+            if (result) {
+                tagsToBeRemoved.forEach((tag) => {
+                    projectTags.splice(projectTags.indexOf({tagName: tag, isInProject: true}), 1);
+                })
+            }
             setTagsToBeRemoved([]);
         }
     }
 
-    async function setPrivacy() {
-        let wasSuccessful = false;
-        if (isProjectPrivate) {
-            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, false);
-        } else if (!isProjectPrivate) {
-            wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, true);
+    /**
+     * Calls PostCreateTag API call to create a new tag from a given tag name.
+     * @param tagToCreate name of the tag that is going to be created.
+     * @returns {Promise<void>}
+     */
+    async function createNewTag(tagToCreate) {
+        let result;
+        if (tagToCreate) {
+            setIsLoading(true);
+            result = await PostCreateTag(tagToCreate);
+            allTags.push(result);
+            setIsLoading(false);
         }
+    }
+
+    /**
+     * Toggles the privacy setting in a project.
+     * @returns {Promise<void>}
+     */
+    async function setPrivacy() {
+        let wasSuccessful = await PutSetProjectPrivacy(ProjectStore.projectId, !isProjectPrivate);
 
         if (wasSuccessful) {
             ProjectStore.isPrivate = !isProjectPrivate;
@@ -125,24 +196,54 @@ export default function ProjectDetails(props) {
                           label="Is project private"
                           disabled={!props.canEdit}
                           defaultChecked={ProjectStore.isPrivate}
-                          onChange={() => {
-                              setPrivacy();
+                          onChange={async function() {
+                              await setPrivacy();
                           }}
                       />
                   </div>
+                  <h5>Tags</h5>
                   <div className="tagsContainer defaultBorder">
-                      {renderProjectTags()}
+                      <div className="searchInputContainer">
+                          <input
+                              className="searchForTags"
+                              type="search"
+                              placeholder={editingTags ? 'Add tag' : 'Search'}
+                              value={searchInput}
+                              onChange={(e) => setSearchInput(e.target.value)}
+                          />
+                      </div>
+                      <Table className="table-striped tagsTable">
+                          <tbody>
+                          {editingTags && renderAllTags(allTags, searchInput).length === 0 ?
+                              <tr>
+                                  <td>
+                                      <Button
+                                          className="createNewTagButton"
+                                          variant="dark"
+                                          onClick={async function() {
+                                              await createNewTag(searchInput)
+                                          }}
+                                      >
+                                          Create new tag
+                                      </Button>
+                                  </td>
+                              </tr> : ""
+                          }
+                          {editingTags ? renderAllTags(allTags, searchInput) : renderTagsInProject(projectTags, searchInput)}
+                          </tbody>
+                      </Table>
                       <LoaderButton
                           className="editButton"
                           size="sm"
                           type="submit"
                           isLoading={isLoading}
                           disabled={!props.canEdit}
-                          onClick={() => {
+                          onClick={async function() {
                               if (editingTags) {
                                   setIsLoading(true);
-                                  addTagsToProject(tagsToBeAdded);
-                                  removeTagsFromProject(tagsToBeRemoved);
+                                  await addTagsToProject(tagsToBeAdded);
+                                  await removeTagsFromProject(tagsToBeRemoved);
+                                  setSearchInput("");
                               }
                               setIsLoading(false);
                               setEditingTags(!editingTags);
