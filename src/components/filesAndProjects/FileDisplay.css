@@ -8,7 +8,14 @@
     flex: 1;
     align-items: center;
     margin-bottom: 8px;
-    border: solid 1px black;
+    border: rgba(0, 0, 0, 1) solid 1px;
+    user-select: none;
+}
+
+.fileDisplay:hover {
+    border: rgba(0, 0, 0, 0.5) solid 1px;
+    outline: rgba(0, 0, 0, 0.6) solid 1px;
+    cursor: pointer;
 }
 
 .fileDisplayIcon {
@@ -20,12 +27,35 @@
     flex-grow: 1;
     text-align: start;
     margin: 0 2px 0 6px;
-    width: 0%;
+    width: 100%;
+    display: inline-block;
     word-wrap: break-word;
-    max-width: 100%;
+    word-break: break-word;
 }
 
 .fileDisplayOwner {
     margin: 0 4px 0 2px;
     color: #565656;
+}
+
+.fileDisplayCheckbox {
+    appearance: none;
+    margin: 8px;
+    width: 29px;
+    height: 25px;
+    border: rgba(0, 0, 0, 0.7) solid 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: url("../../images/checkmark.svg") no-repeat;
+    background-size: 0;
+    transition: all 0.1s;
+}
+
+.fileDisplayCheckbox:hover {
+    border: rgba(0, 0, 0, 0.3) solid 1px;
+}
+
+.fileDisplayCheckbox:checked {
+    background: url("../../images/checkmark.svg") no-repeat;
+    background-size: 100%;
 }

@@ -11,3 +11,7 @@ If it is somewhat low it will cause the sidebar to shrink on some pages
     flex-direction: column;
     text-align: center;
 }
+
+.sideBarButton {
+    margin-top: 4px;
+}

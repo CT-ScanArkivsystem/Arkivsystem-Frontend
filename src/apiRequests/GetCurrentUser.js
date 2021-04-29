@@ -9,7 +9,7 @@ import UserStore from "../stores/UserStore";
  * @returns boolean isUserLoggedIn if the user information was pulled successfully returns true. Else false
  */
 export default async function GetCurrentUser() {
-    let isUserLoggedIn = false;
+    let isUserLoggedIn;
         try {
             let res = await fetch(currentIP + '/user/currentUser', {
                 method: 'GET',
@@ -19,10 +19,10 @@ export default async function GetCurrentUser() {
                 },
             });
 
-            let result = await res.json();
 
             if (res.ok) {
                 //console.log("User is logged in. Gathering user information!");
+                let result = await res.json();
                 UserStore.userId = result.userId;
                 UserStore.email = result.email;
                 UserStore.firstName = result.firstName;

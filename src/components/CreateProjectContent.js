@@ -15,6 +15,7 @@ export default function CreateProjectContent() {
     const [creationDate, setCreationDate] = useState("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const history = useHistory();
 
 
@@ -30,16 +31,34 @@ export default function CreateProjectContent() {
         setIsLoading(true);
         try {
             let result = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
-            if (result !== null && result) {
-                ProjectStore.projectId = result.projectId;
-                ProjectStore.projectName = projectName;
-                ProjectStore.projectDescription = projectDescription;
-                ProjectStore.isPrivate = isPrivate;
-                ProjectStore.creationDate = creationDate;
-                ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
-                history.push("/project");
-            } else {
-                console.log("Project was not created!");
+            switch (result.status) {
+                case 200:
+                    ProjectStore.projectId = result.projectId;
+                    ProjectStore.projectName = projectName;
+                    ProjectStore.projectDescription = projectDescription;
+                    ProjectStore.isPrivate = isPrivate;
+                    ProjectStore.creationDate = creationDate;
+                    ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
+                    history.push("/project");
+                    break;
+                case 403:
+                    setErrorMessage("You have insufficient rights to create a project! Sending to the frontpage.");
+                    setTimeout(() => {
+                        history.push("/userFrontpage");
+                    }, 5000);
+                    break;
+                case 404:
+                    setErrorMessage("Create project failed. Error code 404!");
+                    setIsLoading(false);
+                    break;
+                case 500:
+                    setErrorMessage("An internal server error occurred! Error code 500!");
+                    setIsLoading(false);
+                    break;
+                default:
+                    setErrorMessage("An unexpected error occurred! Unexpected error code!");
+                    setIsLoading(false);
+                    break;
             }
         }
         catch (e) {
@@ -101,7 +120,8 @@ export default function CreateProjectContent() {
                       />
                   </Form.Group>
           </div>
-      </div>
+              <span className="errorMessage">{errorMessage}</span>
+          </div>
           <div className="containerFooter">
               <LoaderButton
                   size="bg"

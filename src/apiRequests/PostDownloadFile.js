@@ -15,7 +15,7 @@ export default async function PostDownloadFile(fileNames, projectId, subFolder) 
         urlencoded.append("subFolder", subFolder);
         fileNames.forEach(file => {
             urlencoded.append("fileName", file);
-            console.log("fileName, " + file);
+            //console.log(file);
         });
 
         let res = await fetch(currentIP + '/user/downloadFile', {

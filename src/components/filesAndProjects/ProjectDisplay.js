@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import "./ProjectDisplay.css";
-import folderIcon from "../../images/Image-Folder-icon.png";
+import projectIcon from "../../images/fileIcons/zip.svg";
+import privateProjectIcon from "../../images/fileIcons/privateProject.svg";
 import ProjectStore from "../../stores/ProjectStore";
 
 /**
@@ -13,34 +14,56 @@ import ProjectStore from "../../stores/ProjectStore";
 export default function ProjectDisplay ({...props}) {
 
     // This sets the default properties of the file. Also works as a guide to what needs to be input.
+    // Some of these are not needed anymore as they will be gotten when going to the project.
     ProjectDisplay.defaultProps = {
         projectId: "Default ID",
         projectName: "Default name",
-        projectDescription: "Default description",
         projectOwner: "Default Owner",
-        projectIsPrivate: true,
-        projectCreationDate: "2021-04-14",
-        projectMembers: [],
-        usersWithSpecialPermission: []
+        projectOwnerName: undefined,
+        projectIsPrivate: false,
+        projectResultInfo: ""
     }
 
-    function putProjectIntoStore() {
-            ProjectStore.projectId = props.projectId;
-            ProjectStore.projectName = props.projectName;
-            ProjectStore.projectDescription = props.projectDescription;
-            ProjectStore.projectOwner = props.projectOwner;
-            ProjectStore.isPrivate = props.projectIsPrivate;
-            ProjectStore.creationDate = props.projectCreationDate;
-            ProjectStore.projectMembers = props.projectMembers;
-            ProjectStore.usersWithSpecialPermission = props.usersWithSpecialPermission;
+    const resultInfoHashmap = new Map([
+        ["name", "Name"],
+        ["owner", "Owner"],
+        ["description", "Description"],
+        ["date", "Date"],
+        ["member", "Member"],
+        ["project_Tag", "Project tag"],
+        ["file_tag", "File tag"],
+    ])
+
+    let infoToDisplay = "";
+
+    function setProjectIdToStore() {
+        ProjectStore.projectId = props.projectId;
+    }
+
+    function getResultInfo() {
+        // Checks if the extension found is the same as the filename. If it is it's a folder.
+        if (props.projectResultInfo) {
+            if (resultInfoHashmap.has(props.projectResultInfo[0])) {
+                infoToDisplay = resultInfoHashmap.get(props.projectResultInfo[0]);
+            } else {
+                infoToDisplay = "";
+            }
+        }
+        return(infoToDisplay);
     }
 
     return (
-        <Link onClick={putProjectIntoStore} to="/project" className="noUnderlineOnHover">
+        <Link onClick={setProjectIdToStore} to="/project" className="noUnderlineOnHover">
             <div className="projectDisplay customBorderAndText highlightOnHover noUnderLineOnHover">
-                <img className="projectDisplayIcon" src={folderIcon} alt="Project icon" />
+                <img className="projectDisplayIcon" src={props.projectIsPrivate ? privateProjectIcon : projectIcon} alt="Project icon" />
                 <span className="projectDisplayName">{props.projectName}</span>
-                <span className="projectDisplayOwner">{props.projectOwner.firstName + " " + props.projectOwner.lastName}</span>
+                <span className="projectResultInfo">{getResultInfo()}</span>
+                <span className="projectDisplayOwner">
+                    {props.projectOwnerName
+                        ? props.projectOwnerName
+                        : props.projectOwner.firstName + " " + props.projectOwner.lastName
+                    }
+                </span>
             </div>
         </Link>
     );

@@ -5,6 +5,7 @@ import {onError} from "../../libs/errorLib";
 import "./CreateUser.css";
 import LoaderButton from "../LoaderButton";
 import PostCreateUser from "../../apiRequests/PostCreateUser";
+import SuccessModal from "../SuccessModal";
 
 export default function CreateUser() {
     const {userHasAuthenticated} = useAppContext();
@@ -15,6 +16,11 @@ export default function CreateUser() {
     const [password2, setPassword2] = useState("");
     const [role, setRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
+    const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
+
 
     /**
      * Checks if both form inputs have something put into them.
@@ -39,7 +45,8 @@ export default function CreateUser() {
             if (didUserGetCreated) {
                 userHasAuthenticated(true);
                 setIsLoading(false);
-                window.location.reload(false);
+                openModal()
+                // window.location.reload(false);
             } else {
                 console.log("User was not created!");
             }
@@ -50,7 +57,16 @@ export default function CreateUser() {
         }
     }
 
-    function displayFormError(error) {
+    function setStatesToEmpty() {
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setPassword1("")
+        setPassword2("")
+        setRole("user")
+    }
+
+    function displayFormError() {
         let inputError = "";
 
         if (firstName.trim().length < 1 || firstName.trim().length > 255) {
@@ -69,6 +85,17 @@ export default function CreateUser() {
         return inputError;
     }
 
+    function openModal() {
+        setIsModalOpen(true);
+        setModalText("User created successfully");
+    }
+
+
+    function closeModal() {
+        setIsModalOpen(false)
+        setStatesToEmpty()
+    }
+
     // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
     return (
         <div className="createUser">
@@ -76,6 +103,12 @@ export default function CreateUser() {
                 <h2>Create a new user:</h2>
             </div>
             <div className="tabContent">
+                <SuccessModal
+                    functionToCloseModal={closeModal}
+                    isOpen={isModalOpen}
+                    modalText={modalText}
+                    functionIfConfirmed={functionIfConfirmed}
+                />
                 <Form className="formContainer" onSubmit={handleSubmit}>
                     <div className="first-lastname-box">
                         <Form.Group className="firstName" size="lg" controlId="firstName">
@@ -106,7 +139,7 @@ export default function CreateUser() {
                     </Form.Group>
                     <div className="password-box">
                         <Form.Group className="password1" size="lg" controlId="password1">
-                            <Form.Label>Password (Minimum 5 characters long)</Form.Label>
+                            <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 value={password1}
@@ -114,7 +147,7 @@ export default function CreateUser() {
                             />
                         </Form.Group>
                         <Form.Group className="password2" size="lg" controlId="password2">
-                            <Form.Label>Enter password again</Form.Label>
+                            <Form.Label>Repeat password</Form.Label>
                             <Form.Control
                                 type="password"
                                 value={password2}

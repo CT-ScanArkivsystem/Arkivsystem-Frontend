@@ -39,6 +39,7 @@ export default function ProjectMembers(props) {
                     }}
                     key={memberToDisplay.userId}
                     id={memberToDisplay.userId}
+                    disabled={!props.canEditMembers}
                     memberfirstname={memberToDisplay.firstName}
                     memberlastname={memberToDisplay.lastName}
                     memberemail={memberToDisplay.email}
@@ -52,8 +53,6 @@ export default function ProjectMembers(props) {
     async function handleAddMember(projectId, emailOfUserToAdd) {
         if (emailOfUserToAdd) {
             let result = await PutAddMemberToProject(projectId, emailOfUserToAdd);
-
-            console.log(result.status)
 
             switch (result.status) {
                 case 200:
@@ -72,7 +71,6 @@ export default function ProjectMembers(props) {
                 default:
                     break;
             }
-
         }
     }
 
@@ -132,7 +130,7 @@ export default function ProjectMembers(props) {
                 functionIfConfirmed={functionIfConfirmed}
             />
             <div className="tabHeader">
-                <h2>Manage members</h2>
+                <h2>Project members</h2>
             </div>
             <div className="tabContent">
                 <div className="memberListContainer">
@@ -140,41 +138,44 @@ export default function ProjectMembers(props) {
                     <div className="memberList">
                         {renderMemberList()}
                     </div>
-                    <div className="memberButtons">
-                        <LoaderButton
-                            className="removeMemberButton"
-                            size="sm"
-                            variant="outline-danger"
-                            isLoading={isLoading}
-                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
-                            onClick={() => {
-                                openRemoveModal()
-                                //handleRemoveMember(ProjectStore.projectId, selectedMember.email)
-                            }}
-                        >
-                            Remove member
-                        </LoaderButton>
-                        <LoaderButton
-                            className="grantOwnershipButton"
-                            size="sm"
-                            variant="outline-primary"
-                            isLoading={isLoading}
-                            disabled={isLoading || !props.canEditMembers || !selectedMember.email}
-                            onClick={() => {
-                                openGrantOwnerModal()
-                                //handleChangeOwner(ProjectStore.projectId, selectedMember.userId)
-                            }}
-                        >
-                            Grant ownership
-                        </LoaderButton>
-                    </div>
-
+                    {props.canEditMembers ?
+                        <div className="memberButtons">
+                            <LoaderButton
+                                className="removeMemberButton"
+                                size="sm"
+                                variant="outline-danger"
+                                isLoading={isLoading}
+                                disabled={isLoading || !props.canEditMembers || !selectedMember.email}
+                                onClick={() => {
+                                    openRemoveModal()
+                                    //handleRemoveMember(ProjectStore.projectId, selectedMember.email)
+                                }}
+                            >
+                                Remove member
+                            </LoaderButton>
+                            <LoaderButton
+                                className="grantOwnershipButton"
+                                size="sm"
+                                variant="outline-primary"
+                                isLoading={isLoading}
+                                disabled={isLoading || !props.canEditMembers || !selectedMember.email}
+                                onClick={() => {
+                                    openGrantOwnerModal()
+                                    //handleChangeOwner(ProjectStore.projectId, selectedMember.userId)
+                                }}
+                            >
+                                Grant ownership
+                            </LoaderButton>
+                        </div>
+                    : ""}
                 </div>
                 <div className="informationAndAddMember">
                     <div className="information">
                         <span>Current owner: {isLoading ? 'Loading' : (ProjectStore.projectOwner.firstName + " " + ProjectStore.projectOwner.lastName)}</span><br/>
                         <span>Owner E-mail: {isLoading ? 'Loading' : (ProjectStore.projectOwner.email)}</span>
                     </div>
+
+                    {props.canEditMembers ?
                         <Form.Group size="lg" controlId="projectDescription" className="addMemberField">
                             <Form.Label className="addMemberLabel">Add member</Form.Label>
                             <div className="formInputAndButton">
@@ -200,6 +201,7 @@ export default function ProjectMembers(props) {
                             </div>
                             <span className="errorMessage">{errorMessage}</span>
                         </Form.Group>
+                    : ""}
                 </div>
             </div>
         </div>

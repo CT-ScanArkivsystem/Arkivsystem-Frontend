@@ -2,9 +2,7 @@ import {onError} from "../libs/errorLib";
 import {currentIP} from "../App";
 
 export default async function DeleteUser(userId) {
-    let result;
     try {
-        console.log("Trying to delete user with ID: " + userId)
         let res = await fetch(currentIP + '/admin/deleteUser', {
             method: 'DELETE',
             credentials: 'include',
@@ -13,10 +11,14 @@ export default async function DeleteUser(userId) {
             },
             body: JSON.stringify({userId: userId})
         });
+        if (res.ok) {
+            console.log("api: Deleted user")
+        } else {
+            console.log("api: User not deleted");
+        }
+
     } catch (e) {
         onError(e);
         console.log("js api has caught an error");
-        //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return result;
 }

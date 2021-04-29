@@ -1,0 +1,40 @@
+.deleteTag {
+    margin: 0 auto 0 auto;
+}
+
+.thisPagesContent {
+    overflow-y: scroll;
+    max-height: 50vh;
+}
+
+.thisButton {
+    min-width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.toTheRight {
+    text-align: right;
+}
+
+.toTheLeft {
+    text-align: left;
+}
+
+.tag-table {
+    margin: 0 auto 0 auto;
+    width: fit-content;
+    /*text-align: left;*/
+}
+
+.tag-details-1 {
+    padding-right: 0.2rem !important;
+}
+
+.tag-details-2 {
+    padding-left: 0.2rem !important;
+}
+
+.modalText {
+    height: 0.90%
+}

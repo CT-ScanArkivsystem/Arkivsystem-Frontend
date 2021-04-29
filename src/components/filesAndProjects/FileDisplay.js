@@ -1,10 +1,18 @@
 import React, {useState} from "react";
 import "./FileDisplay.css";
-import folderIcon from "../../images/Image-Folder-icon.png";
-import gifIcon from "../../images/gif-icon.png";
-import jpegIcon from "../../images/jpeg-icon.png";
-import pngIcon from "../../images/Image-PNG-icon.png";
-import tiffIcon from "../../images/Image-TIFF-icon.png";
+import unknownIcon from "../../images/fileIcons/unknown.svg";
+import imageIcon from "../../images/fileIcons/image.svg";
+import tiffIcon from "../../images/fileIcons/tiff.svg";
+import wordIcon from "../../images/fileIcons/word.svg";
+import excelIcon from "../../images/fileIcons/excel.svg";
+import powerpointIcon from "../../images/fileIcons/powerpoint.svg";
+import pdfIcon from "../../images/fileIcons/pdf.svg";
+import txtIcon from "../../images/fileIcons/txt.svg";
+import zipIcon from "../../images/fileIcons/zip.svg";
+import soundIcon from "../../images/fileIcons/mp3.svg";
+import videoIcon from "../../images/fileIcons/mp4.svg";
+import dicomIcon from "../../images/fileIcons/ima.svg";
+
 import Form from "react-bootstrap/Form";
 
 /**
@@ -14,9 +22,7 @@ import Form from "react-bootstrap/Form";
  * @constructor
  */
 export default function FileDisplay ({...props}) {
-    const [isLoading, setIsLoading] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
-
 
     // This sets the default properties of the file.
     FileDisplay.defaultProps = {
@@ -24,24 +30,45 @@ export default function FileDisplay ({...props}) {
         hasCheckbox: false
     }
 
-    let filetypeHashmap = new Map([
-        ["folder", folderIcon],
-        ["gif", gifIcon],
+    const filetypeHashmap = new Map([
+        ["unknown", unknownIcon],
+        ["gif", imageIcon],
         // All JPEG formats
-        ["JPG", jpegIcon],
-        ["jpg", jpegIcon],
-        ["JPEG", jpegIcon],
-        ["jpeg", jpegIcon],
-        ["jpe", jpegIcon],
-        ["jif", jpegIcon],
-        ["jfif", jpegIcon],
-        ["jfi", jpegIcon],
+        ["JPG", imageIcon],
+        ["jpg", imageIcon],
+        ["jpeg", imageIcon],
+        ["jpe", imageIcon],
+        ["jif", imageIcon],
+        ["jfif", imageIcon],
+        ["jfi", imageIcon],
         // All PNG formats
-        ["png", pngIcon],
-        ["PNG", pngIcon],
+        ["png", imageIcon],
+        // All Word document formats
+        ["docx", "doc", wordIcon],
+        // All Excel formats
+        ["xlsx", excelIcon],
+        // All PowerPoint formats
+        ["pptx", powerpointIcon],
+        // All pdf formats
+        ["pdf", pdfIcon],
         // All TIFF formats
         ["tiff", tiffIcon],
         ["tif", tiffIcon],
+        // All txt formats
+        ["txt", txtIcon],
+        ["log", txtIcon],
+        // Zip formats
+        ["zip", zipIcon],
+        // Sound formats
+        ["mp3", soundIcon],
+        ["wav", soundIcon],
+        // Video formats
+        ["mp4", videoIcon],
+        ["mov", videoIcon],
+        ["avi", videoIcon],
+        ["wmv", videoIcon],
+        // DICOM format
+        ["ima", dicomIcon],
     ])
 
     const fileType = checkFileType(props.fileName);
@@ -49,7 +76,7 @@ export default function FileDisplay ({...props}) {
 
     function checkFileType(fileName) {
         if (fileName) {
-            return fileName.substr(fileName.lastIndexOf('.') + 1);
+            return fileName.toLowerCase().substr(fileName.lastIndexOf('.') + 1);
         }
         else {
             console.log("Error! FileDisplay name is probably empty!");
@@ -59,29 +86,33 @@ export default function FileDisplay ({...props}) {
 
     function getFileIcon() {
         // Checks if the extension found is the same as the filename. If it is it's a folder.
-        if (fileType === props.fileName) {
-            fileTypeIcon = filetypeHashmap.get("folder");
-        } else {
+        if (filetypeHashmap.has(fileType)) {
             fileTypeIcon = filetypeHashmap.get(fileType);
+        } else {
+            fileTypeIcon = filetypeHashmap.get("unknown");
         }
         return(fileTypeIcon);
     }
 
     return (
-        <div className="fileDisplayContainer">
+        <div
+            className="fileDisplayContainer"
+            onClick={() => {
+                setIsChecked(!isChecked);
+                props.toggleFileInList();
+            }}
+        >
             <div className={'fileDisplay'}>
                 <img className="fileDisplayIcon" src={getFileIcon()} alt="Filetype icon" />
                 <span className="fileDisplayName">{props.fileName}</span>
                 {props.hasCheckbox ?
-                    <Form.Check
+                    <input
                         type="checkbox"
-                        className="tagCheckbox"
-                        onClick={() => {
-                            setIsChecked(!isChecked);
-                            props.toggleFileInList();
-                        }}
-                    /> : ''}
+                        className="fileDisplayCheckbox"
+                        checked={isChecked}
+                        readOnly={true}
 
+                    /> : ''}
             </div>
         </div>
     );

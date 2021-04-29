@@ -28,6 +28,7 @@
     flex-direction: row;
     align-items: center;
     flex: 1;
+    word-break: break-word;
 }
 
 .subFolderDisplayIcon {
@@ -37,8 +38,8 @@
 }
 
 .subFolderDisplayName {
-    flex-grow: 1;
     text-align: start;
     font-size: 1.2em;
     margin: 0 2px 0 4px;
+    width: 80%;
 }

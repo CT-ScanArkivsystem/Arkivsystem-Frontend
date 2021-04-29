@@ -20,6 +20,7 @@
     border-width: 1px !important;
     border-radius: 4px;
     padding: 4px;
+    width: 300px;
 }
 
 .creationDate {
@@ -38,4 +39,36 @@
 
 .editButton {
     width: 100%;
+}
+
+.searchInputContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.searchForTags {
+    flex: 2;
+    border-radius: 6px;
+    border: 1px solid black;
+    height: 2em;
+}
+
+.createNewTagButton {
+    width: 100%;
+}
+
+.tagCheckbox {
+    width: 100px;
+}
+
+.tagsTable {
+    margin-top: 8px;
+}
+
+.tagNameDisplayRow {
+    height: 2em;
+}
+
+.tagNameDisplay {
+    padding: 0.4em !important;
 }

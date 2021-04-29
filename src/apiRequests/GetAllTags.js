@@ -21,7 +21,7 @@ export default async function GetAllTags() {
         result = await res.json();
 
         if (res.ok) {
-            //console.log("Got all tags");
+            //console.log("getAllTags: 200 OK");
         }
         else {
             result = [];

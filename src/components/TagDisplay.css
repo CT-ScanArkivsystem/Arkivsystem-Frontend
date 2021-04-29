@@ -1,0 +1,20 @@
+.customCheckbox .form-check-input {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: rgba(0, 0, 0, 0.7) solid 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: url("../images/checkmark.svg") no-repeat;
+    background-size: 0;
+    transition: all 0.1s;
+}
+
+.customCheckbox .form-check-input:hover {
+    border: rgba(0, 0, 0, 0.3) solid 1px;
+}
+
+.customCheckbox .form-check-input:checked {
+    background: url("../images/checkmark.svg") no-repeat;
+    background-size: 100%;
+}

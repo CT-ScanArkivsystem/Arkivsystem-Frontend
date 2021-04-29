@@ -1,0 +1,32 @@
+.imagesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.projectImagesSubFolderContainer {
+    margin-right: 8px;
+    text-align: center;
+    width: 20%;
+}
+
+.projectImagesContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-left: 4px;
+    border-left: black solid 1px;
+}
+
+.pageCounter {
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 1.3em;
+    margin-top: 5px;
+}
