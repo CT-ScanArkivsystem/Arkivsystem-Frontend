@@ -32,7 +32,7 @@ export default function Project() {
                 canEdit={checkPermission("member")}
                 projectTags={projectTags}
                 allTags={allTags} />,
-            permissionToView: "none"
+            permissionToView: checkPermission("none")
         },
         {
             pageName: "Upload files",
@@ -40,7 +40,7 @@ export default function Project() {
                 canUpload={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
             />,
-            permissionToView: "member"
+            permissionToView: checkPermission(ProjectStore.isPrivate ? "member" : "member"),
         },
         {
             pageName: "Project files",
@@ -49,7 +49,7 @@ export default function Project() {
                 canEditFiles={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
             />,
-            permissionToView: "specialPermission"
+            permissionToView: checkPermission(ProjectStore.isPrivate ? "specialPermission" : "none")
         },
         {
             pageName: "Project images",
@@ -57,21 +57,21 @@ export default function Project() {
                 canViewFiles={checkPermission("specialPermission")}
                 projectSubFolders={subFoldersInProject}
             />,
-            permissionToView: "specialPermission"
+            permissionToView: checkPermission(ProjectStore.isPrivate ? "specialPermission" : "none")
         },
         {
             pageName: "Project members",
             pageElement: <ProjectMembers
                 canEditMembers={checkPermission("owner")}
             />,
-            permissionToView: "none"
+            permissionToView: checkPermission("none")
         },
         {
             pageName: "Special Permission",
             pageElement: <ProjectSpecialPermission
                 canEditSpecialPermission={checkPermission("member")}
             />,
-            permissionToView: "none"
+            permissionToView: checkPermission("none")
         }
     ];
 
@@ -172,18 +172,18 @@ export default function Project() {
             hasPermission = true;
         } else {
             switch (permissionNeeded) {
-                case 'member':
-                    if (checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId)) {
-                        hasPermission = true;
-                    }
-                    break;
                 case 'owner':
                     if (checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId)) {
                         hasPermission = true;
                     }
                     break;
+                case 'member':
+                    if (checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId) || checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId)) {
+                        hasPermission = true;
+                    }
+                    break;
                 case 'specialPermission':
-                    if (checkIfUserIsInList(ProjectStore.usersWithSpecialPermission, UserStore.userId)) {
+                    if (checkIfUserIsInList(ProjectStore.usersWithSpecialPermission, UserStore.userId) || checkIfOwner(ProjectStore.projectOwner.userId, UserStore.userId) || checkIfUserIsInList(ProjectStore.projectMembers, UserStore.userId)) {
                         hasPermission = true;
                     }
                     break;
@@ -226,7 +226,7 @@ export default function Project() {
                     className="sideBarButton noHighlight"
                     key={page.pageName}
                     variant={currentPage === page.pageName ? 'secondary' : 'outline-dark'}
-                    disabled={isLoading || !checkPermission(page.permissionToView)}
+                    disabled={isLoading || !page.permissionToView}
                     onClick={() => {
                         if (currentPage !== page.pageName) {
                             setPageContent(page.pageElement);
