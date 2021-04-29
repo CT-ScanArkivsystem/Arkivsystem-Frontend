@@ -111,7 +111,7 @@ export default function FileDisplay ({...props}) {
                         className="fileDisplayCheckbox"
                         checked={isChecked}
                         readOnly={true}
-                        
+
                     /> : ''}
             </div>
         </div>

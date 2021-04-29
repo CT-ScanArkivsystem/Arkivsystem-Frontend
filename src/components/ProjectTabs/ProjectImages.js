@@ -82,6 +82,7 @@ export default function ProjectImages(props) {
                         variant={selectedSubFolder === subFolder ? 'secondary' : 'outline-dark'}
                         onClick={async function() {
                             setCurrentPage(0);
+                            setSelectedImage("");
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
                                 setImagesToRender([]);
@@ -121,6 +122,8 @@ export default function ProjectImages(props) {
      */
     async function getImages(imageNames, projectId, subFolder, nextPage, currentPageNumber) {
         setIsLoading(true);
+        setSelectedImage("");
+        setFilesToDownload([]);
         let result = [];
 
         if (imageNames.length > 0) {
