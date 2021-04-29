@@ -1,0 +1,34 @@
+.serverRestart {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    min-width: 100%;
+
+}
+
+.formContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin: 0 auto 0 auto;
+    min-width: 50%;
+}
+
+.time-picker-element {
+    background-color: white;
+    min-height: 38px;
+}
+
+.react-time-picker__wrapper {
+    border: thin solid #ced4da !important;
+    border-radius: 5px;
+
+}
+
+.put-on-rows {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+}

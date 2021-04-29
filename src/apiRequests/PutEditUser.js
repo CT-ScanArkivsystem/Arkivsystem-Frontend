@@ -34,7 +34,7 @@ export default async function PutEditUser(userId, email, firstName, lastName, ro
         });
         result = await res.json();
         if (res.ok) {
-            console.log("200 OK: Successfully edited user")
+            // console.log("200 OK: Successfully edited user")
         } else {
             result = [];
             console.log("Project was not created!");
