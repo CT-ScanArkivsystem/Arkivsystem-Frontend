@@ -23,6 +23,7 @@ export default function ServerRestart() {
         try {
             let didSetRestart = await RestartServer(restartDate, restartTime, restartZone)
             if (didSetRestart !== null) {
+                window.location.reload();
                 // console.log("Not returned null");
             } else {
                 console.log("Restart not set");
@@ -60,6 +61,22 @@ export default function ServerRestart() {
         } else {
             return removedStuff
         }
+    }
+
+    function displayFormError() {
+        let errorMessage = ""
+
+        if (restartDate === "" || restartDate === null) {
+            errorMessage = "Please enter date"
+        }
+        else if (restartTime === "" || restartTime === null) {
+            errorMessage = "Please enter time"
+        }
+        else if (restartZone === "" || restartZone === null) {
+            errorMessage = "Please pick time zone"
+        }
+        return errorMessage
+
     }
 
     return (
@@ -103,12 +120,13 @@ export default function ServerRestart() {
                             />
                         </Form.Group>
                         <Button
-                            variant="dark"
+                            variant="outline-dark"
                             onClick={() => openModal()}
                             disabled={!validateForm()}
                         >
                             Submit
                         </Button>
+                        <p className="errorMessage">{displayFormError()}</p>
                     </Form>
                 </div>
             </div>
