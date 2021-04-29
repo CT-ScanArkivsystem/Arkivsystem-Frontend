@@ -16,7 +16,9 @@ export default function FindUser({...props}) {
 
     const [searchField, setSearchField] = useState("");
     const [searchShow, setSearchShow] = useState(false);
-    const filteredPersons = allUsers.filter(
+
+
+    let filteredPeople = allUsers.filter(
         person => {
             const fullName = person.firstName + " " + person.lastName
             return (
@@ -50,27 +52,13 @@ export default function FindUser({...props}) {
     }, []);
 
     async function initialisation() {
-        setIsLoading(false);
         await initGetAllUsers()
-        console.log("Getting all users")
-    }
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        console.log("HandleSubmit! in FindUser")
-    }
-
-    function validateForm() {
-        return true;
-        // TODO: Validate when you know how to validate
     }
 
     async function initGetAllUsers() {
         try {
             if (!doesHaveUsers) {
                 let users = await GetAllUsers()
-                console.log(users)
-
                 setAllUsers(users)
                 if (allUsers.length >= 0) {
                     setDoesHaveUsers(true)
@@ -80,7 +68,13 @@ export default function FindUser({...props}) {
         } catch (e) {
             onError(e)
         }
+    }
 
+    async function updateUsers() {
+        setIsLoading(true)
+        let users = await GetAllUsers()
+        setAllUsers(users)
+        setIsLoading(false)
     }
 
     return (
@@ -91,7 +85,7 @@ export default function FindUser({...props}) {
                 </div>
                 <div className="thisPagesContent">
 
-                    <Form className="formContainer" onSubmit={handleSubmit}>
+                    <Form className="formContainer">
                         <Form.Group size="lg">
                             <Form.Control
                                 className="searchFormControl"
@@ -113,9 +107,14 @@ export default function FindUser({...props}) {
                             </thead>
                             <tbody>
                             <UserResultRows
-                                filteredPersons={filteredPersons}
-                                EditPageEvent2={() => {props.EditPageEvent3()}}
+                                filteredPersons={filteredPeople}
+                                EditPageEvent2={() => {
+                                    props.EditPageEvent3()
+                                }}
                                 pageType2={props.pageType1}
+                                initUsersAgain2={() => {
+                                    updateUsers()
+                                }}
                             />
                             </tbody>
                         </Table>
