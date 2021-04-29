@@ -14,7 +14,11 @@ export default function TagDisplay (props) {
           <Form.Check
               type="checkbox"
               className={`${props.customCheckbox ? 'customCheckbox' : ''} tagCheckbox`}
-              {...props}
+              label={props.label}
+              value={props.value}
+              disabled={props.disabled}
+              defaultChecked={props.defaultChecked}
+              onChange={props.onChange}
           />
   );
 }

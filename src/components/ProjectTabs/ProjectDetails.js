@@ -40,7 +40,7 @@ export default function ProjectDetails(props) {
         if (tagsToList) {
             result = tagsToList.map((tagToDisplay) => {
                 return (
-                    <tr className="tagNameDisplayRow">
+                    <tr className="tagNameDisplayRow" key={"TagName" + tagToDisplay.tagName}>
                         <td className="tagNameDisplay">{tagToDisplay.tagName}</td>
                     </tr>
                 )
@@ -65,10 +65,9 @@ export default function ProjectDetails(props) {
         if (tagsToList) {
             result = tagsToList.map((tagToDisplay) => {
                 return (
-                    <tr className="tagNameDisplayRow">
+                    <tr className="tagNameDisplayRow" key={"TagKey" + tagToDisplay.tagName}>
                         <td className="tagNameDisplay">
                             <TagDisplay
-                                key={"TagKey" + tagToDisplay.tagName}
                                 id={"TagId" + tagToDisplay.tagName}
                                 customCheckbox={true}
                                 label={tagToDisplay.tagName}
@@ -88,7 +87,6 @@ export default function ProjectDetails(props) {
                     </tr>
                 )
             })
-
         }
         return result;
     }
@@ -227,31 +225,33 @@ export default function ProjectDetails(props) {
                                           Create new tag
                                       </Button>
                                   </td>
-                              </tr> : ""
+                              </tr> : <></>
                           }
                           {editingTags ? renderAllTags(allTags, searchInput) : renderTagsInProject(projectTags, searchInput)}
                           </tbody>
                       </Table>
-                      <LoaderButton
-                          className="editButton"
-                          size="sm"
-                          type="submit"
-                          isLoading={isLoading}
-                          disabled={!props.canEdit}
-                          onClick={async function() {
-                              if (editingTags) {
-                                  setIsLoading(true);
-                                  await addTagsToProject(tagsToBeAdded);
-                                  await removeTagsFromProject(tagsToBeRemoved);
-                                  setSearchInput("");
-                              }
-                              setIsLoading(false);
-                              setEditingTags(!editingTags);
-                          }}
-                      >
-                          <span>{!editingTags ? 'Edit ' : 'Update '}</span>
-                          tags
-                      </LoaderButton>
+                      {props.canEdit ?
+                          <LoaderButton
+                              className="editButton"
+                              size="sm"
+                              type="submit"
+                              isLoading={isLoading}
+                              disabled={!props.canEdit}
+                              onClick={async function() {
+                                  if (editingTags) {
+                                      setIsLoading(true);
+                                      await addTagsToProject(tagsToBeAdded);
+                                      await removeTagsFromProject(tagsToBeRemoved);
+                                      setSearchInput("");
+                                  }
+                                  setIsLoading(false);
+                                  setEditingTags(!editingTags);
+                              }}
+                          >
+                              <span>{!editingTags ? 'Edit ' : 'Update '}</span>
+                              tags
+                          </LoaderButton> : ""
+                      }
                   </div>
               </div>
               <div className="descriptionContainer">
@@ -267,26 +267,28 @@ export default function ProjectDetails(props) {
                           readOnly={!editingDescription}
                       />
                   </Form.Group>
-                  <LoaderButton
-                      className="editButton"
-                      size="sm"
-                      type="submit"
-                      isLoading={isLoading}
-                      disabled={!props.canEdit}
-                      onClick={() => {
-                          if (editingDescription) {
-                              setIsLoading(true);
-                              setDescription(projectDescription)
-                          }
-                          setIsLoading(false);
-                          setEditingDescription(!editingDescription);
-                      }}
-                  >
-                      <span>{!editingDescription ? 'Edit ' : 'Update '}</span>
-                      description
-                  </LoaderButton>
+                  {props.canEdit ?
+                      <LoaderButton
+                          className="editButton"
+                          size="sm"
+                          type="submit"
+                          isLoading={isLoading}
+                          disabled={!props.canEdit}
+                          onClick={async function() {
+                              if (editingDescription) {
+                                  setIsLoading(true);
+                                  await setDescription(projectDescription)
+                              }
+                              setIsLoading(false);
+                              setEditingDescription(!editingDescription);
+                          }}
+                      >
+                          <span>{!editingDescription ? 'Edit ' : 'Update '}</span>
+                          description
+                      </LoaderButton> : ""
+                  }
               </div>
           </div>
       </div>
-  );
+    );
 }
