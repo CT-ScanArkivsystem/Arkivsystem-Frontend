@@ -3,7 +3,7 @@
 }
 
 .thisPagesContent {
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     max-height: 50vh;
 }
 
