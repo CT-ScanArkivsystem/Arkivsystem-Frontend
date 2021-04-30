@@ -12,6 +12,7 @@ export default function TagDisplay (props) {
 
   return (
           <Form.Check
+              id={props.id}
               type="checkbox"
               className={`${props.customCheckbox ? 'customCheckbox' : ''} tagCheckbox`}
               label={props.label}

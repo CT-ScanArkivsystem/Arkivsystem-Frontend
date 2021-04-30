@@ -6,4 +6,10 @@
 
 .navLogo {
     height: 30px;
+    opacity: 1;
+}
+
+.navLogo:hover {
+    cursor: pointer;
+    opacity: 0.8;
 }
