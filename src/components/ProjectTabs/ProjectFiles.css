@@ -32,6 +32,26 @@
     border-left: black solid 1px;
 }
 
+.imageRenderModeButton {
+    width: 30px;
+}
+
+.imageRenderModeButton:hover {
+    opacity: 0.7;
+}
+
+.imageRenderModeButtonDisabled {
+    width: 30px;
+    opacity: 0.4;
+}
+
+.imagesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .downloadButton {
     margin: 4px;
     width: 14vw;
