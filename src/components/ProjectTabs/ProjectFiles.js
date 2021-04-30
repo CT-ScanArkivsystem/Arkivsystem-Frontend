@@ -22,6 +22,7 @@ export default function ProjectFiles(props) {
     const [filesToDownload, setFilesToDownload] = useState([]);
 
     const imageWidth = 200; // In pixels
+    const imagesPerPage = 10;
 
     const foldersInSubFolder = [
         "DICOM",
@@ -60,6 +61,8 @@ export default function ProjectFiles(props) {
                                 setSelectedSubFolder(subFolder);
                                 setSelectedDefaultFolder("");
                                 setFilesToDownload([]);
+                                setFilesInDirectory([]);
+                                setRenderImagesState(false);
                             }
                         }}
                         childFolders={foldersInSubFolder.map((defaultFolder) => {
@@ -195,7 +198,7 @@ export default function ProjectFiles(props) {
      * @param imageNames Names of all the images in the sub folder.
      * @param projectId Decides which project it will look through.
      * @param subFolder Decides which sub folder in the project it will look through.
-     * @param nextPage Decides whether to pull the next 6 images or the previous 6 images.
+     * @param nextPage Decides whether to pull the next imagesPerPage images or the previous imagesPerPage images.
      * @param currentPageNumber The page the user is currently on.
      */
     async function getImages(imageNames, projectId, subFolder, nextPage, currentPageNumber) {
@@ -224,8 +227,8 @@ export default function ProjectFiles(props) {
      */
     async function getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
         let result = [];
-        let i = currentPageNumber * 6;
-        for (i; i < (currentPageNumber + 1) * 6 && i < imageNames.length; i++) {
+        let i = currentPageNumber * imagesPerPage;
+        for (i; i < (currentPageNumber + 1) * imagesPerPage && i < imageNames.length; i++) {
             let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
             result.push(currentImage);
         }
@@ -243,8 +246,8 @@ export default function ProjectFiles(props) {
      */
     async function getPreviousPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
         let result = [];
-        let i = (currentPageNumber - 2) * 6;
-        for (i; i < (currentPageNumber - 1) * 6 && i < imageNames.length; i++) {
+        let i = (currentPageNumber - 2) * imagesPerPage;
+        for (i; i < (currentPageNumber - 1) * imagesPerPage && i < imageNames.length; i++) {
             let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
             result.push(currentImage);
         }
@@ -253,7 +256,7 @@ export default function ProjectFiles(props) {
     }
 
     function findTotalPages(allImages) {
-        return Math.ceil(allImages.length / 6);
+        return Math.ceil(allImages.length / imagesPerPage);
     }
 
     /**
