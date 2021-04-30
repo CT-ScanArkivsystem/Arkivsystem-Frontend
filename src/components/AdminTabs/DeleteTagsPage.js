@@ -180,7 +180,8 @@ export default function DeleteTagsPage() {
                 </div>
                 <Button
                     className="thisButton"
-                    variant="dark"
+                    variant="outline-dark"
+                    size="lg"
                     onClick={() => openModal()}
                     disabled={testArrayIsEmpty}
                 >

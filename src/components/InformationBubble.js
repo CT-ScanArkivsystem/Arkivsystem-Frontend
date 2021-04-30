@@ -12,7 +12,7 @@ export default function InformationBubble(props) {
     return (
         <div className={`informationBubble`}>
             <div className="informationToShow">
-                <h4>{props.tipHeader}</h4>
+                <h4 className="extraMargin">{props.tipHeader}</h4>
                 <p>{props.tipParagraph}</p>
             </div>
         </div>

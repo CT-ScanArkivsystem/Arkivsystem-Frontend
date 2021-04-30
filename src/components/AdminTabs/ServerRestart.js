@@ -123,6 +123,7 @@ export default function ServerRestart() {
                             variant="outline-dark"
                             onClick={() => openModal()}
                             disabled={!validateForm()}
+                            size="lg"
                         >
                             Submit
                         </Button>
