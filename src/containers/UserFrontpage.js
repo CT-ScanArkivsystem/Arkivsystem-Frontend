@@ -136,9 +136,10 @@ export default function UserFrontpage() {
                 <TagDisplay
                 key={"TagName" + tagToDisplay.tagName}
                 id={"TagName" + tagToDisplay.tagName}
+                customCheckbox={true}
                 label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
                 value={tagToDisplay.tagName}
-                onClick={() => toggleTagInList(tagToDisplay)}
+                onChange={() => toggleTagInList(tagToDisplay)}
             />
             )
         });

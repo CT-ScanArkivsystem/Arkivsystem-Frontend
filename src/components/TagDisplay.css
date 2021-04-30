@@ -18,3 +18,7 @@
     background: url("../images/checkmark.svg") no-repeat;
     background-size: 100%;
 }
+
+.tagCheckbox {
+    min-width: 100px;
+}

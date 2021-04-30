@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import GlobalStyle from "./theme/GlobalStyle";
 import Routes from "./Routes";
@@ -21,6 +21,7 @@ function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true);
     const [isAuthenticated, userHasAuthenticated] = useState(false);
     const history = useHistory();
+    const location = useLocation();
 
     //Functions in the useEffect() will be run once on load of site.
     React.useEffect(() => {
@@ -76,6 +77,10 @@ function App() {
         setIsAuthenticating(false);
     }
 
+    function checkIfInUserFrontpage() {
+        return location.pathname === "/userFrontpage";
+    }
+
     // TODO: Create user link in navbar should only be shown to admins.
     // TODO: Change what is inside the dropdown button.
 
@@ -86,6 +91,12 @@ function App() {
                 <div className="App">
                     <Navbar collapseOnSelect variant="dark">
                         {isAuthenticated ? (
+                            checkIfInUserFrontpage() ?
+                                <img className="navLogo" src={logo} alt="Site logo"
+                                     onClick={() => {
+                                         history.push("/loading");
+                                         history.goBack();
+                                     }} /> :
                             <LinkContainer to="/userFrontpage">
                                 <Navbar.Brand href="/" className="font-weight-bold">
                                     <img className="navLogo" src={logo} alt="Site logo" />

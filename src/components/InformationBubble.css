@@ -27,3 +27,7 @@
     background: white;
     border: 1px black solid;
 }
+
+.extraMargin {
+    margin-top: 0.5em;
+}

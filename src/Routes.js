@@ -8,6 +8,7 @@ import UserFrontpage from "./containers/UserFrontpage";
 import CreateProject from "./containers/CreateProject";
 import Project from "./containers/Project";
 import AdminPage from "./containers/AdminPage";
+import LoadingPage from "./containers/LoadingPage";
 
 export default function Routes() {
     return (
@@ -29,6 +30,9 @@ export default function Routes() {
             </Route>
             <Route exact path="/adminPage">
                 <AdminPage />
+            </Route>
+            <Route exact path="/loading">
+                <LoadingPage />
             </Route>
             <Route>
                 <NotFound />
