@@ -139,7 +139,7 @@ export default function UserFrontpage() {
                 customCheckbox={true}
                 label={tagToDisplay.tagName + " (" + tagToDisplay.numberOfProjects + ")"}
                 value={tagToDisplay.tagName}
-                onClick={() => toggleTagInList(tagToDisplay)}
+                onChange={() => toggleTagInList(tagToDisplay)}
             />
             )
         });
