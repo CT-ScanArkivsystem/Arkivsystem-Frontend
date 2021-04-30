@@ -22,7 +22,7 @@ export default function ProjectFiles(props) {
     const [filesToDownload, setFilesToDownload] = useState([]);
 
     const imageWidth = 200; // In pixels
-    const imagesPerPage = 10;
+    const imagesPerPage = 4;
 
     const foldersInSubFolder = [
         "DICOM",
@@ -57,11 +57,13 @@ export default function ProjectFiles(props) {
                                 setSelectedDefaultFolder("");
                                 setFilesToDownload([]);
                                 setFilesInDirectory([]);
+                                setImagesToRender([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
                                 setSelectedDefaultFolder("");
                                 setFilesToDownload([]);
                                 setFilesInDirectory([]);
+                                setImagesToRender([]);
                                 setRenderImagesState(false);
                             }
                         }}
@@ -78,15 +80,18 @@ export default function ProjectFiles(props) {
                                             setSelectedDefaultFolder("");
                                             setFilesToDownload([]);
                                             setFilesInDirectory([]);
+                                            setImagesToRender([]);
                                             setRenderImagesState(false);
                                         } else {
                                             setIsLoading(true);
                                             setFilesToDownload([]);
                                             setFilesInDirectory([]);
+                                            setImagesToRender([]);
                                             setSelectedDefaultFolder(defaultFolder);
                                             if (defaultFolder === "images") {
                                                 let imageNames = await getImageNamesInSubFolder(defaultFolder, ProjectStore.projectId, subFolder);
-                                                await getImages(imageNames, ProjectStore.projectId, subFolder, true, 0);
+                                                await getImages(imageNames, ProjectStore.projectId, subFolder, 0);
+                                                setIsLoading(false);
                                             } else {
                                                 await getFiles(defaultFolder, ProjectStore.projectId, selectedSubFolder);
                                             }
@@ -198,19 +203,15 @@ export default function ProjectFiles(props) {
      * @param imageNames Names of all the images in the sub folder.
      * @param projectId Decides which project it will look through.
      * @param subFolder Decides which sub folder in the project it will look through.
-     * @param nextPage Decides whether to pull the next imagesPerPage images or the previous imagesPerPage images.
      * @param currentPageNumber The page the user is currently on.
      */
-    async function getImages(imageNames, projectId, subFolder, nextPage, currentPageNumber) {
+    async function getImages(imageNames, projectId, subFolder, currentPageNumber) {
         setIsLoading(true);
         let result = [];
 
         if (imageNames.length > 0) {
-            if (nextPage) {
-                result = await getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber);
-            } else if (!nextPage) {
-                result = await getPreviousPageOfImages(projectId, subFolder, imageNames, currentPageNumber);
-            }
+            console.log("Inside mages")
+            result = [...imagesToRender.concat(await getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber))];
         }
 
         setImagesToRender(result);
@@ -218,7 +219,7 @@ export default function ProjectFiles(props) {
     }
 
     /**
-     * Will get the next 6 images and return them in an array.
+     * Will get the next imagesPerPage images and return them in an array.
      * @param projectId The ID for the project to get images from.
      * @param subFolder The sub folder to get images from.
      * @param imageNames Array with all the images in the sub folder.
@@ -237,24 +238,10 @@ export default function ProjectFiles(props) {
     }
 
     /**
-     * Will get the previous 6 images and return them in an array.
-     * @param projectId The ID for the project to get images from.
-     * @param subFolder The sub folder to get images from.
-     * @param imageNames Array with all the images in the sub folder.
-     * @param currentPageNumber The page the user is currently on.
-     * @returns {Promise<*[]>} An array of objects that holds the links to the pictures.
+     * Retired function. Used to determine how many images can fit on one page.
+     * @param allImages all the images that can be rendered.
+     * @returns {number} of how many pages the images need before all of them are displayed.
      */
-    async function getPreviousPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
-        let result = [];
-        let i = (currentPageNumber - 2) * imagesPerPage;
-        for (i; i < (currentPageNumber - 1) * imagesPerPage && i < imageNames.length; i++) {
-            let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
-            result.push(currentImage);
-        }
-        setCurrentPage(currentPageNumber - 1);
-        return result;
-    }
-
     function findTotalPages(allImages) {
         return Math.ceil(allImages.length / imagesPerPage);
     }
@@ -333,32 +320,21 @@ export default function ProjectFiles(props) {
                           <div className="imagesContainer">
                               {renderImages(imagesToRender)}
                           </div>
-                          <div className="containerFooter">
-                              <Button
-                                  className="downloadButton"
-                                  size="sm"
-                                  variant="dark"
-                                  disabled={isLoading || imagesToRender.length < 1 || (currentPage * 6) > filesInDirectory.length}
-                                  onClick={async function() {
-                                      await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, true, currentPage)
-                                  }}
-                              >
-                                  &gt;
-                              </Button>
+                          <Button
+                              className="loadPageButton"
+                              size="sm"
+                              variant="dark"
+                              disabled={isLoading || imagesToRender.length < 1 || (currentPage * imagesPerPage) > filesInDirectory.length}
+                              onClick={async function() {
+                                  await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, currentPage)
+                              }}
+                          >
+                              Load more!
+                          </Button>
+                          <div className="projectFilesContainerFooter">
                               <div className="pageCounter">
-                                  <span>Page {selectedSubFolder ? currentPage + " of " + findTotalPages(filesInDirectory) : "0"}</span>
+                                  <span>Showing {selectedSubFolder ? imagesToRender.length + " of " + filesInDirectory.length : "0"}</span>
                               </div>
-                              <Button
-                                  className="downloadButton"
-                                  size="sm"
-                                  variant="dark"
-                                  disabled={isLoading || imagesToRender.length < 1 || currentPage === 1}
-                                  onClick={async function() {
-                                      await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, false, currentPage)
-                                  }}
-                              >
-                                  &lt;
-                              </Button>
                           </div>
                       </> :
                       renderFilesInFolder(filesInDirectory)}

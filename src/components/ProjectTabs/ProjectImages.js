@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import "./ProjectImages.css";
 import ImageDisplay from "../filesAndProjects/ImageDisplay";
 import PostGetImage from "../../apiRequests/PostGetImage";
 import ProjectStore from "../../stores/ProjectStore";
