@@ -163,9 +163,9 @@ export default function UploadToProjectContent(props) {
                 )
             })
         } else if (isLoading) {
-            result = [<span>Loading!</span>];
+            result = [<span key="loadingSubFolder">Loading!</span>];
         } else {
-            result = [<span>Empty!</span>];
+            result = [<span key="emptySubFolder">Empty!</span>];
         }
         result.push(
             <form onSubmit={handleSubFolderSubmit} className="newFolderForm" key="addNewFolder">
