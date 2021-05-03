@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "./ProjectFiles.css";
-import renderModeImage from "../../images/InfoQuestionMark1.png";
+import renderModeImage from "../../images/imagesToggleOn.png";
+import renderModeFile from "../../images/imagesToggleOff.png";
 import SubFolderDisplay from "../filesAndProjects/SubFolderDisplay";
 import GetAllFileNames from "../../apiRequests/GetAllFileNames";
 import ProjectStore from "../../stores/ProjectStore";
@@ -22,7 +23,7 @@ export default function ProjectFiles(props) {
     const [filesToDownload, setFilesToDownload] = useState([]);
 
     const imageWidth = 200; // In pixels
-    const imagesPerPage = 4;
+    const imagesPerPage = 6;
 
     const foldersInSubFolder = [
         "DICOM",
@@ -210,7 +211,6 @@ export default function ProjectFiles(props) {
         let result = [];
 
         if (imageNames.length > 0) {
-            console.log("Inside mages")
             result = [...imagesToRender.concat(await getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber))];
         }
 
@@ -283,7 +283,7 @@ export default function ProjectFiles(props) {
                                        setFilesToDownload([]);
                                    }
                                }}
-                               src={renderModeImage}
+                               src={renderImagesState ? renderModeImage : renderModeFile}
                                alt="Toggle image rendering"
                           /> : <></>
                       }

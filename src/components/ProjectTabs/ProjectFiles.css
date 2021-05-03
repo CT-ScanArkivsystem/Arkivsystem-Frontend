@@ -33,7 +33,7 @@
 }
 
 .imageRenderModeButton {
-    width: 30px;
+    height: 30px;
 }
 
 .imageRenderModeButton:hover {
@@ -42,7 +42,7 @@
 }
 
 .imageRenderModeButtonDisabled {
-    width: 30px;
+    height: 30px;
     opacity: 0.4;
 }
 
