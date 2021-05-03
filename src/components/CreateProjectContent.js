@@ -33,7 +33,8 @@ export default function CreateProjectContent() {
             let result = await PostCreateProject(projectName, isPrivate, creationDate, projectDescription); //PostCreateUser(firstName, lastName, email, password1, role);
             switch (result.status) {
                 case 200:
-                    ProjectStore.projectId = result.projectId;
+                    let projectInformation = await result.json();
+                    ProjectStore.projectId = projectInformation.projectId;
                     ProjectStore.projectName = projectName;
                     ProjectStore.projectDescription = projectDescription;
                     ProjectStore.isPrivate = isPrivate;
@@ -49,6 +50,10 @@ export default function CreateProjectContent() {
                     break;
                 case 404:
                     setErrorMessage("Create project failed. Error code 404!");
+                    setIsLoading(false);
+                    break;
+                case 409:
+                    setErrorMessage("Project with that name already exists!");
                     setIsLoading(false);
                     break;
                 case 500:
