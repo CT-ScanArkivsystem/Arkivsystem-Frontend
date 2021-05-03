@@ -101,7 +101,8 @@ const GlobalStyle = createGlobalStyle`
   div.containerFooter {
     bottom: 4px;
     display: flex;
-    margin: 8px;
+    margin-bottom: 8px;
+    margin-top: 8px;
     flex-direction: row-reverse;
     position: sticky;
   }

@@ -30,8 +30,10 @@ export default function Project() {
             pageName: "Project details",
             pageElement: <ProjectDetails
                 canEdit={checkPermission("member")}
+                isOwner={checkPermission("owner")}
                 projectTags={projectTags}
-                allTags={allTags} />,
+                allTags={allTags}
+            />,
             permissionToView: checkPermission("none")
         },
         {
@@ -95,7 +97,12 @@ export default function Project() {
 
             let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
             setAllTags(allTagsTrimmed);
-            setPageContent(<ProjectDetails canEdit={checkPermission("member")} projectTags={tagsInProject} allTags={allTagsTrimmed} />);
+            setPageContent(<ProjectDetails
+                canEdit={checkPermission("member")}
+                isOwner={checkPermission("owner")}
+                projectTags={tagsInProject}
+                allTags={allTagsTrimmed} />
+            );
             setCurrentPage("Project details")
 
             if (ProjectStore.isPrivate) {

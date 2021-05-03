@@ -19,7 +19,7 @@ export default function ProjectMembers(props) {
     //Modal helper states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
-    const [functionIfConfirmed, setFunctionIfConfirmed] = useState(handleRemoveMember);
+    const [functionIfConfirmed, setFunctionIfConfirmed] = useState(() => handleRemoveMember);
     //Error handling state
     const [errorMessage, setErrorMessage] = useState("");
 

@@ -11,6 +11,9 @@ import PutSetProjectDescription from "../../apiRequests/PutSetProjectDescription
 import {Table} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import PostCreateTag from "../../apiRequests/PostCreateTag";
+import {useHistory} from "react-router-dom";
+import ConfirmationModal from "../ConfirmationModal";
+import DeleteProject from "../../apiRequests/DeleteProject";
 
 export default function ProjectDetails(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +24,16 @@ export default function ProjectDetails(props) {
     const [isProjectPrivate, setIsProjectPrivate] = useState(ProjectStore.isPrivate);
     const [tagsToBeAdded, setTagsToBeAdded] = useState([]);
     const [tagsToBeRemoved, setTagsToBeRemoved] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
     const [allTags, setAllTags] = useState(props.allTags);
     const [projectTags, setProjectTags] = useState(props.projectTags);
+
+    //Modal helper states
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
+    const [functionIfConfirmed, setFunctionIfConfirmed] = useState(() => handleDeleteProject);
+
+    const history = useHistory();
 
     function renderTagsInProject(projectTags, currentSearch) {
         let result = [];
@@ -176,11 +187,44 @@ export default function ProjectDetails(props) {
         setIsLoading(false);
     }
 
+    function openRemoveModal() {
+        setIsModalOpen(true);
+        setModalText("Do you want to delete project " + ProjectStore.projectName + "? This action is irreversible!");
+        setFunctionIfConfirmed(() => handleDeleteProject);
+    }
+
+    function closeModal() {
+        setIsModalOpen(false)
+    }
+
+    async function handleDeleteProject() {
+        setIsLoading(true);
+        if (ProjectStore.projectId) {
+            let result = await DeleteProject(ProjectStore.projectId);
+            if (result.status === 200) {
+                setErrorMessage("Project has been deleted.")
+                setTimeout(() => {
+                    closeModal();
+                    history.push("/userFrontpage");
+                }, 1500);
+            } else {
+                setErrorMessage("Something went wrong trying to delete project!")
+                console.log("something went wrong");
+            }
+
+        }
+    }
 
     return (
       <div className="projectDetails">
+          <ConfirmationModal
+              functionToCloseModal={closeModal}
+              isOpen={isModalOpen}
+              modalText={modalText}
+              functionIfConfirmed={functionIfConfirmed}
+          />
           <div className="tabHeader">
-              <h2>{ProjectStore.projectName}</h2>
+              <h2>{errorMessage ? <span className="errorMessage">{errorMessage}</span> : ProjectStore.projectName}</h2>
           </div>
           <div className="tabContent">
               <div className="tagsAndPrivateAndCreatedContainer">
@@ -289,6 +333,18 @@ export default function ProjectDetails(props) {
                   }
               </div>
           </div>
+          {props.isOwner ? <div className="containerFooter">
+              <LoaderButton
+                  className="deleteProjectButton"
+                  size="sm"
+                  variant="outline-danger"
+                  isLoading={isLoading}
+                  disabled={isLoading || !props.isOwner}
+                  onClick={() => openRemoveModal()}
+              >
+                  Delete project
+              </LoaderButton>
+          </div> : ""}
       </div>
     );
 }
