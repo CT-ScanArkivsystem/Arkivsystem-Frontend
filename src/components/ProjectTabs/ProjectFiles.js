@@ -53,18 +53,14 @@ export default function ProjectFiles(props) {
                         hideChildren={selectedSubFolder !== subFolder}
                         showDropDownArrow={true}
                         onClick={() => {
+                            setFilesToDownload([]);
+                            setFilesInDirectory([]);
+                            setImagesToRender([]);
+                            setSelectedDefaultFolder("");
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
-                                setSelectedDefaultFolder("");
-                                setFilesToDownload([]);
-                                setFilesInDirectory([]);
-                                setImagesToRender([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
-                                setSelectedDefaultFolder("");
-                                setFilesToDownload([]);
-                                setFilesInDirectory([]);
-                                setImagesToRender([]);
                                 setRenderImagesState(false);
                             }
                         }}
@@ -77,26 +73,19 @@ export default function ProjectFiles(props) {
                                     isChildFolder={true}
                                     variant={selectedDefaultFolder === defaultFolder ? 'secondary' : 'outline-dark'}
                                     onClick={async function() {
+                                        setFilesToDownload([]);
+                                        setFilesInDirectory([]);
+                                        setImagesToRender([]);
+                                        setCurrentPage(0);
                                         if (selectedDefaultFolder === defaultFolder) {
                                             setSelectedDefaultFolder("");
-                                            setFilesToDownload([]);
-                                            setFilesInDirectory([]);
-                                            setImagesToRender([]);
                                             setRenderImagesState(false);
                                         } else {
                                             setIsLoading(true);
-                                            setFilesToDownload([]);
-                                            setFilesInDirectory([]);
-                                            setImagesToRender([]);
                                             setSelectedDefaultFolder(defaultFolder);
-                                            if (defaultFolder === "images") {
-                                                let imageNames = await getImageNamesInSubFolder(defaultFolder, ProjectStore.projectId, subFolder);
-                                                await getImages(imageNames, ProjectStore.projectId, subFolder, 0);
-                                                setIsLoading(false);
-                                            } else {
-                                                await getFiles(defaultFolder, ProjectStore.projectId, selectedSubFolder);
-                                            }
+                                            await getFiles(defaultFolder, ProjectStore.projectId, subFolder);
                                             setRenderImagesState(false);
+                                            setIsLoading(false);
                                         }
                                     }}
                                 />
@@ -117,14 +106,7 @@ export default function ProjectFiles(props) {
     async function getFiles(directory, projectId, subFolder) {
         let result = await GetAllFileNames(directory, projectId, subFolder);
         setFilesInDirectory(result);
-        setIsLoading(false);
-    }
-
-    async function getImageNamesInSubFolder(directory, projectId, subFolder) {
-        let allImages = await GetAllFileNames(directory, projectId, subFolder);
-        setFilesInDirectory(allImages);
-
-        return allImages;
+        return result;
     }
 
     /**
@@ -277,10 +259,13 @@ export default function ProjectFiles(props) {
                   <div className="flex-row">
                       {selectedDefaultFolder === "images" ?
                           <img className={`${isLoading ? 'imageRenderModeButtonDisabled' : 'imageRenderModeButton'}`}
-                               onClick={() => {
+                               onClick={async function() {
                                    if (!isLoading) {
                                        setRenderImagesState(!renderImagesState)
                                        setFilesToDownload([]);
+                                       if (currentPage === 0) {
+                                           await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, 0);
+                                       }
                                    }
                                }}
                                src={renderImagesState ? renderModeImage : renderModeFile}
