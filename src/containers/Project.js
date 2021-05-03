@@ -41,7 +41,7 @@ export default function Project() {
         {
             pageName: "Project files",
             pageElement: <ProjectFiles
-                canDownloadFiles={checkPermission("specialPermission")}
+                canDownloadFiles={checkPermission(ProjectStore.isPrivate ? "specialPermission" : "none")}
                 canEditFiles={checkPermission("member")}
                 projectSubFolders={subFoldersInProject}
             />,
