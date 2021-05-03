@@ -10,7 +10,6 @@ import UploadToProjectContent from "../components/ProjectTabs/UploadToProjectCon
 import LoadingPage from "../containers/LoadingPage";
 import UserStore from "../stores/UserStore";
 import GetProject from "../apiRequests/GetProject";
-import GetAllTags from "../apiRequests/GetAllTags";
 import GetAllProjectSubFolders from "../apiRequests/GetAllProjectSubFolders";
 import Button from "react-bootstrap/Button";
 import {useHistory} from "react-router-dom";
@@ -19,8 +18,6 @@ export default function Project() {
 
     const [pageContent, setPageContent] = useState(<LoadingPage />);
     const [isLoading, setIsLoading] = useState(true);
-    const [projectTags, setProjectTags] = useState([]);
-    const [allTags, setAllTags] = useState([]);
     const [subFoldersInProject, setSubFoldersInProject] = useState([]);
     const [currentPage, setCurrentPage] = useState("Loading");
     const history = useHistory();
@@ -31,8 +28,6 @@ export default function Project() {
             pageElement: <ProjectDetails
                 canEdit={checkPermission("member")}
                 isOwner={checkPermission("owner")}
-                projectTags={projectTags}
-                allTags={allTags}
             />,
             permissionToView: checkPermission("none")
         },
@@ -92,16 +87,10 @@ export default function Project() {
 
             putProjectIntoStore(project);
 
-            let tagsInProject = trimTagArray(project.tags, project.tags);
-            setProjectTags(tagsInProject);
-
-            let allTagsTrimmed = trimTagArray(await GetAllTags(), project.tags);
-            setAllTags(allTagsTrimmed);
             setPageContent(<ProjectDetails
                 canEdit={checkPermission("member")}
                 isOwner={checkPermission("owner")}
-                projectTags={tagsInProject}
-                allTags={allTagsTrimmed} />
+                />
             );
             setCurrentPage("Project details")
 
@@ -131,44 +120,8 @@ export default function Project() {
         ProjectStore.isPrivate = project.isPrivate;
         ProjectStore.creationDate = project.creation;
         ProjectStore.projectMembers = project.projectMembers;
+        ProjectStore.projectTags = project.tags;
         ProjectStore.usersWithSpecialPermission = project.usersWithSpecialPermission;
-    }
-
-    /**
-     * This function removes the unnecessary numberOfProjects part of the tags that is gotten from the requests.
-     * The function also calls to check if the tags are in the project and sets a variable that tells the site if it is in or not.
-     *
-     * @param arrayToTrim Array which contains tags and numberOfProjects the tags are in.
-     * @param projectTagArray The array of the project to check if the tags are in both.
-     * @returns *[] trimmedProjectTags The array with trimmed out numberOfProjects and has a new isInProject.
-     */
-    function trimTagArray(arrayToTrim, projectTagArray) {
-        let trimmedProjectTags = [];
-        if (arrayToTrim) {
-            for (let i = 0; i < arrayToTrim.length; i++) {
-                trimmedProjectTags.push({tagName: arrayToTrim[i].tagName, isInProject: checkIfTagIsInProject(arrayToTrim[i].tagName, projectTagArray)});
-            }
-        }
-        return trimmedProjectTags;
-    }
-
-    /**
-     * This function checks if a tag is in the project.
-     *
-     * @param tagToCheck The tag that should be checked if is in project.
-     * @param projectTagArray The array that contains all the tags in the project.
-     * @returns {boolean} isTagInProject returns true if the tag is in the project, else false.
-     */
-    function checkIfTagIsInProject(tagToCheck, projectTagArray) {
-        let isTagInProject = false;
-        if (projectTagArray && projectTagArray.length > 0) {
-            for (let i = 0; i < projectTagArray.length && isTagInProject === false; i++) {
-                if (tagToCheck === projectTagArray[i].tagName) {
-                    isTagInProject = true;
-                }
-            }
-        }
-        return isTagInProject;
     }
 
     /**
