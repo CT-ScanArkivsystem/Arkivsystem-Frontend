@@ -32,9 +32,52 @@
     border-left: black solid 1px;
 }
 
+.imageRenderModeButton {
+    height: 30px;
+}
+
+.imageRenderModeButton:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.imageRenderModeButtonDisabled {
+    height: 30px;
+    opacity: 0.4;
+}
+
+.imagesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.projectFilesContainerFooter {
+    bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    margin: 8px;
+}
+
+.pageCounter {
+    text-align: center;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 1.2em;
+    margin-top: 5px;
+}
+
 .downloadButton {
     margin: 4px;
     width: 14vw;
+}
+
+.loadPageButton {
+    margin: 4px;
+    position: sticky;
+    bottom: 4px;
+    width: 50%;
 }
 
 .formInputAndButton {

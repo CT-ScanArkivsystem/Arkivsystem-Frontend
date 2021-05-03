@@ -35,7 +35,7 @@ export default async function PostGetImage(imageName, projectId, subFolder, size
             let blob = await res.blob();
             const url = window.URL.createObjectURL(new Blob([blob]));
             result = {
-                imageName: imageName,
+                fileName: imageName,
                 imageSrc: url
             };
             //console.log(result);

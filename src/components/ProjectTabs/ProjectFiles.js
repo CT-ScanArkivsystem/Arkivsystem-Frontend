@@ -1,20 +1,29 @@
 import React, {useState} from "react";
 import "./ProjectFiles.css";
+import renderModeImage from "../../images/imagesToggleOn.png";
+import renderModeFile from "../../images/imagesToggleOff.png";
 import SubFolderDisplay from "../filesAndProjects/SubFolderDisplay";
 import GetAllFileNames from "../../apiRequests/GetAllFileNames";
 import ProjectStore from "../../stores/ProjectStore";
 import FileDisplay from "../filesAndProjects/FileDisplay";
-import Button from "react-bootstrap/Button";
 import LoaderButton from "../LoaderButton";
 import PostDownloadFile from "../../apiRequests/PostDownloadFile";
+import ImageDisplay from "../filesAndProjects/ImageDisplay";
+import Button from "react-bootstrap/Button";
+import PostGetImage from "../../apiRequests/PostGetImage";
 
 export default function ProjectFiles(props) {
     const [isLoading, setIsLoading] = useState(false);
-    const [hasSelectedSubFolder, setHasSelectedSubFolder] = useState(false);
+    const [renderImagesState, setRenderImagesState] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [imagesToRender, setImagesToRender] = useState([]);
     const [selectedSubFolder, setSelectedSubFolder] = useState("");
     const [selectedDefaultFolder, setSelectedDefaultFolder] = useState("");
     const [filesInDirectory, setFilesInDirectory] = useState([]);
     const [filesToDownload, setFilesToDownload] = useState([]);
+
+    const imageWidth = 200; // In pixels
+    const imagesPerPage = 6;
 
     const foldersInSubFolder = [
         "DICOM",
@@ -44,15 +53,15 @@ export default function ProjectFiles(props) {
                         hideChildren={selectedSubFolder !== subFolder}
                         showDropDownArrow={true}
                         onClick={() => {
+                            setFilesToDownload([]);
+                            setFilesInDirectory([]);
+                            setImagesToRender([]);
+                            setSelectedDefaultFolder("");
                             if (selectedSubFolder === subFolder) {
                                 setSelectedSubFolder("");
-                                setSelectedDefaultFolder("");
-                                setFilesToDownload([]);
-                                setFilesInDirectory([]);
                             } else {
                                 setSelectedSubFolder(subFolder);
-                                setSelectedDefaultFolder("");
-                                setFilesToDownload([]);
+                                setRenderImagesState(false);
                             }
                         }}
                         childFolders={foldersInSubFolder.map((defaultFolder) => {
@@ -63,17 +72,20 @@ export default function ProjectFiles(props) {
                                     name={defaultFolder}
                                     isChildFolder={true}
                                     variant={selectedDefaultFolder === defaultFolder ? 'secondary' : 'outline-dark'}
-                                    onClick={() => {
+                                    onClick={async function() {
+                                        setFilesToDownload([]);
+                                        setFilesInDirectory([]);
+                                        setImagesToRender([]);
+                                        setCurrentPage(0);
                                         if (selectedDefaultFolder === defaultFolder) {
                                             setSelectedDefaultFolder("");
-                                            setFilesToDownload([]);
-                                            setFilesInDirectory([]);
+                                            setRenderImagesState(false);
                                         } else {
                                             setIsLoading(true);
-                                            setFilesInDirectory([]);
                                             setSelectedDefaultFolder(defaultFolder);
-                                            getFiles(defaultFolder, ProjectStore.projectId, selectedSubFolder);
-                                            setFilesToDownload([]);
+                                            await getFiles(defaultFolder, ProjectStore.projectId, subFolder);
+                                            setRenderImagesState(false);
+                                            setIsLoading(false);
                                         }
                                     }}
                                 />
@@ -94,7 +106,7 @@ export default function ProjectFiles(props) {
     async function getFiles(directory, projectId, subFolder) {
         let result = await GetAllFileNames(directory, projectId, subFolder);
         setFilesInDirectory(result);
-        setIsLoading(false);
+        return result;
     }
 
     /**
@@ -143,6 +155,80 @@ export default function ProjectFiles(props) {
     }
 
     /**
+     * Creates a list of <ImageDisplay> which will be rendered on the site.
+     * @param imagesList the list which will be used to create the list that will be rendered.
+     * @returns {[]} Array that contains <ImageDisplay>
+     */
+    function renderImages(imagesList) {
+        let result;
+
+        if (imagesList.length > 0) {
+            result = imagesList.map((image) => {
+                return(
+                    <ImageDisplay
+                        className="imageDisplay"
+                        key={image.imageSrc}
+                        imageSrc={image.imageSrc}
+                        imageName={image.imageName}
+                        toggleFileInList={() => toggleFileInList(image)}
+                    />
+                )
+            })
+        }
+        else {
+            result = <span>Empty!</span>
+        }
+        return result;
+    }
+
+    /**
+     * This function will get the next or previous page of images in the sub folder in the project specified.
+     * @param imageNames Names of all the images in the sub folder.
+     * @param projectId Decides which project it will look through.
+     * @param subFolder Decides which sub folder in the project it will look through.
+     * @param currentPageNumber The page the user is currently on.
+     */
+    async function getImages(imageNames, projectId, subFolder, currentPageNumber) {
+        setIsLoading(true);
+        let result = [];
+
+        if (imageNames.length > 0) {
+            result = [...imagesToRender.concat(await getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber))];
+        }
+
+        setImagesToRender(result);
+        setIsLoading(false);
+    }
+
+    /**
+     * Will get the next imagesPerPage images and return them in an array.
+     * @param projectId The ID for the project to get images from.
+     * @param subFolder The sub folder to get images from.
+     * @param imageNames Array with all the images in the sub folder.
+     * @param currentPageNumber The page the user is currently on.
+     * @returns {Promise<*[]>} An array of objects that holds the links to the pictures.
+     */
+    async function getNextPageOfImages(projectId, subFolder, imageNames, currentPageNumber) {
+        let result = [];
+        let i = currentPageNumber * imagesPerPage;
+        for (i; i < (currentPageNumber + 1) * imagesPerPage && i < imageNames.length; i++) {
+            let currentImage = await PostGetImage(imageNames[i].fileName, projectId, subFolder, imageWidth);
+            result.push(currentImage);
+        }
+        setCurrentPage(currentPageNumber + 1);
+        return result;
+    }
+
+    /**
+     * Retired function. Used to determine how many images can fit on one page.
+     * @param allImages all the images that can be rendered.
+     * @returns {number} of how many pages the images need before all of them are displayed.
+     */
+    function findTotalPages(allImages) {
+        return Math.ceil(allImages.length / imagesPerPage);
+    }
+
+    /**
      * Sets the site to loading then sends an API request to download the files
      * specified from the subFolder in the project specified.
      * @param files to be downloaded
@@ -171,14 +257,29 @@ export default function ProjectFiles(props) {
               <div className="projectFileContainer">
                   <h4>Files</h4>
                   <div className="flex-row">
+                      {selectedDefaultFolder === "images" ?
+                          <img className={`${isLoading ? 'imageRenderModeButtonDisabled' : 'imageRenderModeButton'}`}
+                               onClick={async function() {
+                                   if (!isLoading) {
+                                       setRenderImagesState(!renderImagesState)
+                                       setFilesToDownload([]);
+                                       if (currentPage === 0) {
+                                           await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, 0);
+                                       }
+                                   }
+                               }}
+                               src={renderImagesState ? renderModeImage : renderModeFile}
+                               alt="Toggle image rendering"
+                          /> : <></>
+                      }
                       <LoaderButton
                           className="downloadButton"
                           size="sm"
                           variant="outline-dark"
                           isLoading={isLoading}
                           disabled={isLoading || !props.canDownloadFiles || filesToDownload.length < 1}
-                          onClick={() => {
-                              downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder);
+                          onClick={async function() {
+                              await downloadFiles(filesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download file{filesToDownload.length > 1 ? "s" : ""}
@@ -189,17 +290,39 @@ export default function ProjectFiles(props) {
                           variant="outline-dark"
                           isLoading={isLoading}
                           disabled={isLoading || !props.canDownloadFiles || filesInDirectory.length < 1}
-                          onClick={() => {
+                          onClick={async function() {
                               let allFilesToDownload = [...filesInDirectory].map(file => {
                                   return(file.fileName)
                               });
-                              downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder);
+                              await downloadFiles(allFilesToDownload, ProjectStore.projectId, selectedSubFolder);
                           }}
                       >
                           Download all
                       </LoaderButton>
                   </div>
-                  {renderFilesInFolder(filesInDirectory)}
+                  {renderImagesState ?
+                      <>
+                          <div className="imagesContainer">
+                              {renderImages(imagesToRender)}
+                          </div>
+                          <Button
+                              className="loadPageButton"
+                              size="sm"
+                              variant="dark"
+                              disabled={isLoading || imagesToRender.length < 1 || (currentPage * imagesPerPage) > filesInDirectory.length}
+                              onClick={async function() {
+                                  await getImages(filesInDirectory, ProjectStore.projectId, selectedSubFolder, currentPage)
+                              }}
+                          >
+                              Load more!
+                          </Button>
+                          <div className="projectFilesContainerFooter">
+                              <div className="pageCounter">
+                                  <span>Showing {selectedSubFolder ? imagesToRender.length + " of " + filesInDirectory.length : "0"}</span>
+                              </div>
+                          </div>
+                      </> :
+                      renderFilesInFolder(filesInDirectory)}
               </div>
           </div>
       </div>
