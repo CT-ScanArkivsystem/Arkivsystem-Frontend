@@ -29,15 +29,10 @@ export default function EditUser({...props}) {
     async function initialisation() {
         setIsLoading(false);
         setFirstName(UserEditStore.firstName)
-        console.log("firstName for this user is: " + UserEditStore.firstName)
         setLastName(UserEditStore.lastName)
-        console.log("lastName for this user is: " + UserEditStore.lastName)
         setEmail(UserEditStore.email)
-        console.log("email for this user is: " + UserEditStore.email)
         setRole(UserEditStore.role)
-        console.log("role for this user is: " + UserEditStore.role)
         setUserId(UserEditStore.userId)
-        console.log("userId for this user is: " + UserEditStore.userId)
     }
 
     function clearUserEditStore() {
@@ -50,14 +45,12 @@ export default function EditUser({...props}) {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        console.log("HandleSubmit! in EditUser")
         try {
             let didUserGetSaved = await PutEditUser(userId, email, firstName, lastName, role, password1)
             if (didUserGetSaved !== null) {
                 //userHasAuthenticated(true);
                 // TODO: Should redirect to admin page when it is complete!!!
                 // history.push("/userFrontpage");
-                console.log("User has been saved!");
                 clearUserEditStore()
                 props.backToFindUser()
             } else {
