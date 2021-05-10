@@ -42,6 +42,10 @@ export default function CreateProjectContent() {
                     ProjectStore.projectOwner = UserStore.firstName + " " + UserStore.lastName;
                     history.push("/project");
                     break;
+                case 400:
+                    setErrorMessage("Your project name contains at least one illegal character! List of illegal characters: ;,.=\\?*:|\"<>");
+                    setIsLoading(false);
+                    break;
                 case 403:
                     setErrorMessage("You have insufficient rights to create a project! Sending to the frontpage.");
                     setTimeout(() => {
