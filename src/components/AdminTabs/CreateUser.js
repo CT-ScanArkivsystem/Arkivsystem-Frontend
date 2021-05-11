@@ -151,6 +151,7 @@ export default function CreateUser() {
                         <Form.Group className="firstName" size="lg" controlId="firstName">
                             <Form.Label>First name</Form.Label>
                             <Form.Control
+                                autoFocus
                                 type="text"
                                 value={firstName}
                                 onChange={(e) => handleFirstName(e.target.value)}
@@ -168,7 +169,6 @@ export default function CreateUser() {
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
-                            autoFocus
                             type="email"
                             value={email}
                             onChange={(e) => handleEmail(e.target.value)}
