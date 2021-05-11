@@ -185,7 +185,7 @@ export default function UploadToProjectContent(props) {
                         disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",") || !props.canUpload}
                     />
                 </div>
-                {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?
+                {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",") || newFolderName.includes(".")) ?
                     <span className="errorMessage">Your folder contains illegal characters!</span> : ""}
             </form>
 
