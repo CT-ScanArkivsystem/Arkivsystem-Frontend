@@ -106,7 +106,7 @@ export default function ProjectDetails(props) {
         let result = [];
         let tagsToList = [];
         if (currentSearch && allTags) {
-            searchForTags(allTags, currentSearch)
+            tagsToList = searchForTags(allTags, currentSearch)
         } else {
             tagsToList = allTags;
         }
