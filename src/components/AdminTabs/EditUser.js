@@ -64,7 +64,7 @@ export default function EditUser({...props}) {
     }
 
     /**
-     * Checks if both form inputs have something put into them.
+     * Checks if valid input
      * @returns {boolean}
      */
     function validateForm() {
@@ -167,7 +167,7 @@ export default function EditUser({...props}) {
                             size="lg"
                             type="submit"
                             isLoading={isLoading}
-                            disabled={false}
+                            disabled={!validateForm()}
                         >
                             Edit user
                         </LoaderButton>
