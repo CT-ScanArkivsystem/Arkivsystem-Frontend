@@ -68,7 +68,7 @@ export default function EditUser({...props}) {
      * @returns {boolean}
      */
     function validateForm() {
-        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password1.length > 0 && password2.length === password1.length && role.length > 0);
+        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password2.length === password1.length && role.length > 0);
     }
 
     function displayFormError(error) {
