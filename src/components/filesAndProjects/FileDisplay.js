@@ -13,8 +13,6 @@ import soundIcon from "../../images/fileIcons/mp3.svg";
 import videoIcon from "../../images/fileIcons/mp4.svg";
 import dicomIcon from "../../images/fileIcons/ima.svg";
 
-import Form from "react-bootstrap/Form";
-
 /**
  * FileDisplay is a component which simply displays a file as a clickable object.
  * @param props - contains information about the file the FileDisplay is displaying

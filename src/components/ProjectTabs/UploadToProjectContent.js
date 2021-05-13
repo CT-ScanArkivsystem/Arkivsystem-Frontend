@@ -70,6 +70,7 @@ export default function UploadToProjectContent(props) {
                     key={file.path}
                     fileName={file.path}
                     fileOwner=""
+                    toggleFileInList={() => {console.log("Clicked on uploaded file")}}
                 />)))
         }, [acceptedFiles]);
 
