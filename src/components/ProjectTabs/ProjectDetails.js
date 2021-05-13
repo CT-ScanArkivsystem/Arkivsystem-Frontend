@@ -347,13 +347,13 @@ export default function ProjectDetails(props) {
                   <h5>Tags</h5>
                   <div className="tagsContainer defaultBorder">
                       <div className="searchInputContainer">
-                          <input
+                          {editingTags ? <input
                               className="searchForTags"
                               type="search"
                               placeholder={editingTags ? 'Add tag' : 'Search'}
                               value={searchInput}
                               onChange={(e) => setSearchInput(e.target.value)}
-                          />
+                          /> : ""}
                       </div>
                       <Table className="table-striped tagsTable">
                           <tbody>
