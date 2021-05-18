@@ -12,8 +12,11 @@ export default function ServerRestart() {
 
     const [isLoading, setIsLoading] = useState(false)
     const [restartDate, setRestartDate] = useState("")
+    const [editedDate, setEditedDate] = useState(false)
     const [restartTime, setRestartTime] = useState("")
+    const [editedTime, setEditedTime] = useState(false)
     const [restartZone, setRestartZone] = useState("")
+    const [editedZone, setEditedZone] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
     const [functionIfConfirmed, setFunctionIfConfirmed] = useState();
@@ -47,7 +50,9 @@ export default function ServerRestart() {
 
     function closeModal() {
         setRestartDate("")
+        setEditedDate(false)
         setRestartTime("")
+        setEditedTime(false)
         setIsModalOpen(false)
     }
 
@@ -66,17 +71,32 @@ export default function ServerRestart() {
     function displayFormError() {
         let errorMessage = ""
 
-        if (restartDate === "" || restartDate === null) {
+        if ((restartDate === "" || restartDate === null) && editedDate) {
             errorMessage = "Please enter date"
         }
-        else if (restartTime === "" || restartTime === null) {
+        else if ((restartTime === "" || restartTime === null) && editedTime) {
             errorMessage = "Please enter time"
         }
-        else if (restartZone === "" || restartZone === null) {
+        else if ((restartZone === "" || restartZone === null) && editedZone) {
             errorMessage = "Please pick time zone"
         }
         return errorMessage
 
+    }
+
+    function handleRestartDate(date) {
+        setEditedDate(true)
+        setRestartDate(date)
+    }
+
+    function handleRestartTime(time) {
+        setEditedTime(true)
+        setRestartTime(time)
+    }
+
+    function handleRestartZone(zone) {
+        setEditedZone(true)
+        setRestartZone(zone)
     }
 
     return (
@@ -98,7 +118,7 @@ export default function ServerRestart() {
                             <Form.Control
                                 type="date"
                                 value={restartDate}
-                                onChange={(e) => setRestartDate(e.target.value)}
+                                onChange={(e) => handleRestartDate(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group size="lg" controlId="restartTime" className="put-on-rows">
@@ -106,7 +126,7 @@ export default function ServerRestart() {
                             <TimePicker
                                 className="time-picker-element"
                                 value={restartTime}
-                                onChange={(e) => setRestartTime(e)}
+                                onChange={(e) => handleRestartTime(e)}
                                 locale="nb-NO"
                                 format="HH:mm"
                             />
@@ -116,7 +136,7 @@ export default function ServerRestart() {
                             <TimezoneSelect
                                 // default={restartZone}
                                 value={restartZone}
-                                onChange={(e) => setRestartZone(fixString(e.label))}
+                                onChange={(e) => handleRestartZone(fixString(e.label))}
                             />
                         </Form.Group>
                         <Button

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./ImageDisplay.css";
 import unknownIcon from "../../images/fileIcons/unknown.svg";
 
@@ -9,6 +9,7 @@ import unknownIcon from "../../images/fileIcons/unknown.svg";
  * @constructor
  */
 export default function ImageDisplay ({...props}) {
+    const [isChecked, setIsChecked] = useState(false);
 
     // This sets the default properties of the file.
     ImageDisplay.defaultProps = {
@@ -19,8 +20,11 @@ export default function ImageDisplay ({...props}) {
 
     return (
         <div className="imageDisplayContainer">
-            <img className={`${props.isSelected ? 'imageSelected' : 'imageNotSelected'} imageDisplay`}
-                 onClick={props.onClick}
+            <img className={`${isChecked ? 'imageSelected' : 'imageNotSelected'} imageDisplay`}
+                 onClick={() => {
+                     setIsChecked(!isChecked);
+                     props.toggleFileInList();
+                 }}
                  src={props.imageSrc}
                  alt={props.imageName} />
         </div>

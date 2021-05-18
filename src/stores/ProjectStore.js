@@ -13,6 +13,7 @@ class ProjectStore {
             isPrivate: '',
             creationDate: '',
             projectMembers: [],
+            projectTags: [],
             usersWithSpecialPermission: []
         })
     }

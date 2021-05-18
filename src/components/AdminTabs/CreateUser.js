@@ -16,6 +16,12 @@ export default function CreateUser() {
     const [password2, setPassword2] = useState("");
     const [role, setRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
+    const [editedFirstName, setEditedFirstName] = useState(false)
+    const [editedLastName, setEditedLastName] = useState(false)
+    const [editedEmail, setEditedEmail] = useState(false)
+    const [editedPassword1, setEditedPassword1] = useState(false)
+    const [editedPassword2, setEditedPassword2] = useState(false)
+
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalText, setModalText] = useState("SHOULD NOT SEE THIS!")
@@ -27,16 +33,19 @@ export default function CreateUser() {
      * @returns {boolean}
      */
     function validateForm() {
-        return (firstName.length > 0 && lastName.length > 0 && email.length > 0 && password1.length > 0 && password2.length === password1.length && role.length > 0);
+        return (firstName.trim().length > 0 && lastName.trim().length > 0 && email.trim().length > 0 && validateEmail(email.trim()) && password1.trim().length > 0 && password2.trim().length === password1.trim().length && role.trim().length > 0);
     }
 
     /**
-     * Sends a POST request to the server with the users input email and password.
-     * If the server responds with success: true it will log the user in. The response
-     * sets a cookie in the users browser which will be sent automatically by the browser during future requests.
-     * @param event
-     * @returns {Promise<void>}
+     * https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript/46181#46181
+     * @param email
+     * @returns {boolean}
      */
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -59,29 +68,33 @@ export default function CreateUser() {
 
     function setStatesToEmpty() {
         setFirstName("")
+        setEditedFirstName(false)
         setLastName("")
+        setEditedLastName(false)
         setEmail("")
+        setEditedEmail(false)
         setPassword1("")
+        setEditedPassword1(false)
         setPassword2("")
-        setRole("user")
+        setEditedPassword2(false)
+        setRole("User")
     }
 
     function displayFormError() {
         let inputError = "";
 
-        if (firstName.trim().length < 1 || firstName.trim().length > 255) {
+        if ((firstName.trim().length < 1 || firstName.trim().length > 255) && editedFirstName) {
             inputError = "First name is either empty or too long!";
-        } else if (lastName.trim().length < 1 || lastName.trim().length > 255) {
+        } else if ((lastName.trim().length < 1 || lastName.trim().length > 255) && editedLastName) {
             inputError = "Last name is either empty or too long!";
-        } else if (email.trim().length < 1 || email.trim().length > 255) {
-            inputError = "Email is either empty or too long!";
-        } else if (role.trim().length < 1 || role.trim().length > 255) {
-            inputError = "Role has not been selected!";
-        } else if (password1.trim().length < 5 || password1.trim().length > 255) {
+        } else if ((email.trim().length < 1 || email.trim().length > 255 || !validateEmail(email.trim())) && editedEmail) {
+            inputError = "Email is either too long or in the wrong format!";
+        } else if ((password1.trim().length < 5 || password1.trim().length > 255) && editedPassword1) {
             inputError = "First password field is either empty, not long enough or too long!";
-        } else if (password2 !== password1) {
+        } else if ((password2 !== password1) && editedPassword2) {
             inputError = "Second password is not equal to the first password!";
         }
+
         return inputError;
     }
 
@@ -90,10 +103,34 @@ export default function CreateUser() {
         setModalText("User created successfully");
     }
 
-
     function closeModal() {
         setIsModalOpen(false)
         setStatesToEmpty()
+    }
+
+    function handleFirstName(string) {
+        setEditedFirstName(true)
+        setFirstName(string)
+    }
+
+    function handleLastName(string) {
+        setEditedLastName(true)
+        setLastName(string)
+    }
+
+    function handleEmail(string) {
+        setEditedEmail(true)
+        setEmail(string)
+    }
+
+    function handlePassword1(string) {
+        setEditedPassword1(true)
+        setPassword1(string)
+    }
+
+    function handlePassword2(string) {
+        setEditedPassword2(true)
+        setPassword2(string)
     }
 
     // The formatting for the bootstrap Form can be found here: https://react-bootstrap.github.io/components/forms/
@@ -114,9 +151,10 @@ export default function CreateUser() {
                         <Form.Group className="firstName" size="lg" controlId="firstName">
                             <Form.Label>First name</Form.Label>
                             <Form.Control
+                                autoFocus
                                 type="text"
                                 value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                onChange={(e) => handleFirstName(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="lastName" size="lg" controlId="lastName">
@@ -124,17 +162,16 @@ export default function CreateUser() {
                             <Form.Control
                                 type="text"
                                 value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                onChange={(e) => handleLastName(e.target.value)}
                             />
                         </Form.Group>
                     </div>
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
-                            autoFocus
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => handleEmail(e.target.value)}
                         />
                     </Form.Group>
                     <div className="password-box">
@@ -143,7 +180,7 @@ export default function CreateUser() {
                             <Form.Control
                                 type="password"
                                 value={password1}
-                                onChange={(e) => setPassword1(e.target.value)}
+                                onChange={(e) => handlePassword1(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="password2" size="lg" controlId="password2">
@@ -151,7 +188,7 @@ export default function CreateUser() {
                             <Form.Control
                                 type="password"
                                 value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
+                                onChange={(e) => handlePassword2(e.target.value)}
                             />
                         </Form.Group>
                     </div>
@@ -160,13 +197,13 @@ export default function CreateUser() {
                         <Form.Control
                             as="select"
                             onChange={(e) => setRole(e.target.value)}
+                            value={role}
                         >
                             <option value="" disabled>Choose a role</option>
                             <option value="user">User</option>
                             <option value="academic">Academic</option>
                             <option value="admin">Admin</option>
                         </Form.Control>
-
                     </Form.Group>
 
                     <LoaderButton

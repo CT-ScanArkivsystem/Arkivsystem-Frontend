@@ -11,9 +11,9 @@ import {currentIP} from "../App";
  * @returns Promise result the result from the server. Contains information about the project that was just created.
  */
 export default async function PostCreateProject(projectName, isPrivate, creationDate, projectDescription) {
-    let result;
+    let res;
     try {
-        let res = await fetch(currentIP + '/academic/createProject', {
+        res = await fetch(currentIP + '/academic/createProject', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -26,7 +26,6 @@ export default async function PostCreateProject(projectName, isPrivate, creation
                 description: projectDescription,
             })
         });
-        result = await res.json();
         if (res.ok) {
             //console.log("Project was created")
         } else {
@@ -37,5 +36,5 @@ export default async function PostCreateProject(projectName, isPrivate, creation
         console.log("Project was not created due to an error!");
         //TODO: TELL THE USER SOMETHING WENT WRONG!
     }
-    return result;
+    return res;
 }

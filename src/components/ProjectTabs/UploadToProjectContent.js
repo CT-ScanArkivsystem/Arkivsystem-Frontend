@@ -70,6 +70,7 @@ export default function UploadToProjectContent(props) {
                     key={file.path}
                     fileName={file.path}
                     fileOwner=""
+                    toggleFileInList={() => {console.log("Clicked on uploaded file")}}
                 />)))
         }, [acceptedFiles]);
 
@@ -163,9 +164,9 @@ export default function UploadToProjectContent(props) {
                 )
             })
         } else if (isLoading) {
-            result = [<span>Loading!</span>];
+            result = [<span key="loadingSubFolder">Loading!</span>];
         } else {
-            result = [<span>Empty!</span>];
+            result = [<span key="emptySubFolder">Empty!</span>];
         }
         result.push(
             <form onSubmit={handleSubFolderSubmit} className="newFolderForm" key="addNewFolder">
@@ -185,7 +186,7 @@ export default function UploadToProjectContent(props) {
                         disabled={(newFolderName !== sanitize(newFolderName)) || newFolderName.includes(",") || !props.canUpload}
                     />
                 </div>
-                {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",")) ?
+                {(newFolderName !== sanitize(newFolderName) || newFolderName.includes(",") || newFolderName.includes(".")) ?
                     <span className="errorMessage">Your folder contains illegal characters!</span> : ""}
             </form>
 
